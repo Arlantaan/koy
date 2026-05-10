@@ -3407,6 +3407,7 @@
       if (tableLabel) tableLabel.textContent = tableNum ? `Table ${tableNum}${isAdding ? ' — Additional Items' : ''}` : '';
 
       closeCartDrawer();
+      document.getElementById('cartFab').style.display = 'none';
       document.getElementById('waiterView')?.classList.add('open');
       document.body.style.overflow = 'hidden';
 
