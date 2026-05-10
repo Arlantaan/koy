@@ -1,8 +1,10 @@
 from __future__ import annotations
 
+import hashlib
+import random
 import re
 import uuid
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from typing import Any
 
 import asyncpg
@@ -14,7 +16,9 @@ from app.config import settings
 from app.database import get_db
 from app.models import (
     AdminCustomer,
+    ForgotPinRequest,
     GoogleAuthRequest,
+    ResetPinRequest,
     TokenResponse,
     UserLogin,
     UserPublic,
@@ -226,3 +230,87 @@ async def admin_list_customers(
         d["total_spend"] = round(sum(_parse_dalasi(t) for t in totals if t), 2)
         result.append(d)
     return result
+
+
+# ── POST /api/auth/forgot-pin ─────────────────────────────────────────────────
+
+@router.post("/auth/forgot-pin", status_code=status.HTTP_200_OK)
+async def forgot_pin(
+    body: ForgotPinRequest,
+    db: asyncpg.Connection = Depends(get_db),
+) -> dict[str, Any]:
+    identifier = body.identifier.strip()
+    row = await db.fetchrow(
+        "SELECT id, name, email FROM users WHERE (email = $1 OR phone = $1) AND hashed_password IS NOT NULL",
+        identifier.lower() if "@" in identifier else identifier,
+    )
+    # Always return success to avoid user enumeration
+    if not row or not row["email"]:
+        return {"success": True}
+
+    # Generate 6-digit OTP
+    code = f"{random.randint(0, 999999):06d}"
+    token_hash = hashlib.sha256(code.encode()).hexdigest()
+    token_id = str(uuid.uuid4())
+    expires_at = datetime.now(timezone.utc) + timedelta(minutes=10)
+
+    # Invalidate old tokens for this user
+    await db.execute("DELETE FROM pin_reset_tokens WHERE user_id = $1", row["id"])
+    await db.execute(
+        "INSERT INTO pin_reset_tokens (id, user_id, token_hash, expires_at) VALUES ($1,$2,$3,$4)",
+        token_id, row["id"], token_hash, expires_at,
+    )
+
+    if not settings.resend_api_key:
+        return {"success": True}
+
+    import httpx
+    email_html = f"""
+    <div style="font-family:Georgia,serif;max-width:480px;margin:0 auto;background:#0b0b0b;color:#f0ede8;padding:2.5rem;border-radius:12px;">
+      <img src="https://koya.living/images/koya_logo_gold.png" alt="KOYA" style="height:48px;margin-bottom:1.5rem;" />
+      <h2 style="color:#d4af37;font-size:1.3rem;margin:0 0 0.75rem;">Reset your PIN</h2>
+      <p style="color:#aaa;font-size:0.95rem;margin:0 0 1.5rem;">Hi {row['name']}, use the code below to reset your Koya PIN. It expires in <strong style="color:#f0ede8;">10 minutes</strong>.</p>
+      <div style="background:#1a1a1a;border:1px solid rgba(212,175,55,0.3);border-radius:10px;padding:1.5rem;text-align:center;margin-bottom:1.5rem;">
+        <span style="font-size:2.5rem;font-weight:700;letter-spacing:0.4em;color:#d4af37;">{code}</span>
+      </div>
+      <p style="color:#555;font-size:0.78rem;margin:0;">If you didn't request this, ignore this email. Your PIN won't change.</p>
+    </div>
+    """
+    async with httpx.AsyncClient() as client:
+        await client.post(
+            "https://api.resend.com/emails",
+            headers={"Authorization": f"Bearer {settings.resend_api_key}", "Content-Type": "application/json"},
+            json={"from": settings.email_from, "to": row["email"], "subject": "Your Koya PIN reset code", "html": email_html},
+        )
+    return {"success": True}
+
+
+# ── POST /api/auth/reset-pin ──────────────────────────────────────────────────
+
+@router.post("/auth/reset-pin", status_code=status.HTTP_200_OK)
+async def reset_pin(
+    body: ResetPinRequest,
+    db: asyncpg.Connection = Depends(get_db),
+) -> dict[str, Any]:
+    identifier = body.identifier.strip()
+    row = await db.fetchrow(
+        "SELECT id FROM users WHERE (email = $1 OR phone = $1) AND hashed_password IS NOT NULL",
+        identifier.lower() if "@" in identifier else identifier,
+    )
+    if not row:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid code")
+
+    token_hash = hashlib.sha256(body.code.encode()).hexdigest()
+    token_row = await db.fetchrow(
+        "SELECT id, expires_at, used FROM pin_reset_tokens WHERE user_id = $1 AND token_hash = $2",
+        row["id"], token_hash,
+    )
+    if not token_row or token_row["used"] or token_row["expires_at"] < datetime.now(timezone.utc):
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid or expired code")
+
+    new_hashed = _hash_password(body.new_pin)
+    async with db.transaction():
+        await db.execute("UPDATE users SET hashed_password = $1 WHERE id = $2", new_hashed, row["id"])
+        await db.execute("UPDATE pin_reset_tokens SET used = TRUE WHERE id = $1", token_row["id"])
+
+    return {"success": True}

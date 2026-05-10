@@ -150,6 +150,16 @@ class GoogleAuthRequest(BaseModel):
     credential: str
 
 
+class ForgotPinRequest(BaseModel):
+    identifier: str = Field(..., min_length=1, max_length=200)
+
+
+class ResetPinRequest(BaseModel):
+    identifier: str = Field(..., min_length=1, max_length=200)
+    code: str = Field(..., min_length=6, max_length=6)
+    new_pin: str = Field(..., min_length=4, max_length=4)
+
+
 class UserPublic(BaseModel):
     id: str
     name: str

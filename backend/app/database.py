@@ -96,6 +96,17 @@ ALTER_ORDERS_ADD_CUSTOMER_ID = """
 ALTER TABLE orders ADD COLUMN IF NOT EXISTS customer_id TEXT REFERENCES users(id) ON DELETE SET NULL
 """
 
+CREATE_PIN_RESET_TOKENS = """
+CREATE TABLE IF NOT EXISTS pin_reset_tokens (
+    id         TEXT PRIMARY KEY,
+    user_id    TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    token_hash TEXT NOT NULL,
+    expires_at TIMESTAMPTZ NOT NULL,
+    used       BOOLEAN NOT NULL DEFAULT FALSE,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+)
+"""
+
 CREATE_STAFF = """
 CREATE TABLE IF NOT EXISTS staff (
     id              TEXT PRIMARY KEY,
@@ -137,6 +148,7 @@ async def init_db(conn: asyncpg.Connection) -> None:
     await conn.execute(CREATE_ORDERS)
     await conn.execute(ALTER_ORDERS_ADD_CUSTOMER_ID)
     await conn.execute(CREATE_STAFF)
+    await conn.execute(CREATE_PIN_RESET_TOKENS)
     # Seed defaults only if the table is empty
     for key, value in DEFAULT_SETTINGS:
         await conn.execute(

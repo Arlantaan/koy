@@ -2947,19 +2947,82 @@
 
     function closeAuthModal() {
       document.getElementById('auth-modal').style.display = 'none';
-      ['auth-error','reg-error'].forEach(id => { const el = document.getElementById(id); if(el) el.style.display='none'; });
+      ['auth-error','reg-error','forgot-error','reset-error'].forEach(id => {
+        const el = document.getElementById(id);
+        if(el) { el.style.display='none'; el.style.color='#e74c3c'; }
+      });
+      const fi = document.getElementById('forgot-identifier'); if(fi) fi.value = '';
+      const rc = document.getElementById('reset-code'); if(rc) rc.value = '';
+      const rp = document.getElementById('reset-new-pin'); if(rp) rp.value = '';
     }
 
     function switchAuthTab(tab) {
+      const allForms = ['auth-form-signin','auth-form-register','auth-form-forgot','auth-form-reset'];
+      allForms.forEach(id => { const el = document.getElementById(id); if(el) el.style.display='none'; });
+      const target = document.getElementById('auth-form-' + tab);
+      if(target) target.style.display = 'block';
       const isSignin = tab === 'signin';
-      document.getElementById('auth-form-signin').style.display = isSignin ? 'block' : 'none';
-      document.getElementById('auth-form-register').style.display = isSignin ? 'none' : 'block';
+      const isRegister = tab === 'register';
       document.getElementById('auth-tab-signin').style.cssText = isSignin
         ? 'flex:1;padding:0.5rem;border-radius:6px;border:none;background:rgba(212,175,55,0.2);color:#d4af37;font-weight:700;font-size:0.8rem;cursor:pointer;'
         : 'flex:1;padding:0.5rem;border-radius:6px;border:none;background:transparent;color:#666;font-weight:600;font-size:0.8rem;cursor:pointer;';
-      document.getElementById('auth-tab-register').style.cssText = isSignin
-        ? 'flex:1;padding:0.5rem;border-radius:6px;border:none;background:transparent;color:#666;font-weight:600;font-size:0.8rem;cursor:pointer;'
-        : 'flex:1;padding:0.5rem;border-radius:6px;border:none;background:rgba(212,175,55,0.2);color:#d4af37;font-weight:700;font-size:0.8rem;cursor:pointer;';
+      document.getElementById('auth-tab-register').style.cssText = isRegister
+        ? 'flex:1;padding:0.5rem;border-radius:6px;border:none;background:rgba(212,175,55,0.2);color:#d4af37;font-weight:700;font-size:0.8rem;cursor:pointer;'
+        : 'flex:1;padding:0.5rem;border-radius:6px;border:none;background:transparent;color:#666;font-weight:600;font-size:0.8rem;cursor:pointer;';
+    }
+
+    let _forgotIdentifier = '';
+
+    function openForgotPin() {
+      _forgotIdentifier = '';
+      const fi = document.getElementById('forgot-identifier'); if(fi) fi.value = '';
+      const fe = document.getElementById('forgot-error'); if(fe) fe.style.display='none';
+      switchAuthTab('forgot');
+    }
+
+    async function doForgotPin() {
+      const identifier = document.getElementById('forgot-identifier').value.trim();
+      const errEl = document.getElementById('forgot-error');
+      errEl.style.display = 'none';
+      if (!identifier) { errEl.textContent = 'Please enter your email or phone.'; errEl.style.display = 'block'; return; }
+      const btn = document.querySelector('#auth-form-forgot button');
+      btn.disabled = true; btn.textContent = 'Sending…';
+      try {
+        await fetch(`${API}/api/auth/forgot-pin`, {
+          method: 'POST', headers: {'Content-Type':'application/json'},
+          body: JSON.stringify({ identifier }),
+        });
+        _forgotIdentifier = identifier;
+        const rc = document.getElementById('reset-code'); if(rc) rc.value = '';
+        const rp = document.getElementById('reset-new-pin'); if(rp) rp.value = '';
+        const re = document.getElementById('reset-error'); if(re) re.style.display='none';
+        switchAuthTab('reset');
+      } catch { errEl.textContent = 'Connection error. Try again.'; errEl.style.display = 'block'; }
+      finally { btn.disabled = false; btn.textContent = 'Send Code'; }
+    }
+
+    async function doResetPin() {
+      const code = document.getElementById('reset-code').value.trim();
+      const newPin = document.getElementById('reset-new-pin').value.trim();
+      const errEl = document.getElementById('reset-error');
+      errEl.style.display = 'none';
+      if (!code || code.length !== 6) { errEl.textContent = 'Enter the 6-digit code from your email.'; errEl.style.display = 'block'; return; }
+      if (!/^\d{4}$/.test(newPin)) { errEl.textContent = 'New PIN must be exactly 4 digits.'; errEl.style.display = 'block'; return; }
+      if (!_forgotIdentifier) { errEl.textContent = 'Session expired. Please start again.'; errEl.style.display = 'block'; return; }
+      const btn = document.querySelector('#auth-form-reset button');
+      btn.disabled = true; btn.textContent = 'Resetting…';
+      try {
+        const res = await fetch(`${API}/api/auth/reset-pin`, {
+          method: 'POST', headers: {'Content-Type':'application/json'},
+          body: JSON.stringify({ identifier: _forgotIdentifier, code, new_pin: newPin }),
+        });
+        const data = await res.json();
+        if (!res.ok) { errEl.textContent = data.detail || 'Invalid or expired code.'; errEl.style.display = 'block'; return; }
+        _forgotIdentifier = '';
+        switchAuthTab('signin');
+        const ae = document.getElementById('auth-error'); if(ae) { ae.style.color='#4caf50'; ae.textContent='PIN reset! Sign in with your new PIN.'; ae.style.display='block'; }
+      } catch { errEl.textContent = 'Connection error. Try again.'; errEl.style.display = 'block'; }
+      finally { btn.disabled = false; btn.textContent = 'Reset PIN'; }
     }
 
     async function doSignIn() {
@@ -3547,7 +3610,29 @@
           <input id="auth-pin" type="tel" inputmode="numeric" placeholder="4-digit PIN" maxlength="4" pattern="\d{4}" autocomplete="current-password" style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(212,175,55,0.2);border-radius:8px;color:#f0ede8;padding:0.65rem 0.85rem;font-size:0.85rem;margin-bottom:0.65rem;outline:none;box-sizing:border-box;letter-spacing:0.25em;" onkeydown="if(event.key==='Enter')doSignIn()" />
           <div id="auth-error" style="color:#e74c3c;font-size:0.75rem;margin-bottom:0.65rem;display:none;"></div>
           <button onclick="doSignIn()" style="width:100%;background:rgba(212,175,55,0.15);border:1px solid rgba(212,175,55,0.4);border-radius:8px;color:#d4af37;padding:0.65rem;font-weight:700;font-size:0.85rem;cursor:pointer;letter-spacing:0.04em;">Sign In</button>
-          <button onclick="closeAuthModal()" style="width:100%;background:transparent;border:none;color:#555;padding:0.5rem;font-size:0.78rem;cursor:pointer;margin-top:0.4rem;">Continue as guest</button>
+          <div style="text-align:center;margin-top:0.6rem;">
+            <button onclick="openForgotPin()" style="background:transparent;border:none;color:#888;font-size:0.75rem;cursor:pointer;text-decoration:underline;">Forgot PIN?</button>
+          </div>
+          <button onclick="closeAuthModal()" style="width:100%;background:transparent;border:none;color:#555;padding:0.5rem;font-size:0.78rem;cursor:pointer;margin-top:0.2rem;">Continue as guest</button>
+        </div>
+
+        <!-- Forgot PIN flow -->
+        <div id="auth-form-forgot" style="display:none;">
+          <p style="color:#aaa;font-size:0.8rem;margin:0 0 0.75rem;">Enter your email or phone and we'll send you a reset code.</p>
+          <input id="forgot-identifier" type="text" inputmode="email" placeholder="Email or phone number" style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(212,175,55,0.2);border-radius:8px;color:#f0ede8;padding:0.65rem 0.85rem;font-size:0.85rem;margin-bottom:0.65rem;outline:none;box-sizing:border-box;" />
+          <div id="forgot-error" style="color:#e74c3c;font-size:0.75rem;margin-bottom:0.65rem;display:none;"></div>
+          <button onclick="doForgotPin()" style="width:100%;background:rgba(212,175,55,0.15);border:1px solid rgba(212,175,55,0.4);border-radius:8px;color:#d4af37;padding:0.65rem;font-weight:700;font-size:0.85rem;cursor:pointer;">Send Code</button>
+          <button onclick="switchAuthTab('signin')" style="width:100%;background:transparent;border:none;color:#555;padding:0.5rem;font-size:0.78rem;cursor:pointer;margin-top:0.2rem;">Back to Sign In</button>
+        </div>
+
+        <!-- Reset PIN flow -->
+        <div id="auth-form-reset" style="display:none;">
+          <p style="color:#aaa;font-size:0.8rem;margin:0 0 0.75rem;">Enter the 6-digit code sent to your email and choose a new PIN.</p>
+          <input id="reset-code" type="tel" inputmode="numeric" placeholder="6-digit code" maxlength="6" style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(212,175,55,0.2);border-radius:8px;color:#f0ede8;padding:0.65rem 0.85rem;font-size:0.85rem;margin-bottom:0.65rem;outline:none;box-sizing:border-box;letter-spacing:0.3em;" />
+          <input id="reset-new-pin" type="tel" inputmode="numeric" placeholder="New 4-digit PIN" maxlength="4" style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(212,175,55,0.2);border-radius:8px;color:#f0ede8;padding:0.65rem 0.85rem;font-size:0.85rem;margin-bottom:0.65rem;outline:none;box-sizing:border-box;letter-spacing:0.25em;" />
+          <div id="reset-error" style="color:#e74c3c;font-size:0.75rem;margin-bottom:0.65rem;display:none;"></div>
+          <button onclick="doResetPin()" style="width:100%;background:rgba(212,175,55,0.15);border:1px solid rgba(212,175,55,0.4);border-radius:8px;color:#d4af37;padding:0.65rem;font-weight:700;font-size:0.85rem;cursor:pointer;">Reset PIN</button>
+          <button onclick="openForgotPin()" style="width:100%;background:transparent;border:none;color:#555;padding:0.5rem;font-size:0.78rem;cursor:pointer;margin-top:0.2rem;">Resend code</button>
         </div>
         <div id="auth-form-register" style="display:none;">
           <input id="reg-name" type="text" placeholder="Your name" autocomplete="name" style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(212,175,55,0.2);border-radius:8px;color:#f0ede8;padding:0.65rem 0.85rem;font-size:0.85rem;margin-bottom:0.65rem;outline:none;box-sizing:border-box;" />

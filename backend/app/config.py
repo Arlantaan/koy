@@ -13,6 +13,8 @@ class Settings(BaseSettings):
     jwt_secret: str = "changeme-jwt-secret-please-change"
     google_client_id: str = ""
     upload_dir: str = "/var/www/koya/uploads"
+    resend_api_key: str = ""
+    email_from: str = "Koya Restaurant <comedine@koya.living>"
 
 
 settings = Settings()
