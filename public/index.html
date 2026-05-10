@@ -3304,11 +3304,12 @@
     let _wakeLock = null;
     // ── Submit order to backend, then show waiter view ──
     let _submittingOrder = false;
+    let _activeOrderId = sessionStorage.getItem('koya-active-order') || null;
 
     async function submitOrder() {
       if (_submittingOrder || cart.length === 0) return;
       const tableInput = document.getElementById('cartTableInput');
-      const tableNum = tableInput ? tableInput.value.trim() : '';
+      const tableNum = _activeTableNumber || (tableInput ? tableInput.value.trim() : '');
       if (!tableNum) {
         tableInput?.classList.add('input-error');
         tableInput?.focus();
@@ -3318,40 +3319,57 @@
       _submittingOrder = true;
 
       const total = calcCartTotal();
-      const payload = {
-        table_number: tableNum,
-        items: cart.map(item => ({ id: item.id, name: item.name, price: item.price || '', qty: item.qty })),
-        total: total > 0 ? 'D' + total.toLocaleString() : '',
-        notes: document.getElementById('cartNotesInput')?.value?.trim() || '',
-      };
+      const isAdding = !!_activeOrderId;
+      const itemsPayload = cart.map(item => ({ id: item.id, name: item.name, price: item.price || '', qty: item.qty }));
 
-      // Track the active table number so customer can add more items anytime
-      _activeTableNumber = tableNum;
-      sessionStorage.setItem('koya-active-table', tableNum);
-
-      // Show waiter view immediately (optimistic — customer holds it up to waiter)
-      await showWaiterView(tableNum);
+      // Show waiter view immediately
+      await showWaiterView(tableNum, isAdding);
       _submittingOrder = false;
 
-      // Fire-and-forget to backend; fail silently
+      // Send to backend
       if (API) {
         const headers = { 'Content-Type': 'application/json' };
         if (koyaToken) headers['Authorization'] = `Bearer ${koyaToken}`;
-        fetch(`${API}/api/orders`, {
-          method: 'POST',
-          headers,
-          body: JSON.stringify(payload),
-        }).catch(() => {});
+
+        if (isAdding) {
+          // Append to existing order
+          fetch(`${API}/api/orders/${_activeOrderId}/items`, {
+            method: 'PATCH',
+            headers,
+            body: JSON.stringify({ items: itemsPayload, total: total > 0 ? 'D' + total.toLocaleString() : '' }),
+          }).catch(() => {});
+        } else {
+          // New order
+          const res = await fetch(`${API}/api/orders`, {
+            method: 'POST',
+            headers,
+            body: JSON.stringify({
+              table_number: tableNum,
+              items: itemsPayload,
+              total: total > 0 ? 'D' + total.toLocaleString() : '',
+              notes: document.getElementById('cartNotesInput')?.value?.trim() || '',
+            }),
+          }).catch(() => null);
+          if (res && res.ok) {
+            const data = await res.json().catch(() => ({}));
+            if (data.id) {
+              _activeOrderId = data.id;
+              sessionStorage.setItem('koya-active-order', data.id);
+            }
+          }
+        }
       }
 
-      // Clear the order items from cart but keep table number for adding more
+      _activeTableNumber = tableNum;
+      sessionStorage.setItem('koya-active-table', tableNum);
+
       cart = [];
       saveCart();
       syncAddButtons();
       updateCartFab();
     }
 
-    async function showWaiterView(tableNum) {
+    async function showWaiterView(tableNum, isAdding = false) {
       const body = document.getElementById('waiterBody');
       if (body) {
         body.innerHTML = cart.map(item => {
@@ -3371,7 +3389,7 @@
       if (totalEl) totalEl.textContent = total > 0 ? 'D' + total.toLocaleString() : '—';
 
       const tableLabel = document.getElementById('waiterTableLabel');
-      if (tableLabel) tableLabel.textContent = tableNum ? `Table ${tableNum}` : '';
+      if (tableLabel) tableLabel.textContent = tableNum ? `Table ${tableNum}${isAdding ? ' — Additional Items' : ''}` : '';
 
       closeCartDrawer();
       document.getElementById('waiterView')?.classList.add('open');
@@ -3408,9 +3426,10 @@
     }
 
     function finishOrdering() {
-      // Clear the active table completely and end the session
       _activeTableNumber = null;
+      _activeOrderId = null;
       sessionStorage.removeItem('koya-active-table');
+      sessionStorage.removeItem('koya-active-order');
       document.getElementById('waiterView')?.classList.remove('open');
       document.body.style.overflow = '';
       if (_wakeLock) { _wakeLock.release().catch(() => {}); _wakeLock = null; }

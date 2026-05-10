@@ -44,6 +44,35 @@ async def create_order(
     return {"success": True, "id": order_id}
 
 
+# ── Public: PATCH /api/orders/:id/items ───────────────────────────────────────
+
+@router.patch("/orders/{order_id}/items", response_model=SuccessResponse)
+async def append_order_items(
+    order_id: str,
+    body: OrderItemsAppend,
+    db: asyncpg.Connection = Depends(get_db),
+) -> dict[str, Any]:
+    row = await db.fetchrow("SELECT items, total FROM orders WHERE id = $1 AND status != 'done'", order_id)
+    if not row:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Order not found")
+    existing: list[dict] = json.loads(row["items"] or "[]")
+    for new_item in body.items:
+        merged = False
+        for ex in existing:
+            if ex.get("name") == new_item.name:
+                ex["qty"] = ex.get("qty", 1) + new_item.qty
+                merged = True
+                break
+        if not merged:
+            existing.append(new_item.model_dump())
+    updated_total = body.total if body.total is not None else row["total"]
+    await db.execute(
+        "UPDATE orders SET items = $1, total = $2 WHERE id = $3",
+        json.dumps(existing), updated_total, order_id,
+    )
+    return {"success": True, "id": order_id}
+
+
 # ── Admin: GET /api/admin/orders ──────────────────────────────────────────────
 
 @router.get(
