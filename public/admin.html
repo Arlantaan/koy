@@ -406,8 +406,13 @@
           <label>Section</label>
           <select id="add-section" class="form-control mt-1" onchange="toggleNewSection()">
             <option value="starters">Starters</option>
-            <option value="mains">Main Courses</option>
+            <option value="salad">Salads</option>
+            <option value="meat">Meat</option>
+            <option value="fish">Fish</option>
+            <option value="pizza">Pizza</option>
+            <option value="pasta">Pasta</option>
             <option value="sharing">Sharing Mix</option>
+            <option value="calzone">Calzone</option>
             <option value="sides">Sides</option>
             <option value="sauces">Sauces</option>
             <option value="desserts">Desserts</option>
@@ -425,8 +430,13 @@
           <select id="add-section-position" class="form-control mt-2" style="display:none;">
             <option value="end">Add at the end</option>
             <option value="starters">After: Starters</option>
-            <option value="mains">After: Main Courses</option>
+            <option value="salad">After: Salads</option>
+            <option value="meat">After: Meat</option>
+            <option value="fish">After: Fish</option>
+            <option value="pizza">After: Pizza</option>
+            <option value="pasta">After: Pasta</option>
             <option value="sharing">After: Sharing Mix</option>
+            <option value="calzone">After: Calzone</option>
             <option value="sides">After: Sides</option>
             <option value="sauces">After: Sauces</option>
             <option value="desserts">After: Desserts</option>
@@ -577,8 +587,9 @@ let editModal, addModal, deleteModal;
 let deleteItemId = null;
 
 const SECTION_LABELS = {
-  starters:'Starters', mains:'Main Courses', sharing:'Sharing Mix',
-  sides:'Sides', sauces:'Sauces', desserts:'Desserts',
+  starters:'Starters', salad:'Salads', meat:'Meat', fish:'Fish',
+  pizza:'Pizza', pasta:'Pasta', sharing:'Sharing Mix', calzone:'Calzone',
+  sides:'Sides', sauces:'Sauces', desserts:'Desserts', mains:'Main Courses',
   softdrinks:'Soft Drinks', freshjuices:'Fresh Juices', localjuices:'Local Juices',
   milkshakes:'Milkshakes', coffee:'Coffee', hottea:'Hot Tea',
   mocktails:'Mocktails', icedtea:'Iced Tea'
