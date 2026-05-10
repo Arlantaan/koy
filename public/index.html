@@ -3414,15 +3414,11 @@
     }
 
     function addMoreItems() {
-      // Close waiter view and reopen menu to add more items to same table
       document.getElementById('waiterView')?.classList.remove('open');
       document.body.style.overflow = '';
       if (_wakeLock) { _wakeLock.release().catch(() => {}); _wakeLock = null; }
-      // Keep _activeTableNumber so customer can add more to same table
       updateCartFab();
       syncAddButtons();
-      // Open the cart drawer so they can immediately start adding items
-      setTimeout(() => openCartDrawer(), 100);
     }
 
     function finishOrdering() {
