@@ -2532,6 +2532,12 @@
               <div class="cat-card-count">${s.items.length}</div>
             </button>`
           ).join('');
+          // Reapply padding-top now that tiles have their real height
+          requestAnimationFrame(() => {
+            const cb = document.getElementById('catBand');
+            const mp = document.getElementById('page-menu');
+            if (cb && mp && cb.style.display !== 'none') mp.style.paddingTop = cb.offsetHeight + 'px';
+          });
         }
 
         // Build menu content
@@ -2630,9 +2636,9 @@
       if (catBand) {
         if (n === 2) {
           catBand.style.display = 'block';
-          requestAnimationFrame(() => {
+          requestAnimationFrame(() => requestAnimationFrame(() => {
             if (menuPg) menuPg.style.paddingTop = catBand.offsetHeight + 'px';
-          });
+          }));
         } else {
           catBand.style.display = 'none';
           if (menuPg) menuPg.style.paddingTop = '';
