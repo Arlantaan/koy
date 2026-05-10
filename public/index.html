@@ -3213,56 +3213,68 @@
       const footer = document.getElementById('cartDrawerFooter');
       if (!body) return;
 
+      const sentItems = cart.filter(i => i.sent);
+      const newItems = cart.filter(i => !i.sent);
+      const placeBtn = footer?.querySelector('[onclick="submitOrder()"]');
+      const finishBtn = document.getElementById('finishOrderingBtn');
+
       if (cart.length === 0) {
-        // If there's an active table, show option to finish ordering
-        if (_activeTableNumber) {
-          body.innerHTML = `<div class="cart-empty"><i class="fas fa-check-circle"></i>No items in this order.<br>Add more items or finish ordering.</div>`;
-          if (footer) footer.style.display = 'block';
-          // Show finish button, hide place order button
-          const placeBtn = footer.querySelector('[onclick="submitOrder()"]');
-          const finishBtn = document.getElementById('finishOrderingBtn');
-          if (placeBtn) placeBtn.style.display = 'none';
-          if (finishBtn) finishBtn.style.display = 'block';
-        } else {
-          body.innerHTML = `<div class="cart-empty"><i class="fas fa-utensils"></i>Your order is empty.<br>Tap <strong style="color:rgba(212,175,55,0.7)">+</strong> on any item to add it.</div>`;
-          if (footer) footer.style.display = 'none';
-          const finishBtn = document.getElementById('finishOrderingBtn');
-          if (finishBtn) finishBtn.style.display = 'none';
-        }
+        body.innerHTML = `<div class="cart-empty"><i class="fas fa-utensils"></i>Your order is empty.<br>Tap <strong style="color:rgba(212,175,55,0.7)">+</strong> on any item to add it.</div>`;
+        if (footer) footer.style.display = 'none';
         return;
       }
 
       if (footer) footer.style.display = 'block';
-      // Show place order button, hide finish button
-      const placeBtn = footer.querySelector('[onclick="submitOrder()"]');
-      const finishBtn = document.getElementById('finishOrderingBtn');
-      if (placeBtn) placeBtn.style.display = 'block';
-      if (finishBtn) finishBtn.style.display = 'none';
 
-      body.innerHTML = cart.map(item => {
-        const lineTotal = parsePrice(item.price) * item.qty;
-        const lineTotalStr = lineTotal > 0 ? 'D' + lineTotal.toLocaleString() : (item.price || '—');
-        const imgHtml = item.image
-          ? `<img src="${item.image}" alt="${item.name}" class="cart-item-img">`
-          : `<div class="cart-item-img"><i class="fas fa-utensils" style="color:rgba(212,175,55,0.25);font-size:0.9rem;"></i></div>`;
-        return `
-          <div class="cart-item">
-            ${imgHtml}
-            <div>
-              <div class="cart-item-name">${item.name}</div>
-              <div class="cart-item-price">${lineTotalStr}</div>
-            </div>
-            <div class="cart-qty-controls">
-              <button class="cart-qty-btn minus" onclick="cartUpdateQty('${item.id}',-1)" aria-label="Remove one">&#8722;</button>
-              <span class="cart-qty-num">${item.qty}</span>
-              <button class="cart-qty-btn" onclick="cartUpdateQty('${item.id}',1)" aria-label="Add one">+</button>
-            </div>
-          </div>`;
-      }).join('');
+      if (newItems.length > 0) {
+        if (placeBtn) placeBtn.style.display = 'block';
+        if (finishBtn) finishBtn.style.display = 'none';
+      } else {
+        if (placeBtn) placeBtn.style.display = 'none';
+        if (finishBtn) finishBtn.style.display = 'block';
+      }
 
-      const total = calcCartTotal();
+      body.innerHTML = [
+        // Already ordered — grayed out, no controls
+        ...sentItems.map(item => {
+          const imgHtml = item.image
+            ? `<img src="${item.image}" alt="${item.name}" class="cart-item-img" style="opacity:0.4;">`
+            : `<div class="cart-item-img" style="opacity:0.4;"><i class="fas fa-utensils" style="color:rgba(212,175,55,0.25);font-size:0.9rem;"></i></div>`;
+          return `
+            <div class="cart-item" style="opacity:0.5;">
+              ${imgHtml}
+              <div>
+                <div class="cart-item-name">${item.name}</div>
+                <div class="cart-item-price" style="color:#555;">✓ Ordered &nbsp;×${item.qty}</div>
+              </div>
+            </div>`;
+        }),
+        // New items — normal controls
+        ...newItems.map(item => {
+          const lineTotal = parsePrice(item.price) * item.qty;
+          const lineTotalStr = lineTotal > 0 ? 'D' + lineTotal.toLocaleString() : (item.price || '—');
+          const imgHtml = item.image
+            ? `<img src="${item.image}" alt="${item.name}" class="cart-item-img">`
+            : `<div class="cart-item-img"><i class="fas fa-utensils" style="color:rgba(212,175,55,0.25);font-size:0.9rem;"></i></div>`;
+          return `
+            <div class="cart-item">
+              ${imgHtml}
+              <div>
+                <div class="cart-item-name">${item.name}</div>
+                <div class="cart-item-price">${lineTotalStr}</div>
+              </div>
+              <div class="cart-qty-controls">
+                <button class="cart-qty-btn minus" onclick="cartUpdateQty('${item.id}',-1)" aria-label="Remove one">&#8722;</button>
+                <span class="cart-qty-num">${item.qty}</span>
+                <button class="cart-qty-btn" onclick="cartUpdateQty('${item.id}',1)" aria-label="Add one">+</button>
+              </div>
+            </div>`;
+        }),
+      ].join('');
+
+      const newTotal = newItems.reduce((s, i) => s + parsePrice(i.price) * i.qty, 0);
       const totalEl = document.getElementById('cartTotalAmount');
-      if (totalEl) totalEl.textContent = total > 0 ? 'D' + total.toLocaleString() : '—';
+      if (totalEl) totalEl.textContent = newTotal > 0 ? 'D' + newTotal.toLocaleString() : '—';
     }
 
     // ── Open / close cart drawer ──
@@ -3318,9 +3330,10 @@
 
       _submittingOrder = true;
 
-      const total = calcCartTotal();
       const isAdding = !!_activeOrderId;
-      const itemsPayload = cart.map(item => ({ id: item.id, name: item.name, price: item.price || '', qty: item.qty }));
+      const newItems = cart.filter(item => !item.sent);
+      const total = newItems.reduce((s, i) => s + parsePrice(i.price) * i.qty, 0);
+      const itemsPayload = newItems.map(item => ({ id: item.id, name: item.name, price: item.price || '', qty: item.qty }));
 
       // Show waiter view immediately
       await showWaiterView(tableNum, isAdding);
@@ -3363,7 +3376,8 @@
       _activeTableNumber = tableNum;
       sessionStorage.setItem('koya-active-table', tableNum);
 
-      cart = [];
+      // Mark current items as sent — keep them visible so customer sees what they ordered
+      cart = cart.map(item => ({ ...item, sent: true }));
       saveCart();
       syncAddButtons();
       updateCartFab();
@@ -3372,7 +3386,8 @@
     async function showWaiterView(tableNum, isAdding = false) {
       const body = document.getElementById('waiterBody');
       if (body) {
-        body.innerHTML = cart.map(item => {
+        const itemsToShow = cart.filter(item => !item.sent);
+        body.innerHTML = itemsToShow.map(item => {
           const lineTotal = parsePrice(item.price) * item.qty;
           const lineTotalStr = lineTotal > 0 ? 'D' + lineTotal.toLocaleString() : (item.price || '—');
           return `
@@ -3494,9 +3509,6 @@
             <div class="waiter-total-amount" id="waiterTotal">—</div>
         </div>
         <div style="display:flex;gap:0.75rem;padding:1rem;">
-            <button class="waiter-close-btn" onclick="addMoreItems()" style="flex:1;">
-                <i class="fas fa-plus"></i> Add More Items
-            </button>
             <button class="waiter-close-btn" onclick="closeWaiterView()" style="flex:1;">
                 <i class="fas fa-check"></i> Done
             </button>
