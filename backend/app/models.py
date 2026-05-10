@@ -116,6 +116,11 @@ class OrderUpdate(BaseModel):
     status: str = Field(..., pattern=r"^(new|done)$")
 
 
+class OrderItemsAppend(BaseModel):
+    items: list[OrderItemInput] = Field(..., min_length=1)
+    total: Optional[str] = Field(None, max_length=50)
+
+
 class Order(BaseModel):
     model_config = {"extra": "ignore"}
     id: str

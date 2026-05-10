@@ -9,7 +9,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 
 from app.auth import get_current_user, get_optional_user, require_admin, require_role
 from app.database import get_db
-from app.models import MyOrder, Order, OrderCreate, OrderUpdate, SuccessResponse
+from app.models import MyOrder, Order, OrderCreate, OrderItemsAppend, OrderUpdate, SuccessResponse
 
 router = APIRouter(prefix="/api")
 
@@ -90,6 +90,39 @@ async def admin_update_order(
     )
     if result == "UPDATE 0":
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Order not found")
+    return {"success": True}
+
+
+# ── Admin: PATCH /api/admin/orders/:id/items ─────────────────────────────────
+
+@router.patch(
+    "/admin/orders/{order_id}/items",
+    response_model=SuccessResponse,
+    dependencies=[Depends(require_role("waiter"))],
+)
+async def admin_append_order_items(
+    order_id: str,
+    body: OrderItemsAppend,
+    db: asyncpg.Connection = Depends(get_db),
+) -> dict[str, Any]:
+    row = await db.fetchrow("SELECT items, total FROM orders WHERE id = $1", order_id)
+    if not row:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Order not found")
+    existing: list[dict] = json.loads(row["items"] or "[]")
+    for new_item in body.items:
+        merged = False
+        for ex in existing:
+            if ex.get("name") == new_item.name:
+                ex["qty"] = ex.get("qty", 1) + new_item.qty
+                merged = True
+                break
+        if not merged:
+            existing.append(new_item.model_dump())
+    updated_total = body.total if body.total is not None else row["total"]
+    await db.execute(
+        "UPDATE orders SET items = $1, total = $2 WHERE id = $3",
+        json.dumps(existing), updated_total, order_id,
+    )
     return {"success": True}
 
 

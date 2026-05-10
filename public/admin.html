@@ -370,6 +370,29 @@
     </div>
   </div>
 
+<!-- Add Items to Order Modal -->
+<div class="modal fade" id="addItemsToOrderModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Add Items — <span id="aito-table-label" style="color:#d4af37;"></span></h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body" style="max-height:65vh;overflow-y:auto;">
+        <input type="text" id="aito-search" class="form-control mb-3" placeholder="Search menu…" oninput="renderAitoMenu()" />
+        <div id="aito-menu-list"></div>
+      </div>
+      <div class="modal-footer" style="flex-direction:column;align-items:stretch;gap:0.5rem;">
+        <div id="aito-cart" style="font-size:0.8rem;color:#aaa;min-height:1.2rem;"></div>
+        <div style="display:flex;gap:0.5rem;justify-content:flex-end;">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-gold" onclick="submitAddItemsToOrder()">Add to Order</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- Add Item Modal -->
 <div class="modal fade" id="addModal" tabindex="-1">
   <div class="modal-dialog modal-dialog-centered">
@@ -604,6 +627,7 @@ window.addEventListener('DOMContentLoaded', () => {
   editModal = new bootstrap.Modal(document.getElementById('editModal'));
   addModal = new bootstrap.Modal(document.getElementById('addModal'));
   deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
+  addItemsToOrderModal = new bootstrap.Modal(document.getElementById('addItemsToOrderModal'));
   document.getElementById('password-input').addEventListener('keydown', e => {
     if (e.key === 'Enter') doLogin();
   });
@@ -1294,6 +1318,7 @@ function renderOrders() {
           </div>
           <div style="display:flex;align-items:center;gap:0.5rem;">
             <span style="font-family:'Playfair Display',serif;font-size:1.05rem;font-weight:600;color:#d4af37;">${escHtml(o.total || '—')}</span>
+            ${!isDone ? `<button onclick="openAddItemsToOrder('${o.id}','${escHtml(o.table_number)}')" style="background:rgba(212,175,55,0.1);color:#d4af37;border:1px solid rgba(212,175,55,0.3);border-radius:8px;padding:0.3rem 0.75rem;font-size:0.72rem;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;margin-right:0.25rem;"><i class="fas fa-plus me-1"></i>Add Items</button>` : ''}
             ${!isDone ? `<button onclick="markOrderDone('${o.id}')" style="background:rgba(80,200,80,0.12);color:#5c9;border:1px solid rgba(80,200,80,0.25);border-radius:8px;padding:0.3rem 0.75rem;font-size:0.72rem;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;"><i class="fas fa-check me-1"></i>Mark Done</button>` : ''}
           </div>
         </div>
@@ -1301,6 +1326,77 @@ function renderOrders() {
         ${o.notes ? `<div style="font-size:0.75rem;color:#888;border-top:1px solid rgba(255,255,255,0.05);padding-top:0.45rem;margin-top:0.1rem;"><i class="fas fa-comment-alt me-1" style="color:#666;"></i>${escHtml(o.notes)}</div>` : ''}
       </div>`;
   }).join('');
+}
+
+let addItemsToOrderModal;
+let aitoOrderId = null;
+let aitoCart = {}; // { itemId: { name, price, qty } }
+
+function openAddItemsToOrder(orderId, tableNumber) {
+  aitoOrderId = orderId;
+  aitoCart = {};
+  document.getElementById('aito-table-label').textContent = `Table ${tableNumber}`;
+  document.getElementById('aito-search').value = '';
+  renderAitoMenu();
+  updateAitoCart();
+  addItemsToOrderModal.show();
+}
+
+function renderAitoMenu() {
+  const q = document.getElementById('aito-search').value.toLowerCase();
+  const el = document.getElementById('aito-menu-list');
+  const filtered = allItems.filter(i => !i.hidden && (!q || i.name.toLowerCase().includes(q) || (i.section||'').toLowerCase().includes(q)));
+  if (!filtered.length) { el.innerHTML = '<p style="color:#555;text-align:center;padding:1rem;">No items found</p>'; return; }
+  const grouped = {};
+  filtered.forEach(i => { (grouped[i.section] = grouped[i.section] || []).push(i); });
+  el.innerHTML = Object.entries(grouped).map(([sec, items]) => `
+    <div style="font-size:0.68rem;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:#d4af37;padding:0.6rem 0 0.3rem;">${escHtml(SECTION_LABELS[sec] || sec)}</div>
+    ${items.map(i => `
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:0.45rem 0.1rem;border-bottom:1px solid rgba(255,255,255,0.04);">
+        <div>
+          <span style="font-size:0.85rem;">${escHtml(i.name)}</span>
+          ${i.price ? `<span style="font-size:0.75rem;color:#888;margin-left:0.4rem;">${escHtml(i.price)}</span>` : ''}
+        </div>
+        <div style="display:flex;align-items:center;gap:0.4rem;">
+          <button onclick="aitoAdjust('${i.id}','${escHtml(i.name)}','${escHtml(i.price||'')}', -1)" style="background:rgba(255,255,255,0.07);border:none;color:#f0ede8;border-radius:5px;width:26px;height:26px;cursor:pointer;font-size:1rem;line-height:1;">−</button>
+          <span id="aito-qty-${i.id}" style="min-width:18px;text-align:center;font-size:0.85rem;">${aitoCart[i.id]?.qty || 0}</span>
+          <button onclick="aitoAdjust('${i.id}','${escHtml(i.name)}','${escHtml(i.price||'')}', 1)" style="background:rgba(212,175,55,0.15);border:none;color:#d4af37;border-radius:5px;width:26px;height:26px;cursor:pointer;font-size:1rem;line-height:1;">+</button>
+        </div>
+      </div>`).join('')}
+  `).join('');
+}
+
+function aitoAdjust(id, name, price, delta) {
+  if (!aitoCart[id]) aitoCart[id] = { name, price, qty: 0 };
+  aitoCart[id].qty = Math.max(0, aitoCart[id].qty + delta);
+  if (aitoCart[id].qty === 0) delete aitoCart[id];
+  const qtyEl = document.getElementById(`aito-qty-${id}`);
+  if (qtyEl) qtyEl.textContent = aitoCart[id]?.qty || 0;
+  updateAitoCart();
+}
+
+function updateAitoCart() {
+  const el = document.getElementById('aito-cart');
+  const entries = Object.values(aitoCart);
+  if (!entries.length) { el.textContent = 'No items selected yet.'; return; }
+  el.innerHTML = '<strong style="color:#d4af37;">Adding:</strong> ' + entries.map(e => `${e.qty}× ${escHtml(e.name)}`).join(', ');
+}
+
+async function submitAddItemsToOrder() {
+  const entries = Object.entries(aitoCart);
+  if (!entries.length) { alert('Select at least one item.'); return; }
+  const items = entries.map(([id, e]) => ({ id, name: e.name, price: e.price, qty: e.qty }));
+  const res = await fetch(`${API}/api/admin/orders/${aitoOrderId}/items`, {
+    method: 'PATCH',
+    headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ items }),
+  });
+  if (res.ok) {
+    addItemsToOrderModal.hide();
+    await loadOrders();
+  } else {
+    alert('Failed to add items.');
+  }
 }
 
 async function markOrderDone(orderId) {
