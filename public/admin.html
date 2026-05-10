@@ -457,6 +457,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-outline-warning" onclick="createItem(true)">Save & Add Another</button>
         <button type="button" class="btn btn-gold" onclick="createItem()">Create Item</button>
       </div>
     </div>
@@ -1036,7 +1037,7 @@ async function previewEditImage() {
   }
 }
 
-async function createItem() {
+async function createItem(addAnother = false) {
   let section = document.getElementById('add-section').value;
   
   if (section === '__new__') {
@@ -1084,8 +1085,22 @@ async function createItem() {
   });
 
   if (res.ok) {
-    addModal.hide();
     await loadItems();
+    if (addAnother) {
+      const savedSection = document.getElementById('add-section').value;
+      document.getElementById('add-name').value = '';
+      document.getElementById('add-price').value = '';
+      document.getElementById('add-desc').value = '';
+      document.getElementById('add-image').value = '';
+      document.getElementById('add-image-file').value = '';
+      document.getElementById('add-image-preview').style.display = 'none';
+      document.getElementById('add-hidden').checked = false;
+      document.getElementById('add-badge').value = '';
+      document.getElementById('add-section').value = savedSection;
+      document.getElementById('add-name').focus();
+    } else {
+      addModal.hide();
+    }
   } else {
     alert('Error creating item');
   }
