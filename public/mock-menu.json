@@ -1,0 +1,98 @@
+[
+  { "id": "st-1", "section": "starters", "name": "Arancini", "description": "Gorgonzola and turkey breast with tomato basil sauce", "price": "D850", "image": null, "hidden": 0, "badge": null },
+  { "id": "st-2", "section": "starters", "name": "Bao Buns with Shredded Beef", "description": "Pulled Beef, Onion, Carrot, Sriracha, sauce", "price": "D850", "image": null, "hidden": 0, "badge": null },
+  { "id": "st-3", "section": "starters", "name": "Mini Burgers", "description": "3 Mini Burgers Smothered in Cheddar Sauce", "price": "D825", "image": null, "hidden": 0, "badge": null },
+  { "id": "st-4", "section": "starters", "name": "Cauliflower Velouté with Smoked Salmon", "description": "Silky whipped cauliflower velouté, delicately crowned with hand-shaved cold-smoked salmon and a drizzle of chive oil", "price": "D750", "image": null, "hidden": 0, "badge": null },
+  { "id": "st-5", "section": "starters", "name": "Caesar Salad", "description": null, "price": "D850", "image": null, "hidden": 0, "badge": null },
+  { "id": "st-6", "section": "starters", "name": "Thiof Ceviche", "description": "Ceviche juice, fresh marinated fish, coriander, red onion, sweet potato paste, avocado paste", "price": "D875", "image": null, "hidden": 0, "badge": null },
+  { "id": "st-7", "section": "starters", "name": "Fritto Misto", "description": "Breaded calamari and shrimp (panko), duo sauces (tartar & spicy)", "price": "D800", "image": null, "hidden": 0, "badge": null },
+
+  { "id": "ma-1", "section": "mains", "name": "Chicken Supreme", "description": "Grilled chicken escalope with its own jus", "price": "D1,100", "image": null, "hidden": 0, "badge": null },
+  { "id": "ma-2", "section": "mains", "name": "Imported Beef Fillet", "description": "Hand-selected 200g centre-cut beef fillet, rested and finished with a bold house-ground black pepper jus", "price": "D1,950", "image": null, "hidden": 0, "badge": "chefs_pick" },
+  { "id": "ma-3", "section": "mains", "name": "Spicy Garlic Prawns", "description": "Spicy prawns with garlic and lemon", "price": "D1,700", "image": null, "hidden": 0, "badge": "popular" },
+  { "id": "ma-4", "section": "mains", "name": "Roasted Salmon Steak with Lemon Beurre Blanc", "description": null, "price": "D2,100", "image": null, "hidden": 0, "badge": null },
+  { "id": "ma-5", "section": "mains", "name": "Burger", "description": "Fresh beef with tomato salad, caramelized onions and cheddar", "price": "D925", "image": null, "hidden": 0, "badge": null },
+  { "id": "ma-6", "section": "mains", "name": "Whole Marinated Grilled Fish", "description": "Catch of the day", "price": "D1,500", "image": null, "hidden": 0, "badge": null },
+  { "id": "ma-7", "section": "mains", "name": "Black Angus Ribeye with Garlic (300g)", "description": "300g prime ribeye heart, encrusted in garden herbs and slow-roasted with whole confit garlic", "price": "D2,350", "image": null, "hidden": 0, "badge": null },
+  { "id": "ma-8", "section": "mains", "name": "Grilled Lamb Chop with Thyme Honey Sauce", "description": null, "price": "D1,950", "image": null, "hidden": 0, "badge": null },
+  { "id": "ma-9", "section": "mains", "name": "Grilled Thioff Fillet", "description": null, "price": "1500", "image": null, "hidden": 0, "badge": null },
+
+  { "id": "pz-1", "section": "pizza", "name": "Pizza Koya", "description": "Fresh cream, poultry, mixed vegetables, mozzarella", "price": "D975", "image": null, "hidden": 0, "badge": null },
+  { "id": "pz-2", "section": "pizza", "name": "Margherita", "description": "Tomato sauce, fior di latte mozzarella, basil", "price": "D800", "image": null, "hidden": 0, "badge": null },
+  { "id": "pz-3", "section": "pizza", "name": "Burratina", "description": "Tomato sauce, 150g burrata, pesto, basil persillade", "price": "D950", "image": null, "hidden": 0, "badge": null },
+  { "id": "pz-4", "section": "pizza", "name": "Tuna Pizza", "description": "Tomato sauce, mozzarella, black olives, onions, Italian-style smoked tuna", "price": "D1,000", "image": null, "hidden": 0, "badge": null },
+  { "id": "pz-5", "section": "pizza", "name": "Salmon Pizza", "description": "Sour cream, mozzarella, smoked salmon", "price": "D1,000", "image": null, "hidden": 0, "badge": null },
+
+  { "id": "sh-1", "section": "sharing", "name": "Sharing Mix for Two", "description": "Chicken skewers, bao, seafood rillettes, hummus, tzatziki, homemade bread", "price": "D2,200", "image": null, "hidden": 0, "badge": null },
+  { "id": "sh-2", "section": "sharing", "name": "Imported Beef Tomahawk (1.2 kg)", "description": "Served with 2 sides", "price": "D8,000", "image": null, "hidden": 0, "badge": null },
+
+  { "id": "pa-1", "section": "pasta", "name": "Penne with Chicken and Mushroom Cream Sauce", "description": "Creamy penne with chicken and mushrooms", "price": "950", "image": null, "hidden": 0, "badge": null },
+
+  { "id": "si-1", "section": "sides", "name": "Mashed Potatoes", "description": "Creamy mashed potatoes", "price": null, "image": null, "hidden": 0, "badge": null },
+  { "id": "si-2", "section": "sides", "name": "White Rice", "description": "Steamed white rice", "price": null, "image": null, "hidden": 0, "badge": null },
+  { "id": "si-3", "section": "sides", "name": "Sautéed Vegetables", "description": "Sautéed seasonal vegetables", "price": null, "image": null, "hidden": 0, "badge": null },
+  { "id": "si-4", "section": "sides", "name": "Fries", "description": "Golden fries", "price": null, "image": null, "hidden": 0, "badge": null },
+  { "id": "si-5", "section": "sides", "name": "Green Salad", "description": "Crisp mixed greens", "price": null, "image": null, "hidden": 0, "badge": null },
+
+  { "id": "sa-1", "section": "sauces", "name": "Shallot Sauce", "description": null, "price": null, "image": null, "hidden": 0, "badge": null },
+  { "id": "sa-2", "section": "sauces", "name": "Black Pepper Sauce", "description": null, "price": null, "image": null, "hidden": 0, "badge": null },
+  { "id": "sa-3", "section": "sauces", "name": "Beurre Blanc", "description": null, "price": null, "image": null, "hidden": 0, "badge": null },
+
+  { "id": "de-1", "section": "desserts", "name": "Profiteroles with Chocolate Sauce", "description": "Pastry cream filling, whipped cream", "price": "D650", "image": null, "hidden": 0, "badge": null },
+  { "id": "de-2", "section": "desserts", "name": "French Toast Brioche", "description": "Salted caramel, red fruits, vanilla ice cream", "price": "D650", "image": null, "hidden": 0, "badge": null },
+  { "id": "de-3", "section": "desserts", "name": "Lemon Cheesecake", "description": "Red fruit coulis", "price": "D700", "image": null, "hidden": 0, "badge": null },
+  { "id": "de-4", "section": "desserts", "name": "Chocolate Lava Cake", "description": "Warm dark-chocolate fondant with a molten centre, served with house-made vanilla ice cream", "price": "D700", "image": null, "hidden": 0, "badge": null },
+  { "id": "de-5", "section": "desserts", "name": "Mango Pavlova", "description": "Meringue, Italian cream and mango", "price": "700", "image": null, "hidden": 0, "badge": "new" },
+
+  { "id": "sd-1", "section": "softdrinks", "name": "Coke", "description": null, "price": "D200", "image": null, "hidden": 0, "badge": null },
+  { "id": "sd-2", "section": "softdrinks", "name": "Diet Coke", "description": null, "price": "D250", "image": null, "hidden": 0, "badge": null },
+  { "id": "sd-3", "section": "softdrinks", "name": "Perrier Sparkling", "description": null, "price": "Small D200 / Large D300", "image": null, "hidden": 0, "badge": null },
+  { "id": "sd-4", "section": "softdrinks", "name": "Fanta", "description": null, "price": "D200", "image": null, "hidden": 0, "badge": null },
+  { "id": "sd-5", "section": "softdrinks", "name": "Sprite", "description": null, "price": "D200", "image": null, "hidden": 0, "badge": null },
+  { "id": "sd-6", "section": "softdrinks", "name": "Red Bull", "description": null, "price": "D250", "image": null, "hidden": 0, "badge": null },
+  { "id": "sd-7", "section": "softdrinks", "name": "Imported Water Mondariz", "description": null, "price": "Small D125 / Large D200", "image": null, "hidden": 0, "badge": null },
+
+  { "id": "fj-1", "section": "freshjuices", "name": "Fresh Orange Juice", "description": null, "price": "D400", "image": null, "hidden": 0, "badge": null },
+  { "id": "fj-2", "section": "freshjuices", "name": "Fresh Apple Juice", "description": null, "price": "D400", "image": null, "hidden": 0, "badge": null },
+  { "id": "fj-3", "section": "freshjuices", "name": "Fresh Pineapple Juice", "description": null, "price": "D400", "image": null, "hidden": 0, "badge": null },
+
+  { "id": "lj-1", "section": "localjuices", "name": "Wonjo", "description": "Hibiscus juice", "price": "D150", "image": null, "hidden": 0, "badge": null },
+  { "id": "lj-2", "section": "localjuices", "name": "Ginger Juice", "description": "Ginger juice", "price": "D150", "image": null, "hidden": 0, "badge": null },
+  { "id": "lj-3", "section": "localjuices", "name": "Baobab", "description": "Baobab juice", "price": "D150", "image": null, "hidden": 0, "badge": null },
+  { "id": "lj-4", "section": "localjuices", "name": "Daharr", "description": "Daharr juice", "price": "D150", "image": null, "hidden": 0, "badge": null },
+
+  { "id": "ms-1", "section": "milkshakes", "name": "Peachberry Shake", "description": "Vanilla, strawberry, peach, and milk", "price": "D450", "image": null, "hidden": 0, "badge": null },
+  { "id": "ms-2", "section": "milkshakes", "name": "Strawberry Milkshake", "description": "Vanilla, strawberry, and milk", "price": "D450", "image": null, "hidden": 0, "badge": null },
+  { "id": "ms-3", "section": "milkshakes", "name": "Vanilla Milkshake", "description": "Vanilla, espresso, and milk", "price": "D450", "image": null, "hidden": 0, "badge": null },
+  { "id": "ms-4", "section": "milkshakes", "name": "Chocomint Shake", "description": "Vanilla, green mint, chocolate, and milk", "price": "450", "image": null, "hidden": 0, "badge": null },
+
+  { "id": "co-1", "section": "coffee", "name": "Espresso", "description": null, "price": "D200", "image": null, "hidden": 0, "badge": null },
+  { "id": "co-2", "section": "coffee", "name": "Flavored Latte", "description": "Chocolate Cookie, Caramel or Vanilla", "price": "D300", "image": null, "hidden": 0, "badge": null },
+  { "id": "co-3", "section": "coffee", "name": "Cappuccino", "description": "Tiramisu syrup, 1 Espresso and Milk of Choice — Chocolate Cookie, Caramel or Vanilla", "price": "D300", "image": null, "hidden": 0, "badge": null },
+  { "id": "co-4", "section": "coffee", "name": "American Coffee (Nescafé)", "description": null, "price": "D150", "image": null, "hidden": 0, "badge": null },
+  { "id": "co-5", "section": "coffee", "name": "Mocha", "description": null, "price": "D375", "image": null, "hidden": 0, "badge": null },
+  { "id": "co-6", "section": "coffee", "name": "Flavored Iced Coffee", "description": "Vanilla, caramel, hazelnut", "price": "D350", "image": null, "hidden": 0, "badge": null },
+  { "id": "co-7", "section": "coffee", "name": "Blue Iced Coffee", "description": null, "price": "D375", "image": null, "hidden": 0, "badge": null },
+
+  { "id": "ht-1", "section": "hottea", "name": "Moroccan Mint Tea", "description": null, "price": "D150", "image": null, "hidden": 0, "badge": null },
+  { "id": "ht-2", "section": "hottea", "name": "Ginger Tea", "description": null, "price": "D150", "image": null, "hidden": 0, "badge": null },
+  { "id": "ht-3", "section": "hottea", "name": "Tea Selection", "description": null, "price": "D150", "image": null, "hidden": 0, "badge": null },
+
+  { "id": "mo-1",  "section": "mocktails", "name": "Classic Mojito", "description": "Cloudy lemonade, mint and sparkling water", "price": "D500", "image": null, "hidden": 0, "badge": null },
+  { "id": "mo-2",  "section": "mocktails", "name": "Mango Daiquiri", "description": null, "price": "D550", "image": null, "hidden": 0, "badge": null },
+  { "id": "mo-3",  "section": "mocktails", "name": "Strawberry Daiquiri", "description": null, "price": "D550", "image": null, "hidden": 0, "badge": null },
+  { "id": "mo-4",  "section": "mocktails", "name": "Pineapple Daiquiri", "description": null, "price": "D550", "image": null, "hidden": 0, "badge": null },
+  { "id": "mo-5",  "section": "mocktails", "name": "Flavored Mojito", "description": "Available in Hibiscus, Mango, Lychee or Passion Fruit", "price": "D550", "image": null, "hidden": 0, "badge": null },
+  { "id": "mo-6",  "section": "mocktails", "name": "Tiki Taka", "description": "Passion Fruit, Pineapple Juice, Orange Juice and ginger", "price": "D550", "image": null, "hidden": 0, "badge": null },
+  { "id": "mo-7",  "section": "mocktails", "name": "Star of the Evening", "description": "Salted Caramel Syrup, Fruit of Peach, Apple Juice and a Splash of Soda", "price": "D550", "image": null, "hidden": 0, "badge": null },
+  { "id": "mo-8",  "section": "mocktails", "name": "Spicy Mandarin Mule", "description": "Tangerine, falernum, lime juice and fevertree ginger beer", "price": "D550", "image": null, "hidden": 0, "badge": null },
+  { "id": "mo-9",  "section": "mocktails", "name": "Midnight Orchard", "description": "Rose, passion fruit, goyave juice, lime juice and soda", "price": "D550", "image": null, "hidden": 0, "badge": null },
+  { "id": "mo-10", "section": "mocktails", "name": "Sky", "description": "Curaçao bleu, almond, lime juice and soda", "price": "D550", "image": null, "hidden": 0, "badge": null },
+  { "id": "mo-11", "section": "mocktails", "name": "Velvet", "description": "Strawberry, hibiscus, and ginger juice", "price": "550", "image": null, "hidden": 0, "badge": null },
+  { "id": "mo-12", "section": "mocktails", "name": "Strawbasil", "description": "Strawberry, basilic, lemon juice, sparkling water", "price": "500", "image": null, "hidden": 0, "badge": null },
+  { "id": "mo-13", "section": "mocktails", "name": "Cucumber Cooler", "description": "Green apple, cucumber, pineapple juice with soda", "price": "500", "image": null, "hidden": 0, "badge": null },
+
+  { "id": "it-1", "section": "icedtea", "name": "Lemon Iced Tea", "description": null, "price": "D400", "image": null, "hidden": 0, "badge": null },
+  { "id": "it-2", "section": "icedtea", "name": "Raspberry Iced Tea", "description": null, "price": "D400", "image": null, "hidden": 0, "badge": null },
+  { "id": "it-3", "section": "icedtea", "name": "Peach Iced Tea", "description": null, "price": "D400", "image": null, "hidden": 0, "badge": null }
+]
