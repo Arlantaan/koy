@@ -136,7 +136,7 @@ class Order(BaseModel):
 
 class UserRegister(BaseModel):
     name: str = Field(..., min_length=1, max_length=120)
-    email: Optional[str] = Field(None, min_length=3, max_length=120)
+    email: str = Field(..., min_length=3, max_length=120)
     phone: Optional[str] = Field(None, min_length=6, max_length=30)
     pin: str = Field(..., pattern=r"^\d{4}$")
 

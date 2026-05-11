@@ -3046,19 +3046,17 @@
 
     async function doRegister() {
       const name = document.getElementById('reg-name').value.trim();
-      const identifier = document.getElementById('reg-identifier').value.trim();
+      const email = document.getElementById('reg-email').value.trim();
       const pin = document.getElementById('reg-pin').value.trim();
       const errEl = document.getElementById('reg-error');
       errEl.style.display = 'none';
-      if (!name || !identifier || !pin) { errEl.textContent = 'Please fill in all fields.'; errEl.style.display = 'block'; return; }
+      if (!name || !email || !pin) { errEl.textContent = 'Please fill in all fields.'; errEl.style.display = 'block'; return; }
+      if (!email.includes('@')) { errEl.textContent = 'Please enter a valid email address.'; errEl.style.display = 'block'; return; }
       if (!/^\d{4}$/.test(pin)) { errEl.textContent = 'PIN must be exactly 4 digits.'; errEl.style.display = 'block'; return; }
-      // Determine if identifier is phone or email
-      const isPhone = /^[+\d\s\-()]{6,}$/.test(identifier) && !identifier.includes('@');
-      const body = { name, pin, ...(isPhone ? { phone: identifier } : { email: identifier }) };
       try {
         const res = await fetch(`${API}/api/auth/register`, {
           method: 'POST', headers: {'Content-Type':'application/json'},
-          body: JSON.stringify(body),
+          body: JSON.stringify({ name, email, pin }),
         });
         const data = await res.json();
         if (!res.ok) { errEl.textContent = data.detail || 'Registration failed'; errEl.style.display = 'block'; return; }
@@ -3636,7 +3634,7 @@
         </div>
         <div id="auth-form-register" style="display:none;">
           <input id="reg-name" type="text" placeholder="Your name" autocomplete="name" style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(212,175,55,0.2);border-radius:8px;color:#f0ede8;padding:0.65rem 0.85rem;font-size:0.85rem;margin-bottom:0.65rem;outline:none;box-sizing:border-box;" />
-          <input id="reg-identifier" type="text" inputmode="email" placeholder="Email or phone number" autocomplete="username" style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(212,175,55,0.2);border-radius:8px;color:#f0ede8;padding:0.65rem 0.85rem;font-size:0.85rem;margin-bottom:0.65rem;outline:none;box-sizing:border-box;" />
+          <input id="reg-email" type="email" inputmode="email" placeholder="Email address" autocomplete="email" style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(212,175,55,0.2);border-radius:8px;color:#f0ede8;padding:0.65rem 0.85rem;font-size:0.85rem;margin-bottom:0.65rem;outline:none;box-sizing:border-box;" />
           <input id="reg-pin" type="tel" inputmode="numeric" placeholder="Choose a 4-digit PIN" maxlength="4" pattern="\d{4}" autocomplete="new-password" style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(212,175,55,0.2);border-radius:8px;color:#f0ede8;padding:0.65rem 0.85rem;font-size:0.85rem;margin-bottom:0.65rem;outline:none;box-sizing:border-box;letter-spacing:0.25em;" onkeydown="if(event.key==='Enter')doRegister()" />
           <div id="reg-error" style="color:#e74c3c;font-size:0.75rem;margin-bottom:0.65rem;display:none;"></div>
           <button onclick="doRegister()" style="width:100%;background:rgba(212,175,55,0.15);border:1px solid rgba(212,175,55,0.4);border-radius:8px;color:#d4af37;padding:0.65rem;font-weight:700;font-size:0.85rem;cursor:pointer;letter-spacing:0.04em;">Create Account</button>
