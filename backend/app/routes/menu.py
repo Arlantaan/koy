@@ -205,3 +205,19 @@ async def admin_delete_item(
     async with db.transaction():
         await db.execute("DELETE FROM menu_items WHERE id = $1", item_id)
     return {"success": True}
+
+
+# ── Admin: DELETE /api/admin/menu/section/:section ────────────────────────────
+
+@router.delete(
+    "/admin/menu/section/{section}",
+    response_model=SuccessResponse,
+    dependencies=[Depends(require_admin)],
+)
+async def admin_delete_section(
+    section: str,
+    db: asyncpg.Connection = Depends(get_db),
+) -> dict[str, Any]:
+    async with db.transaction():
+        await db.execute("DELETE FROM menu_items WHERE section = $1", section)
+    return {"success": True}

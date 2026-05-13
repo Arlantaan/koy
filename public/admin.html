@@ -521,6 +521,30 @@
   </div>
 </div>
 
+<!-- Delete Section Modal -->
+<div class="modal fade" id="deleteSectionModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content" style="border-color:rgba(255,60,60,0.3);">
+      <div class="modal-header" style="border-bottom:1px solid rgba(255,60,60,0.2);">
+        <h5 class="modal-title" style="color:#ff6b6b;"><i class="fas fa-exclamation-triangle me-2"></i>Delete Entire Section</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <p>This will permanently delete <strong>all items</strong> in the <strong id="delete-section-label">this section</strong> section.</p>
+        <p class="text-muted" style="font-size:0.85rem;">This cannot be undone.</p>
+        <div class="mb-3 mt-4">
+          <label>Admin Password to confirm</label>
+          <input type="password" id="delete-section-password" class="form-control mt-2" placeholder="Enter admin password" />
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-danger" onclick="confirmDeleteSection()">Delete All Items</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- Edit Modal -->
 <div class="modal fade" id="editModal" tabindex="-1">
   <div class="modal-dialog modal-dialog-centered">
@@ -583,7 +607,7 @@ let token = sessionStorage.getItem('admin_token') || '';
 let staffRole = sessionStorage.getItem('admin_role') || 'admin'; // 'admin'|'receptionist'|'waiter'
 let staffName = sessionStorage.getItem('admin_name') || '';
 let allItems = [];
-let editModal, addModal, deleteModal;
+let editModal, addModal, deleteModal, deleteSectionModal;
 let deleteItemId = null;
 
 const SECTION_LABELS = {
@@ -638,6 +662,7 @@ window.addEventListener('DOMContentLoaded', () => {
   editModal = new bootstrap.Modal(document.getElementById('editModal'));
   addModal = new bootstrap.Modal(document.getElementById('addModal'));
   deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
+  deleteSectionModal = new bootstrap.Modal(document.getElementById('deleteSectionModal'));
   addItemsToOrderModal = new bootstrap.Modal(document.getElementById('addItemsToOrderModal'));
   document.getElementById('password-input').addEventListener('keydown', e => {
     if (e.key === 'Enter') doLogin();
@@ -798,29 +823,29 @@ function renderItems() {
     const items = sections[key];
     if (!items) continue;
     
-    html += `<div class="section-header"><i class="fas fa-circle-small me-2"></i>${label} <span class="ms-2 text-muted">${items.length} items</span></div>`;
+    html += `<div class="section-header" style="display:flex;align-items:center;justify-content:space-between;"><span><i class="fas fa-circle-small me-2"></i>${label} <span class="ms-2 text-muted">${items.length} items</span></span><button onclick="openDeleteSectionModal('${key}','${label}')" style="background:none;border:none;color:#ff6b6b;font-size:0.75rem;cursor:pointer;opacity:0.7;" title="Delete entire section"><i class="fas fa-trash-can me-1"></i>Delete section</button></div>`;
     for (const item of items) html += buildAdminItemRow(item);
     renderedSections.add(key);
-    
+
     // Render custom sections that should appear after this predefined section
     for (const [customSection, position] of Object.entries(customSectionPositions)) {
       if (position === key && !renderedSections.has(customSection)) {
         const customItems = customSectionsToRender.get(customSection) || [];
         if (customItems.length > 0) {
           const customLabel = customSection.charAt(0).toUpperCase() + customSection.slice(1).replace(/([A-Z])/g, ' $1');
-          html += `<div class="section-header"><i class="fas fa-circle-small me-2"></i>${customLabel} <span class="ms-2 text-muted">${customItems.length} items</span></div>`;
+          html += `<div class="section-header" style="display:flex;align-items:center;justify-content:space-between;"><span><i class="fas fa-circle-small me-2"></i>${customLabel} <span class="ms-2 text-muted">${customItems.length} items</span></span><button onclick="openDeleteSectionModal('${customSection}','${customLabel}')" style="background:none;border:none;color:#ff6b6b;font-size:0.75rem;cursor:pointer;opacity:0.7;" title="Delete entire section"><i class="fas fa-trash-can me-1"></i>Delete section</button></div>`;
           for (const item of customItems) html += buildAdminItemRow(item);
           renderedSections.add(customSection);
         }
       }
     }
   }
-  
+
   // Render any remaining custom sections at the end (not positioned after anything)
   for (const [customSection, items] of customSectionsToRender) {
     if (!renderedSections.has(customSection)) {
       const customLabel = customSection.charAt(0).toUpperCase() + customSection.slice(1).replace(/([A-Z])/g, ' $1');
-      html += `<div class="section-header"><i class="fas fa-circle-small me-2"></i>${customLabel} <span class="ms-2 text-muted">${items.length} items</span></div>`;
+      html += `<div class="section-header" style="display:flex;align-items:center;justify-content:space-between;"><span><i class="fas fa-circle-small me-2"></i>${customLabel} <span class="ms-2 text-muted">${items.length} items</span></span><button onclick="openDeleteSectionModal('${customSection}','${customLabel}')" style="background:none;border:none;color:#ff6b6b;font-size:0.75rem;cursor:pointer;opacity:0.7;" title="Delete entire section"><i class="fas fa-trash-can me-1"></i>Delete section</button></div>`;
       for (const item of items) html += buildAdminItemRow(item);
     }
   }
@@ -1176,6 +1201,33 @@ async function confirmDelete() {
     await loadItems();
   } else {
     alert('Error deleting item');
+  }
+  showSaving(false);
+}
+
+let deleteSectionKey = null;
+
+function openDeleteSectionModal(sectionKey, sectionLabel) {
+  deleteSectionKey = sectionKey;
+  document.getElementById('delete-section-label').textContent = sectionLabel;
+  document.getElementById('delete-section-password').value = '';
+  deleteSectionModal.show();
+}
+
+async function confirmDeleteSection() {
+  const password = document.getElementById('delete-section-password').value.trim();
+  if (!password) { alert('Password required'); return; }
+  if (password !== token) { alert('Incorrect password'); return; }
+  showSaving(true);
+  const res = await fetch(`${API}/api/admin/menu/section/${deleteSectionKey}`, {
+    method: 'DELETE',
+    headers: { 'Authorization': `Bearer ${token}` },
+  });
+  if (res.ok) {
+    deleteSectionModal.hide();
+    await loadItems();
+  } else {
+    alert('Error deleting section');
   }
   showSaving(false);
 }

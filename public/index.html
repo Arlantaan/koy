@@ -2378,7 +2378,7 @@
         : rawPrice;
       const priceEl = normPrice
         ? `<span class="price-tag">${isComingSoon ? '—' : normPrice}</span>` : '';
-      const addBtnEl = !isComingSoon
+      const addBtnEl = (!isComingSoon && ORDERING_ENABLED)
         ? `<button class="add-btn" id="add-btn-${item.id}" onclick="addToCart('${item.id}')" aria-label="Add ${item.name.replace(/'/g, '&#39;')} to order">+</button>`
         : '';
       const actionsEl = (priceEl || addBtnEl)
@@ -2676,12 +2676,17 @@
     }
 
     const GOOGLE_CLIENT_ID = '889570776744-k4ekspp5aoqidt22vf1qe1e9hqdknhcn.apps.googleusercontent.com';
+    const ORDERING_ENABLED = false;
     let koyaUser = JSON.parse(localStorage.getItem('koya_user') || 'null');
     let koyaToken = localStorage.getItem('koya_token') || '';
 
     loadMenu();
     applySettings();
     initAuth();
+    if (!ORDERING_ENABLED) {
+      const fab = document.getElementById('cartFab');
+      if (fab) fab.style.display = 'none';
+    }
     async function loadImages(items) {
       if (API === '') return; // local mock already has image URLs inline
       try {
