@@ -134,7 +134,13 @@
 
         /* search drawer */
         .search-drawer {
-            background: #0a0a0a;
+            position: fixed;
+            top: 56px;
+            left: 0; right: 0;
+            z-index: 999;
+            background: rgba(10,10,10,0.97);
+            -webkit-backdrop-filter: blur(12px);
+            backdrop-filter: blur(12px);
             border-bottom: 1px solid rgba(212,175,55,0.15);
             padding: 0.65rem var(--page-gutter) 0.9rem;
             display: none;
