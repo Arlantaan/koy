@@ -2277,6 +2277,7 @@
       lightbox.classList.add('open');
       lightbox.setAttribute('aria-hidden', 'false');
       document.body.style.overflow = 'hidden';
+      document.documentElement.style.overflow = 'hidden';
     }
 
     document.addEventListener('DOMContentLoaded', () => {
@@ -2286,6 +2287,7 @@
           lightbox.classList.remove('open');
           lightbox.setAttribute('aria-hidden', 'true');
           document.body.style.overflow = '';
+          document.documentElement.style.overflow = '';
         }
       });
 
@@ -3004,6 +3006,7 @@
     function openAuthModal(tab) {
       document.getElementById('auth-modal').style.display = 'flex';
       document.body.style.overflow = 'hidden';
+      document.documentElement.style.overflow = 'hidden';
       if (GOOGLE_CLIENT_ID) {
         document.getElementById('google-signin-btn').style.display = 'flex';
         document.getElementById('google-or-divider').style.display = 'block';
@@ -3015,6 +3018,7 @@
     function closeAuthModal() {
       document.getElementById('auth-modal').style.display = 'none';
       document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
       ['auth-error','reg-error','forgot-error','reset-error'].forEach(id => {
         const el = document.getElementById(id);
         if(el) { el.style.display='none'; el.style.color='#e74c3c'; }
