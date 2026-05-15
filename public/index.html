@@ -2019,7 +2019,7 @@
                 <button class="header-btn" id="header-signin-btn" aria-label="Sign In" onclick="openAuthModal()" style="font-size:0.7rem;font-weight:700;letter-spacing:0.04em;padding:0.3rem 0.65rem;width:auto;gap:0.3rem;color:var(--gold,#d4af37);border:1px solid rgba(212,175,55,0.35);border-radius:6px;">
                     <i class="fas fa-user" style="font-size:0.75rem;"></i> Sign In
                 </button>
-                <button class="header-btn" id="header-user-btn" aria-label="Account" onclick="openMyOrders()" style="display:none;font-size:0.7rem;font-weight:700;letter-spacing:0.04em;padding:0.3rem 0.65rem;width:auto;gap:0.3rem;color:var(--gold,#d4af37);">
+                <button class="header-btn" id="header-user-btn" aria-label="Account" onclick="ORDERING_ENABLED ? openMyOrders() : null" style="display:none;font-size:0.7rem;font-weight:700;letter-spacing:0.04em;padding:0.3rem 0.65rem;width:auto;gap:0.3rem;color:var(--gold,#d4af37);cursor:default;">
                     <i class="fas fa-user-circle" style="font-size:0.85rem;"></i><span id="header-user-name"></span>
                 </button>
                 <button class="header-btn" id="navToggle" aria-label="Menu">
@@ -2982,7 +2982,7 @@
           const av = koyaUser.avatar ? `<img src="${koyaUser.avatar}" style="width:20px;height:20px;border-radius:50%;object-fit:cover;">` : '<i class="fas fa-user-circle"></i>';
           userInfo.innerHTML = `
             <div class="nav-dropdown-ext" style="pointer-events:none;opacity:0.7;font-size:0.72rem;">${av}&nbsp;${koyaUser.name}</div>
-            <a class="nav-dropdown-ext" href="#" onclick="openMyOrders();document.getElementById('navDropdown').classList.remove('open');return false;"><i class="fas fa-receipt"></i>My Orders</a>
+            ${ORDERING_ENABLED ? `<a class="nav-dropdown-ext" href="#" onclick="openMyOrders();document.getElementById('navDropdown').classList.remove('open');return false;"><i class="fas fa-receipt"></i>My Orders</a>` : ''}
             <a class="nav-dropdown-ext" href="reserve.html"><i class="fas fa-calendar-alt"></i>My Reservations</a>
             <a class="nav-dropdown-ext" href="#" onclick="doSignOut();return false;"><i class="fas fa-sign-out-alt"></i>Sign Out</a>
           `;
