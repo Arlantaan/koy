@@ -628,8 +628,10 @@ const BADGE_ADMIN_META = {
 };
 
 function buildAdminItemRow(item) {
-  // Always show placeholder in list view for speed
-  const imgEl = `<div class="no-img"><i class="fas fa-image"></i></div>`;
+  const imgSrc = item.image ? (item.image.startsWith('http') ? item.image : `${API}${item.image.startsWith('/') ? '' : '/'}${item.image}`) : null;
+  const imgEl = imgSrc
+    ? `<img src="${imgSrc}" alt="${item.name}" loading="lazy" onerror="this.outerHTML='<div class=\\"no-img\\"><i class=\\"fas fa-image\\"></i></div>'">`
+    : `<div class="no-img"><i class="fas fa-image"></i></div>`;
   const statusBadge = item.hidden
     ? `<span class="badge-hidden ms-2">HIDDEN</span>`
     : `<span class="badge-visible ms-2">VISIBLE</span>`;
