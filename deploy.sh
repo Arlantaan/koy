@@ -104,6 +104,7 @@ systemctl is-active koya && echo "  koya.service is RUNNING" || echo "  koya.ser
 
 echo "=== 8. Nginx ==="
 cp "$REPO_DIR/nginx-koya.conf" "$NGINX_CONF"
+cp "$REPO_DIR/nginx-ratelimit.conf" /etc/nginx/conf.d/koya-ratelimit.conf
 ln -sf "$NGINX_CONF" /etc/nginx/sites-enabled/koya
 rm -f /etc/nginx/sites-enabled/default
 nginx -t && systemctl reload nginx

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import asyncio
 import hashlib
 import random
 import re
@@ -26,6 +27,94 @@ from app.models import (
 )
 
 router = APIRouter(prefix="/api")
+
+# ---------------------------------------------------------------------------
+# Brute-force protection (in-memory, per process)
+# ---------------------------------------------------------------------------
+_bf_lock = asyncio.Lock()
+
+# Login lockout: {normalized_identifier: {"count": int, "locked_until": datetime|None}}
+_login_attempts: dict[str, dict] = {}
+MAX_LOGIN_ATTEMPTS = 5
+LOGIN_LOCKOUT_SECONDS = 15 * 60  # 15 minutes
+
+# Forgot-PIN throttle: {identifier: [unix_timestamp, ...]}
+_otp_requests: dict[str, list[float]] = {}
+MAX_OTP_REQUESTS = 3   # per OTP_REQUEST_WINDOW seconds
+OTP_REQUEST_WINDOW = 3600  # 1 hour
+
+# Reset-PIN attempt counter: {user_id: int}
+_reset_attempts: dict[str, int] = {}
+MAX_RESET_ATTEMPTS = 5  # wrong guesses before token is deleted
+
+
+async def _check_login_lockout(identifier: str) -> None:
+    now = datetime.now(timezone.utc)
+    async with _bf_lock:
+        entry = _login_attempts.get(identifier)
+        if not entry:
+            return
+        if entry.get("locked_until") and entry["locked_until"] > now:
+            remaining = int((entry["locked_until"] - now).total_seconds())
+            raise HTTPException(
+                status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+                detail=f"Too many failed attempts. Try again in {remaining // 60 + 1} minute(s).",
+                headers={"Retry-After": str(remaining)},
+            )
+        # Expired lockout — reset silently
+        if entry.get("locked_until") and entry["locked_until"] <= now:
+            entry["count"] = 0
+            entry["locked_until"] = None
+
+
+async def _record_failed_login(identifier: str) -> None:
+    now = datetime.now(timezone.utc)
+    async with _bf_lock:
+        entry = _login_attempts.setdefault(identifier, {"count": 0, "locked_until": None})
+        entry["count"] += 1
+        if entry["count"] >= MAX_LOGIN_ATTEMPTS:
+            entry["locked_until"] = now + timedelta(seconds=LOGIN_LOCKOUT_SECONDS)
+            entry["count"] = 0
+
+
+async def _clear_login_attempts(identifier: str) -> None:
+    async with _bf_lock:
+        _login_attempts.pop(identifier, None)
+
+
+async def _check_otp_rate(identifier: str) -> None:
+    now = datetime.now(timezone.utc).timestamp()
+    async with _bf_lock:
+        window_start = now - OTP_REQUEST_WINDOW
+        timestamps = [t for t in _otp_requests.get(identifier, []) if t > window_start]
+        if len(timestamps) >= MAX_OTP_REQUESTS:
+            raise HTTPException(
+                status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+                detail="Too many reset requests. Try again in an hour.",
+            )
+        timestamps.append(now)
+        _otp_requests[identifier] = timestamps
+
+
+async def _handle_reset_fail(user_id: str, db: asyncpg.Connection) -> None:
+    """Increment bad-guess counter; after MAX_RESET_ATTEMPTS, delete all active tokens."""
+    async with _bf_lock:
+        count = _reset_attempts.get(user_id, 0) + 1
+        _reset_attempts[user_id] = count
+        if count >= MAX_RESET_ATTEMPTS:
+            del _reset_attempts[user_id]
+            await db.execute(
+                "DELETE FROM pin_reset_tokens WHERE user_id = $1 AND NOT used", user_id
+            )
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Invalid or expired code",
+            )
+
+
+async def _clear_reset_attempts(user_id: str) -> None:
+    async with _bf_lock:
+        _reset_attempts.pop(user_id, None)
 
 
 def _hash_password(password: str) -> str:
@@ -79,11 +168,15 @@ async def login(
     db: asyncpg.Connection = Depends(get_db),
 ) -> dict[str, Any]:
     identifier = body.identifier.strip()
+    normalized = identifier.lower() if "@" in identifier else identifier
+
+    await _check_login_lockout(normalized)
+
     # Try email match first, then phone
     row = await db.fetchrow(
         "SELECT id, name, email, phone, hashed_password, avatar, created_at FROM users "
         "WHERE email = $1 OR phone = $1",
-        identifier.lower() if "@" in identifier else identifier,
+        normalized,
     )
     # If email search with lowercase didn't find by phone, try direct
     if row is None and "@" not in identifier:
@@ -92,9 +185,13 @@ async def login(
             identifier,
         )
     if row is None or not row["hashed_password"]:
+        await _record_failed_login(normalized)
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid credentials")
     if not _verify_password(body.pin, row["hashed_password"]):
+        await _record_failed_login(normalized)
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid credentials")
+
+    await _clear_login_attempts(normalized)
     await db.execute("UPDATE users SET last_login = NOW() WHERE id = $1", row["id"])
     return {
         "access_token": make_token(row["id"]),
@@ -240,9 +337,13 @@ async def forgot_pin(
     db: asyncpg.Connection = Depends(get_db),
 ) -> dict[str, Any]:
     identifier = body.identifier.strip()
+    normalized = identifier.lower() if "@" in identifier else identifier
+
+    await _check_otp_rate(normalized)
+
     row = await db.fetchrow(
         "SELECT id, name, email FROM users WHERE (email = $1 OR phone = $1) AND hashed_password IS NOT NULL",
-        identifier.lower() if "@" in identifier else identifier,
+        normalized,
     )
     # Always return success to avoid user enumeration
     if not row or not row["email"]:
@@ -306,6 +407,7 @@ async def reset_pin(
         row["id"], token_hash,
     )
     if not token_row or token_row["used"] or token_row["expires_at"] < datetime.now(timezone.utc):
+        await _handle_reset_fail(row["id"], db)
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid or expired code")
 
     new_hashed = _hash_password(body.new_pin)
@@ -313,4 +415,5 @@ async def reset_pin(
         await db.execute("UPDATE users SET hashed_password = $1 WHERE id = $2", new_hashed, row["id"])
         await db.execute("UPDATE pin_reset_tokens SET used = TRUE WHERE id = $1", token_row["id"])
 
+    await _clear_reset_attempts(row["id"])
     return {"success": True}
