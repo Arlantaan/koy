@@ -1276,15 +1276,56 @@
         #page-cover .hero-slider { height: calc(100svh - 56px); min-height: 480px; }
         #page-cover .hero-dots   { bottom: 1.5rem; }
 
-        /* CTA button floating over bottom of hero */
+        /* CTA buttons floating over bottom of hero */
         .cover-cta-wrap {
             position: absolute;
             bottom: 1.75rem;
             left: 0; right: 0;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.65rem;
             z-index: 10;
         }
+        .cover-reserve-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--gold);
+            background: rgba(0,0,0,0.35);
+            border: 1.5px solid rgba(212,175,55,0.55);
+            border-radius: 999px;
+            padding: 0.6rem 1.7rem;
+            cursor: pointer;
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            text-decoration: none;
+            transition: background 0.18s, border-color 0.18s, transform 0.15s;
+            font-family: inherit;
+        }
+        .cover-reserve-btn:hover {
+            background: rgba(212,175,55,0.12);
+            border-color: var(--gold);
+            transform: translateY(-1px);
+        }
+        .cover-about-link {
+            font-size: 0.68rem;
+            font-weight: 500;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.55);
+            text-decoration: none;
+            transition: color 0.18s;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-family: inherit;
+        }
+        .cover-about-link:hover { color: rgba(255,255,255,0.9); }
 
         /* Shared page explore / next button */
         .page-explore-btn {
@@ -2057,9 +2098,15 @@
                     <div class="hero-overlay">
                         <h2 class="hero-brand-title"><img src="images/koya_logo_gold.png" alt="Koya" class="hero-logo-img" /></h2>
                         <p id="cover-hours" class="hero-sub-line">Open nightly &nbsp;·&nbsp; 18:00 – 01:30</p>
-                        <div style="margin-top:2rem;pointer-events:auto;">
+                        <div style="margin-top:2rem;pointer-events:auto;display:flex;flex-direction:column;align-items:center;gap:0.65rem;">
                             <button class="page-explore-btn" onclick="bookGoTo(2)">
                                 <i class="fas fa-utensils"></i>&nbsp; Explore Our Menu
+                            </button>
+                            <a href="reserve.html" class="cover-reserve-btn">
+                                <i class="fas fa-calendar-check"></i>&nbsp; Reserve a Table
+                            </a>
+                            <button class="cover-about-link" onclick="bookGoTo(1)">
+                                About Koya
                             </button>
                         </div>
                     </div>
