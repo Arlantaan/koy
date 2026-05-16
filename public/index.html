@@ -2229,6 +2229,25 @@
     </button>
 
 <script>
+        // Scroll lock — works on iOS where overflow:hidden alone doesn't stop momentum scroll
+        let _scrollLockY = 0;
+        function lockScroll() {
+          _scrollLockY = window.scrollY;
+          document.body.style.position = 'fixed';
+          document.body.style.top = `-${_scrollLockY}px`;
+          document.body.style.width = '100%';
+          document.body.style.overflow = 'hidden';
+          document.documentElement.style.overflow = 'hidden';
+        }
+        function unlockScroll() {
+          document.body.style.position = '';
+          document.body.style.top = '';
+          document.body.style.width = '';
+          document.body.style.overflow = '';
+          document.documentElement.style.overflow = '';
+          window.scrollTo(0, _scrollLockY);
+        }
+
         let API = 'https://koya.living';
         // Use local mock data if running on localhost
         const isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1' || location.hostname.startsWith('192.168.') || location.hostname.startsWith('10.');
@@ -2270,8 +2289,7 @@
       img.src = src;
       lightbox.classList.add('open');
       lightbox.setAttribute('aria-hidden', 'false');
-      document.body.style.overflow = 'hidden';
-      document.documentElement.style.overflow = 'hidden';
+      lockScroll();
     }
 
     document.addEventListener('DOMContentLoaded', () => {
@@ -2280,8 +2298,7 @@
         if (e.target === lightbox) {
           lightbox.classList.remove('open');
           lightbox.setAttribute('aria-hidden', 'true');
-          document.body.style.overflow = '';
-          document.documentElement.style.overflow = '';
+          unlockScroll();
         }
       });
 
@@ -2348,8 +2365,7 @@
           const open = navDropdown.classList.toggle('open');
           navToggle.classList.toggle('active', open);
           navDropdown.setAttribute('aria-hidden', String(!open));
-          document.body.style.overflow = open ? 'hidden' : '';
-          document.documentElement.style.overflow = open ? 'hidden' : '';
+          open ? lockScroll() : unlockScroll();
           // close search drawer if open
           searchDrawer.classList.remove('open');
           searchToggle.classList.remove('active');
@@ -2359,8 +2375,7 @@
           if (!navDropdown.contains(e.target) && !navToggle.contains(e.target)) {
             navDropdown.classList.remove('open');
             navToggle.classList.remove('active');
-            document.body.style.overflow = '';
-            document.documentElement.style.overflow = '';
+            unlockScroll();
           }
         });
       }
@@ -2636,8 +2651,7 @@
       const nt = document.getElementById('navToggle');
       if (nd) { nd.classList.remove('open'); nd.setAttribute('aria-hidden','true'); }
       if (nt) nt.classList.remove('active');
-      document.body.style.overflow = '';
-      document.documentElement.style.overflow = '';
+      unlockScroll();
 
       function doScroll() {
         const target = document.getElementById(key);
@@ -3010,8 +3024,7 @@
 
     function openAuthModal(tab) {
       document.getElementById('auth-modal').style.display = 'flex';
-      document.body.style.overflow = 'hidden';
-      document.documentElement.style.overflow = 'hidden';
+      lockScroll();
       if (GOOGLE_CLIENT_ID) {
         document.getElementById('google-signin-btn').style.display = 'flex';
         document.getElementById('google-or-divider').style.display = 'block';
@@ -3022,8 +3035,7 @@
 
     function closeAuthModal() {
       document.getElementById('auth-modal').style.display = 'none';
-      document.body.style.overflow = '';
-      document.documentElement.style.overflow = '';
+      unlockScroll();
       ['auth-error','reg-error','forgot-error','reset-error'].forEach(id => {
         const el = document.getElementById(id);
         if(el) { el.style.display='none'; el.style.color='#e74c3c'; }
