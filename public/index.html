@@ -2232,7 +2232,16 @@
 
 <script>
         // Scroll lock — overflow:hidden + block touchmove for iOS Safari
-        function _preventTouchMove(e) { e.preventDefault(); }
+        // Allows touchmove within elements that have their own scroll (nav dropdown, modals)
+        function _preventTouchMove(e) {
+          let el = e.target;
+          while (el && el !== document.body) {
+            const style = window.getComputedStyle(el);
+            if (style.overflowY === 'auto' || style.overflowY === 'scroll') return;
+            el = el.parentElement;
+          }
+          e.preventDefault();
+        }
         function lockScroll() {
           document.body.style.overflow = 'hidden';
           document.documentElement.style.overflow = 'hidden';
