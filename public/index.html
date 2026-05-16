@@ -2229,23 +2229,14 @@
     </button>
 
 <script>
-        // Scroll lock — works on iOS where overflow:hidden alone doesn't stop momentum scroll
-        let _scrollLockY = 0;
+        // Scroll lock
         function lockScroll() {
-          _scrollLockY = window.scrollY;
-          document.body.style.position = 'fixed';
-          document.body.style.top = `-${_scrollLockY}px`;
-          document.body.style.width = '100%';
           document.body.style.overflow = 'hidden';
           document.documentElement.style.overflow = 'hidden';
         }
         function unlockScroll() {
-          document.body.style.position = '';
-          document.body.style.top = '';
-          document.body.style.width = '';
           document.body.style.overflow = '';
           document.documentElement.style.overflow = '';
-          window.scrollTo(0, _scrollLockY);
         }
 
         let API = 'https://koya.living';
