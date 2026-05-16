@@ -2231,26 +2231,16 @@
     </button>
 
 <script>
-        // Scroll lock — overflow:hidden + block touchmove for iOS Safari
-        // Allows touchmove within elements that have their own scroll (nav dropdown, modals)
-        function _preventTouchMove(e) {
-          let el = e.target;
-          while (el && el !== document.body) {
-            const style = window.getComputedStyle(el);
-            if (style.overflowY === 'auto' || style.overflowY === 'scroll') return;
-            el = el.parentElement;
-          }
-          e.preventDefault();
-        }
+        // Scroll lock — overflow:hidden on html+body.
+        // touch-action:none on overlays (CSS) handles iOS scroll-through for lightbox/modal.
+        // Nav dropdown relies on its own touch-action:pan-y + overflow-y:auto.
         function lockScroll() {
           document.body.style.overflow = 'hidden';
           document.documentElement.style.overflow = 'hidden';
-          document.addEventListener('touchmove', _preventTouchMove, { passive: false });
         }
         function unlockScroll() {
           document.body.style.overflow = '';
           document.documentElement.style.overflow = '';
-          document.removeEventListener('touchmove', _preventTouchMove);
         }
 
         let API = 'https://koya.living';
