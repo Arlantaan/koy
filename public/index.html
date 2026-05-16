@@ -2229,14 +2229,17 @@
     </button>
 
 <script>
-        // Scroll lock
+        // Scroll lock — overflow:hidden + block touchmove for iOS Safari
+        function _preventTouchMove(e) { e.preventDefault(); }
         function lockScroll() {
           document.body.style.overflow = 'hidden';
           document.documentElement.style.overflow = 'hidden';
+          document.addEventListener('touchmove', _preventTouchMove, { passive: false });
         }
         function unlockScroll() {
           document.body.style.overflow = '';
           document.documentElement.style.overflow = '';
+          document.removeEventListener('touchmove', _preventTouchMove);
         }
 
         let API = 'https://koya.living';
