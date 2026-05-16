@@ -109,6 +109,8 @@ document.addEventListener('DOMContentLoaded', () => {
         lightboxImage.alt = img.alt || 'Menu item image';
         lightbox.classList.add('open');
         lightbox.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+        document.documentElement.style.overflow = 'hidden';
       });
     });
 
@@ -117,6 +119,8 @@ document.addEventListener('DOMContentLoaded', () => {
         lightbox.classList.remove('open');
         lightbox.setAttribute('aria-hidden', 'true');
         lightboxImage.src = '';
+        document.body.style.overflow = '';
+        document.documentElement.style.overflow = '';
       }
     });
 
@@ -125,6 +129,8 @@ document.addEventListener('DOMContentLoaded', () => {
         lightbox.classList.remove('open');
         lightbox.setAttribute('aria-hidden', 'true');
         lightboxImage.src = '';
+        document.body.style.overflow = '';
+        document.documentElement.style.overflow = '';
       }
     });
   }
