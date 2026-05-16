@@ -2347,6 +2347,8 @@
           const open = navDropdown.classList.toggle('open');
           navToggle.classList.toggle('active', open);
           navDropdown.setAttribute('aria-hidden', String(!open));
+          document.body.style.overflow = open ? 'hidden' : '';
+          document.documentElement.style.overflow = open ? 'hidden' : '';
           // close search drawer if open
           searchDrawer.classList.remove('open');
           searchToggle.classList.remove('active');
@@ -2356,6 +2358,8 @@
           if (!navDropdown.contains(e.target) && !navToggle.contains(e.target)) {
             navDropdown.classList.remove('open');
             navToggle.classList.remove('active');
+            document.body.style.overflow = '';
+            document.documentElement.style.overflow = '';
           }
         });
       }
@@ -2631,6 +2635,8 @@
       const nt = document.getElementById('navToggle');
       if (nd) { nd.classList.remove('open'); nd.setAttribute('aria-hidden','true'); }
       if (nt) nt.classList.remove('active');
+      document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
 
       function doScroll() {
         const target = document.getElementById(key);
