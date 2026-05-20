@@ -47,8 +47,9 @@ self.addEventListener('fetch', event => {
     event.respondWith(
       caches.match(request).then(response => {
         return response || fetch(request).then(fetchResponse => {
+          const cloned = fetchResponse.clone();
           if (fetchResponse.status === 200) {
-            caches.open(CACHE_NAME).then(c => c.put(request, fetchResponse.clone()));
+            caches.open(CACHE_NAME).then(c => c.put(request, cloned));
           }
           return fetchResponse;
         });
