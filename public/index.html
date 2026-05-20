@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <!-- Hosted on Cloudflare Pages: casa-afriqa.pages.dev -->
     <title>Koya</title>
     <link rel="icon" type="image/png" href="koya_pics/koyafavicon.png" />
     <!-- Preload first hero image (LCP) so it starts fetching immediately -->
@@ -2042,8 +2041,8 @@
                 <div class="nav-dropdown-section">Links</div>
                 <a id="nav-phone" href="tel:+2202222208" class="nav-dropdown-ext"><i class="fas fa-phone"></i>+220 2222208</a>
                 <a id="nav-email" href="mailto:comedine@koya.living" class="nav-dropdown-ext"><i class="fas fa-envelope"></i>comedine@koya.living</a>
-                <a id="nav-instagram" href="https://www.instagram.com/casaafriqa" target="_blank" rel="noopener noreferrer" class="nav-dropdown-ext"><i class="fab fa-instagram"></i>Instagram</a>
-                <a id="nav-tiktok" href="https://www.tiktok.com/@casaafriqa" target="_blank" rel="noopener noreferrer" class="nav-dropdown-ext"><i class="fab fa-tiktok"></i>TikTok</a>
+                <a id="nav-instagram" href="#" target="_blank" rel="noopener noreferrer" class="nav-dropdown-ext"><i class="fab fa-instagram"></i>Instagram</a>
+                <a id="nav-tiktok" href="#" target="_blank" rel="noopener noreferrer" class="nav-dropdown-ext"><i class="fab fa-tiktok"></i>TikTok</a>
                 <a id="nav-whatsapp" href="https://api.whatsapp.com/send/?phone=2202222208" target="_blank" rel="noopener noreferrer" class="nav-dropdown-ext"><i class="fab fa-whatsapp"></i>WhatsApp</a>
                 <hr class="nav-dropdown-divider" />
                 <div class="nav-dropdown-section">Account</div>
@@ -2200,8 +2199,8 @@
                     <div>
                         <div class="footer-block-label footer-follow-label">Follow us</div>
                         <div class="footer-socials">
-                            <a id="footer-instagram" href="https://www.instagram.com/casaafriqa" target="_blank" rel="noopener noreferrer" class="footer-social-btn"><i class="fab fa-instagram"></i>Instagram</a>
-                            <a id="footer-tiktok" href="https://www.tiktok.com/@casaafriqa" target="_blank" rel="noopener noreferrer" class="footer-social-btn"><i class="fab fa-tiktok"></i>TikTok</a>
+                            <a id="footer-instagram" href="#" target="_blank" rel="noopener noreferrer" class="footer-social-btn"><i class="fab fa-instagram"></i>Instagram</a>
+                            <a id="footer-tiktok" href="#" target="_blank" rel="noopener noreferrer" class="footer-social-btn"><i class="fab fa-tiktok"></i>TikTok</a>
                             <a id="footer-whatsapp" href="https://api.whatsapp.com/send/?phone=2202222208" target="_blank" rel="noopener noreferrer" class="footer-social-btn"><i class="fab fa-whatsapp"></i>WhatsApp</a>
                         </div>
                     </div>
@@ -2504,9 +2503,9 @@
 
         // Fingerprint data to detect price/menu changes
         const fingerprint = items.map(i => `${i.id}:${i.price}:${i.name}:${i.hidden}:${i.badge}`).join('|');
-        const lastFingerprint = sessionStorage.getItem('casa_afriqa_menu_fp');
+        const lastFingerprint = sessionStorage.getItem('koya_menu_fp');
         const hasChanged = lastFingerprint && lastFingerprint !== fingerprint;
-        sessionStorage.setItem('casa_afriqa_menu_fp', fingerprint);
+        sessionStorage.setItem('koya_menu_fp', fingerprint);
 
         // If this is a background refresh and nothing changed, skip re-render
         if (isBackgroundRefresh && !hasChanged) return;
