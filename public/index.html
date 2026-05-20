@@ -2287,6 +2287,7 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
+      if (new URLSearchParams(window.location.search).get('signin') === '1') openAuthModal();
       const lightbox = document.getElementById('imageLightbox');
       lightbox.addEventListener('click', (e) => {
         if (e.target === lightbox) {
@@ -2971,6 +2972,8 @@
       localStorage.setItem('koya_token', token);
       localStorage.setItem('koya_user', JSON.stringify(user));
       updateAuthUI();
+      const back = new URLSearchParams(window.location.search).get('back');
+      if (back === 'reserve') { window.location.href = 'reserve.html'; return; }
     }
 
     function clearAuth() {
