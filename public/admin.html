@@ -602,7 +602,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-const API = 'https://koya.living';
+const API = window.location.origin.replace(/^https:\/\/www\./, 'https://');
 let token = sessionStorage.getItem('admin_token') || '';
 let staffRole = sessionStorage.getItem('admin_role') || 'admin'; // 'admin'|'receptionist'|'waiter'
 let staffName = sessionStorage.getItem('admin_name') || '';
