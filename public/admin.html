@@ -466,7 +466,7 @@
         <div class="mb-3">
           <label>Image</label>
           <input type="file" id="add-image-file" class="form-control mt-1" accept="image/jpeg,image/png,image/webp,image/gif" onchange="previewAddImage()" />
-          <small class="text-muted d-block mt-2">JPEG, PNG, WebP, or GIF · Max 5MB (auto-converts to WebP)</small>
+          <small class="text-muted d-block mt-2">JPEG, PNG, WebP, or GIF · Max 20MB (compressed automatically)</small>
           <div id="add-image-preview" style="margin-top:0.75rem; display:none;">
             <img id="add-image-thumb" src="" alt="preview" style="max-width:100px; max-height:100px; border-radius:8px; border: 1px solid rgba(212,175,55,0.3);" />
           </div>
@@ -570,7 +570,7 @@
         <div class="mb-3">
           <label>Image</label>
           <input type="file" id="edit-image-file" class="form-control mt-1" accept="image/jpeg,image/png,image/webp,image/gif" onchange="previewEditImage()" />
-          <small class="text-muted d-block mt-2">JPEG, PNG, WebP, or GIF · Max 5MB (auto-converts to WebP)</small>
+          <small class="text-muted d-block mt-2">JPEG, PNG, WebP, or GIF · Max 20MB (compressed automatically)</small>
           <div id="edit-image-preview" style="margin-top:0.75rem;">
             <img id="edit-image-thumb" src="" alt="preview" style="max-width:100px; max-height:100px; border-radius:8px; border: 1px solid rgba(212,175,55,0.3); display:none;" />
           </div>
@@ -1001,6 +1001,27 @@ function fileToBase64(file) {
   });
 }
 
+// Compress image in browser before upload — resizes to max 1400px wide, exports as JPEG ~85%
+// Reduces a 3MB photo to ~250KB before it ever leaves the device
+function compressImage(file, maxWidth = 1400, quality = 0.85) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      let { width, height } = img;
+      if (width > maxWidth) { height = Math.round(height * maxWidth / width); width = maxWidth; }
+      const canvas = document.createElement('canvas');
+      canvas.width = width; canvas.height = height;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, width, height);
+      canvas.toBlob(blob => blob ? resolve(new File([blob], 'image.jpg', { type: 'image/jpeg' })) : reject(new Error('Compression failed')), 'image/jpeg', quality);
+    };
+    img.onerror = reject;
+    img.src = url;
+  });
+}
+
 async function previewAddImage() {
   const file = document.getElementById('add-image-file').files[0];
   if (!file) return;
@@ -1011,20 +1032,23 @@ async function previewAddImage() {
     document.getElementById('add-image-file').value = '';
     return;
   }
-  if (file.size > 5 * 1024 * 1024) {
-    alert('Image too large (max 5MB)');
+  if (file.size > 20 * 1024 * 1024) {
+    alert('Image too large (max 20MB)');
     document.getElementById('add-image-file').value = '';
     return;
   }
-  
+
   try {
     // Show loading state
     const thumb = document.getElementById('add-image-thumb');
     thumb.src = 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22%3E%3Crect fill=%22%23222%22 width=%22100%22 height=%22100%22/%3E%3C/svg%3E';
-    
+
+    // Compress before upload
+    const compressed = await compressImage(file);
+
     // Upload to backend
     const formData = new FormData();
-    formData.append('file', file);
+    formData.append('file', compressed);
     
     const res = await fetch(`${API}/api/admin/upload-image`, {
       method: 'POST',
@@ -1059,21 +1083,24 @@ async function previewEditImage() {
     document.getElementById('edit-image-file').value = '';
     return;
   }
-  if (file.size > 5 * 1024 * 1024) {
-    alert('Image too large (max 5MB)');
+  if (file.size > 20 * 1024 * 1024) {
+    alert('Image too large (max 20MB)');
     document.getElementById('edit-image-file').value = '';
     return;
   }
-  
+
   try {
     // Show loading state
     const thumb = document.getElementById('edit-image-thumb');
     thumb.src = 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22%3E%3Crect fill=%22%23222%22 width=%22100%22 height=%22100%22/%3E%3C/svg%3E';
     thumb.style.display = 'block';
-    
+
+    // Compress before upload
+    const compressed = await compressImage(file);
+
     // Upload to backend
     const formData = new FormData();
-    formData.append('file', file);
+    formData.append('file', compressed);
     
     const res = await fetch(`${API}/api/admin/upload-image`, {
       method: 'POST',
