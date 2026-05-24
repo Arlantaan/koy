@@ -9,58 +9,58 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <style>
     body { background: #0b0b0b; color: #f0ede8; font-family: 'Segoe UI', sans-serif; }
-    .topbar { background: #111; border-bottom: 1px solid rgba(212,175,55,0.3); padding: 1rem 1.5rem; display:flex; align-items:center; justify-content:space-between; }
-    .topbar h1 { font-size: 1.2rem; color: #d4af37; margin: 0; }
-    #login-screen { max-width: 380px; margin: 8vh auto; background: #111; border: 1px solid rgba(212,175,55,0.3); border-radius: 12px; padding: 2.5rem; }
-    #login-screen h2 { color: #d4af37; margin-bottom: 1.5rem; font-size: 1.4rem; }
-    .form-control { background: #1a1a1a; border: 1px solid rgba(212,175,55,0.3); color: #f0ede8; }
-    .form-control:focus { background: #1a1a1a; border-color: #d4af37; color: #f0ede8; box-shadow: 0 0 0 3px rgba(212,175,55,0.15); }
-    .btn-gold { background: #d4af37; color: #000; font-weight: 700; border: none; }
-    .btn-gold:hover { background: #e8c84a; color: #000; }
-    .section-header { background: #1a1a1a; border-left: 3px solid #d4af37; padding: 0.6rem 1rem; margin: 2rem 0 0.5rem; font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase; color: #d4af37; }
+    .topbar { background: #111; border-bottom: 1px solid rgba(151,131,107,0.3); padding: 1rem 1.5rem; display:flex; align-items:center; justify-content:space-between; }
+    .topbar h1 { font-size: 1.2rem; color: #97836B; margin: 0; }
+    #login-screen { max-width: 380px; margin: 8vh auto; background: #111; border: 1px solid rgba(151,131,107,0.3); border-radius: 12px; padding: 2.5rem; }
+    #login-screen h2 { color: #97836B; margin-bottom: 1.5rem; font-size: 1.4rem; }
+    .form-control { background: #1a1a1a; border: 1px solid rgba(151,131,107,0.3); color: #f0ede8; }
+    .form-control:focus { background: #1a1a1a; border-color: #97836B; color: #f0ede8; box-shadow: 0 0 0 3px rgba(151,131,107,0.15); }
+    .btn-gold { background: #97836B; color: #000; font-weight: 700; border: none; }
+    .btn-gold:hover { background: #b09b82; color: #000; }
+    .section-header { background: #1a1a1a; border-left: 3px solid #97836B; padding: 0.6rem 1rem; margin: 2rem 0 0.5rem; font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase; color: #97836B; }
     .item-row { background: #111; border: 1px solid rgba(255,255,255,0.07); border-radius: 8px; padding: 0.85rem 1rem; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.75rem; }
-    .item-row img { width: 46px; height: 46px; border-radius: 50%; object-fit: cover; flex-shrink: 0; border: 1px solid rgba(212,175,55,0.3); background: #1a1a1a; }
-    .item-row .no-img { width: 46px; height: 46px; border-radius: 50%; background: #1a1a1a; border: 1px solid rgba(212,175,55,0.3); display: flex; align-items: center; justify-content: center; color: #555; flex-shrink: 0; }
+    .item-row img { width: 46px; height: 46px; border-radius: 50%; object-fit: cover; flex-shrink: 0; border: 1px solid rgba(151,131,107,0.3); background: #1a1a1a; }
+    .item-row .no-img { width: 46px; height: 46px; border-radius: 50%; background: #1a1a1a; border: 1px solid rgba(151,131,107,0.3); display: flex; align-items: center; justify-content: center; color: #555; flex-shrink: 0; }
     .item-info { flex: 1; min-width: 0; }
     .item-name { font-weight: 600; font-size: 0.92rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .item-price { color: #d4af37; font-size: 0.8rem; }
+    .item-price { color: #97836B; font-size: 0.8rem; }
     .item-desc { color: #888; font-size: 0.75rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .form-check-input:checked { background-color: #d4af37; border-color: #d4af37; }
+    .form-check-input:checked { background-color: #97836B; border-color: #97836B; }
     .badge-hidden { background: rgba(255,60,60,0.15); color: #ff6b6b; border: 1px solid rgba(255,60,60,0.3); font-size: 0.65rem; padding: 0.15rem 0.45rem; border-radius: 999px; }
     .badge-visible { background: rgba(50,200,100,0.15); color: #4cd980; border: 1px solid rgba(50,200,100,0.3); font-size: 0.65rem; padding: 0.15rem 0.45rem; border-radius: 999px; }
-    .edit-btn { background: transparent; border: 1px solid rgba(212,175,55,0.3); color: #d4af37; border-radius: 6px; padding: 0.3rem 0.6rem; font-size: 0.78rem; cursor: pointer; }
-    .edit-btn:hover { background: rgba(212,175,55,0.1); }
-    .modal-content { background: #141414; border: 1px solid rgba(212,175,55,0.3); color: #f0ede8; }
-    .modal-header { border-bottom: 1px solid rgba(212,175,55,0.2); }
-    .modal-footer { border-top: 1px solid rgba(212,175,55,0.2); }
-    .modal-title { color: #d4af37; }
+    .edit-btn { background: transparent; border: 1px solid rgba(151,131,107,0.3); color: #97836B; border-radius: 6px; padding: 0.3rem 0.6rem; font-size: 0.78rem; cursor: pointer; }
+    .edit-btn:hover { background: rgba(151,131,107,0.1); }
+    .modal-content { background: #141414; border: 1px solid rgba(151,131,107,0.3); color: #f0ede8; }
+    .modal-header { border-bottom: 1px solid rgba(151,131,107,0.2); }
+    .modal-footer { border-top: 1px solid rgba(151,131,107,0.2); }
+    .modal-title { color: #97836B; }
     label { color: #aaa; font-size: 0.82rem; }
     .form-check-label { color: #f0ede8; font-size: 0.88rem; }
-    .spinner-border { color: #d4af37; }
+    .spinner-border { color: #97836B; }
     #error-msg { color: #ff6b6b; font-size: 0.85rem; margin-top: 0.5rem; display:none; }
-    .saving-indicator { font-size: 0.75rem; color: #d4af37; display: none; }
+    .saving-indicator { font-size: 0.75rem; color: #97836B; display: none; }
     .badge-pill { display:inline-flex; align-items:center; gap:0.2rem; font-size:0.6rem; font-weight:800; letter-spacing:0.12em; text-transform:uppercase; border-radius:999px; padding:0.1rem 0.5rem; white-space:nowrap; }
-    .badge-pill-new        { background:rgba(212,175,55,0.15); color:#f5d060; border:1px solid rgba(212,175,55,0.5); }
+    .badge-pill-new        { background:rgba(151,131,107,0.15); color:#c4a882; border:1px solid rgba(151,131,107,0.5); }
     .badge-pill-popular    { background:rgba(255,75,43,0.12); color:#ff7057; border:1px solid rgba(255,75,43,0.4); }
     .badge-pill-limited    { background:rgba(255,165,0,0.12); color:#ffaa33; border:1px solid rgba(255,165,0,0.4); }
     .badge-pill-chefs_pick { background:rgba(160,90,220,0.12); color:#c07ef0; border:1px solid rgba(160,90,220,0.4); }
     .badge-pill-coming_soon{ background:rgba(100,180,255,0.1); color:#80c8ff; border:1px solid rgba(100,180,255,0.35); }
-    .badge-select { background:#1a1a1a; border:1px solid rgba(212,175,55,0.3); color:#f0ede8; border-radius:6px; padding:0.4rem 0.6rem; width:100%; font-size:0.85rem; }
-    .badge-select:focus { outline:none; border-color:#d4af37; box-shadow:0 0 0 3px rgba(212,175,55,0.15); }
+    .badge-select { background:#1a1a1a; border:1px solid rgba(151,131,107,0.3); color:#f0ede8; border-radius:6px; padding:0.4rem 0.6rem; width:100%; font-size:0.85rem; }
+    .badge-select:focus { outline:none; border-color:#97836B; box-shadow:0 0 0 3px rgba(151,131,107,0.15); }
     /* Tabs */
-    .admin-tabs { display:flex; gap:0; border-bottom:1px solid rgba(212,175,55,0.18); background:#111; overflow-x:auto; overflow-y:visible; scrollbar-width:none; -ms-overflow-style:none; }
+    .admin-tabs { display:flex; gap:0; border-bottom:1px solid rgba(151,131,107,0.18); background:#111; overflow-x:auto; overflow-y:visible; scrollbar-width:none; -ms-overflow-style:none; }
     .admin-tabs::-webkit-scrollbar { display:none; }
     .admin-tab { flex:0 0 auto; padding:0.65rem 1.25rem; font-size:0.8rem; font-weight:600; letter-spacing:0.06em; text-transform:uppercase; cursor:pointer; background:transparent; border:none; color:#888; transition:color 0.15s; border-bottom:2px solid transparent; margin-bottom:-1px; white-space:nowrap; }
-    .admin-tab.active { color:#d4af37; border-bottom-color:#d4af37; }
+    .admin-tab.active { color:#97836B; border-bottom-color:#97836B; }
     .admin-tab:hover { color:#f0ede8; }
     /* Reservation rows */
     .res-row { background:#111; border:1px solid rgba(255,255,255,0.07); border-radius:8px; padding:0.85rem 1rem; margin-bottom:0.5rem; }
     .res-row-top { display:flex; align-items:flex-start; justify-content:space-between; gap:0.75rem; }
     .res-name { font-weight:700; font-size:0.95rem; }
     .res-meta { font-size:0.75rem; color:#888; margin-top:0.2rem; }
-    .res-date-badge { font-size:0.7rem; font-weight:700; letter-spacing:0.08em; background:rgba(212,175,55,0.1); border:1px solid rgba(212,175,55,0.3); color:#d4af37; border-radius:6px; padding:0.2rem 0.55rem; white-space:nowrap; flex-shrink:0; }
+    .res-date-badge { font-size:0.7rem; font-weight:700; letter-spacing:0.08em; background:rgba(151,131,107,0.1); border:1px solid rgba(151,131,107,0.3); color:#97836B; border-radius:6px; padding:0.2rem 0.55rem; white-space:nowrap; flex-shrink:0; }
     .res-status { display:inline-block; font-size:0.62rem; font-weight:800; letter-spacing:0.12em; text-transform:uppercase; border-radius:999px; padding:0.1rem 0.55rem; white-space:nowrap; }
-    .res-status-pending  { background:rgba(212,175,55,0.12); color:#f5d060; border:1px solid rgba(212,175,55,0.4); }
+    .res-status-pending  { background:rgba(151,131,107,0.12); color:#c4a882; border:1px solid rgba(151,131,107,0.4); }
     .res-status-confirmed{ background:rgba(50,200,100,0.12); color:#4cd980; border:1px solid rgba(50,200,100,0.3); }
     .res-status-cancelled{ background:rgba(255,60,60,0.12); color:#ff6b6b; border:1px solid rgba(255,60,60,0.3); }
     .res-status-seated   { background:rgba(100,180,255,0.12); color:#80c8ff; border:1px solid rgba(100,180,255,0.3); }
@@ -70,33 +70,33 @@
     .res-btn-confirm  { color:#4cd980; border-color:rgba(50,200,100,0.4); }
     .res-btn-cancel   { color:#ff6b6b; border-color:rgba(255,60,60,0.35); }
     .res-btn-seated   { color:#80c8ff; border-color:rgba(100,180,255,0.35); }
-    .res-btn-pending  { color:#f5d060; border-color:rgba(212,175,55,0.4); }
+    .res-btn-pending  { color:#c4a882; border-color:rgba(151,131,107,0.4); }
     .res-btn-delete   { color:#ff6b6b; border-color:rgba(255,60,60,0.3); background:rgba(255,60,60,0.07); }
     .res-filter-bar { display:flex; align-items:center; gap:0.6rem; flex-wrap:wrap; margin-bottom:1rem; }
-    .res-filter-bar input[type=date], .res-filter-bar select { background:#1a1a1a; border:1px solid rgba(212,175,55,0.25); color:#f0ede8; border-radius:6px; padding:0.35rem 0.6rem; font-size:0.8rem; }
-    .res-filter-bar input[type=date]:focus, .res-filter-bar select:focus { outline:none; border-color:#d4af37; }
+    .res-filter-bar input[type=date], .res-filter-bar select { background:#1a1a1a; border:1px solid rgba(151,131,107,0.25); color:#f0ede8; border-radius:6px; padding:0.35rem 0.6rem; font-size:0.8rem; }
+    .res-filter-bar input[type=date]:focus, .res-filter-bar select:focus { outline:none; border-color:#97836B; }
     .res-count { font-size:0.72rem; color:#888; margin-left:auto; }
     .res-stats-bar { display:flex; gap:0.75rem; margin-bottom:1rem; flex-wrap:wrap; }
-    .res-stat { flex:1; min-width:90px; background:#111; border:1px solid rgba(212,175,55,0.15); border-radius:10px; padding:0.65rem 0.85rem; text-align:center; }
-    .res-stat-num { font-size:1.45rem; font-weight:700; color:#d4af37; line-height:1; }
+    .res-stat { flex:1; min-width:90px; background:#111; border:1px solid rgba(151,131,107,0.15); border-radius:10px; padding:0.65rem 0.85rem; text-align:center; }
+    .res-stat-num { font-size:1.45rem; font-weight:700; color:#97836B; line-height:1; }
     .res-stat-label { font-size:0.6rem; color:#888; text-transform:uppercase; letter-spacing:0.1em; margin-top:0.2rem; }
-    .res-row.status-pending   { border-left:3px solid rgba(212,175,55,0.7); }
+    .res-row.status-pending   { border-left:3px solid rgba(151,131,107,0.7); }
     .res-row.status-confirmed { border-left:3px solid rgba(50,200,100,0.7); }
     .res-row.status-seated    { border-left:3px solid rgba(100,180,255,0.7); }
     .res-row.status-cancelled { border-left:3px solid rgba(255,60,60,0.4); }
-    .res-date-group-hdr { font-size:0.68rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:#d4af37; padding:0.8rem 0 0.35rem; border-bottom:1px solid rgba(212,175,55,0.12); margin-bottom:0.5rem; display:flex; align-items:center; justify-content:space-between; }
-    .res-note-btn { font-size:0.65rem; font-weight:600; background:transparent; border:1px solid rgba(212,175,55,0.2); color:#888; border-radius:5px; padding:0.18rem 0.45rem; cursor:pointer; }
-    .res-note-btn:hover { border-color:#d4af37; color:#d4af37; }
-    .res-note-btn.has-note { border-color:rgba(212,175,55,0.4); color:#d4af37; }
+    .res-date-group-hdr { font-size:0.68rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:#97836B; padding:0.8rem 0 0.35rem; border-bottom:1px solid rgba(151,131,107,0.12); margin-bottom:0.5rem; display:flex; align-items:center; justify-content:space-between; }
+    .res-note-btn { font-size:0.65rem; font-weight:600; background:transparent; border:1px solid rgba(151,131,107,0.2); color:#888; border-radius:5px; padding:0.18rem 0.45rem; cursor:pointer; }
+    .res-note-btn:hover { border-color:#97836B; color:#97836B; }
+    .res-note-btn.has-note { border-color:rgba(151,131,107,0.4); color:#97836B; }
     .res-notes-editor { margin-top:0.65rem; padding-top:0.65rem; border-top:1px solid rgba(255,255,255,0.05); }
-    .res-notes-textarea { width:100%; background:#1a1a1a; border:1px solid rgba(212,175,55,0.25); color:#f0ede8; border-radius:8px; padding:0.5rem 0.75rem; font-size:0.8rem; font-family:inherit; resize:vertical; min-height:72px; outline:none; display:block; }
-    .res-notes-textarea:focus { border-color:#d4af37; box-shadow:0 0 0 2px rgba(212,175,55,0.12); }
+    .res-notes-textarea { width:100%; background:#1a1a1a; border:1px solid rgba(151,131,107,0.25); color:#f0ede8; border-radius:8px; padding:0.5rem 0.75rem; font-size:0.8rem; font-family:inherit; resize:vertical; min-height:72px; outline:none; display:block; }
+    .res-notes-textarea:focus { border-color:#97836B; box-shadow:0 0 0 2px rgba(151,131,107,0.12); }
     .res-notes-editor-actions { display:flex; gap:0.5rem; margin-top:0.4rem; }
-    .btn-print-sheet { display:inline-flex; align-items:center; gap:0.35rem; font-size:0.75rem; font-weight:700; letter-spacing:0.05em; background:rgba(212,175,55,0.1); color:#d4af37; border:1px solid rgba(212,175,55,0.35); border-radius:6px; padding:0.35rem 0.75rem; cursor:pointer; transition:background 0.15s; }
-    .btn-print-sheet:hover { background:rgba(212,175,55,0.2); }
-    .res-refresh-btn { font-size:0.72rem; background:transparent; border:1px solid rgba(212,175,55,0.2); color:#888; border-radius:6px; padding:0.3rem 0.6rem; cursor:pointer; }
-    .res-refresh-btn:hover { border-color:#d4af37; color:#d4af37; }
-    @keyframes orderTabFlash { 0%,100%{background:rgba(212,175,55,0);}50%{background:rgba(212,175,55,0.35);} }
+    .btn-print-sheet { display:inline-flex; align-items:center; gap:0.35rem; font-size:0.75rem; font-weight:700; letter-spacing:0.05em; background:rgba(151,131,107,0.1); color:#97836B; border:1px solid rgba(151,131,107,0.35); border-radius:6px; padding:0.35rem 0.75rem; cursor:pointer; transition:background 0.15s; }
+    .btn-print-sheet:hover { background:rgba(151,131,107,0.2); }
+    .res-refresh-btn { font-size:0.72rem; background:transparent; border:1px solid rgba(151,131,107,0.2); color:#888; border-radius:6px; padding:0.3rem 0.6rem; cursor:pointer; }
+    .res-refresh-btn:hover { border-color:#97836B; color:#97836B; }
+    @keyframes orderTabFlash { 0%,100%{background:rgba(151,131,107,0);}50%{background:rgba(151,131,107,0.35);} }
   </style>
 </head>
 <body>
@@ -106,7 +106,7 @@
   <h2><i class="fas fa-lock me-2"></i>Koya Staff Login</h2>
   <!-- Toggle between admin and staff login -->
   <div style="display:flex;gap:0.5rem;margin-bottom:1.2rem;">
-    <button id="login-tab-admin" onclick="setLoginMode('admin')" style="flex:1;padding:0.4rem;border-radius:7px;border:1px solid rgba(212,175,55,0.4);background:rgba(212,175,55,0.15);color:#d4af37;font-weight:700;cursor:pointer;font-size:0.8rem;">Admin</button>
+    <button id="login-tab-admin" onclick="setLoginMode('admin')" style="flex:1;padding:0.4rem;border-radius:7px;border:1px solid rgba(151,131,107,0.4);background:rgba(151,131,107,0.15);color:#97836B;font-weight:700;cursor:pointer;font-size:0.8rem;">Admin</button>
     <button id="login-tab-staff" onclick="setLoginMode('staff')" style="flex:1;padding:0.4rem;border-radius:7px;border:1px solid rgba(255,255,255,0.1);background:transparent;color:#888;font-weight:700;cursor:pointer;font-size:0.8rem;">Staff</button>
   </div>
   <div id="login-admin-fields">
@@ -145,8 +145,8 @@
   <!-- Tab bar -->
   <div class="admin-tabs">
     <button class="admin-tab active" id="tab-menu" onclick="switchTab('menu')"><i class="fas fa-utensils me-1"></i>Menu</button>
-    <button class="admin-tab" id="tab-orders" onclick="switchTab('orders')"><i class="fas fa-receipt me-1"></i>Orders <span id="orders-new-badge" style="display:none; background:rgba(212,175,55,0.25); color:#f5d060; border-radius:999px; font-size:0.6rem; padding:0.05rem 0.45rem; margin-left:0.25rem;"></span></button>
-    <button class="admin-tab" id="tab-reservations" onclick="switchTab('reservations')"><i class="fas fa-calendar me-1"></i>Reservations <span id="res-pending-badge" style="display:none; background:rgba(212,175,55,0.25); color:#f5d060; border-radius:999px; font-size:0.6rem; padding:0.05rem 0.45rem; margin-left:0.25rem;"></span></button>
+    <button class="admin-tab" id="tab-orders" onclick="switchTab('orders')"><i class="fas fa-receipt me-1"></i>Orders <span id="orders-new-badge" style="display:none; background:rgba(151,131,107,0.25); color:#c4a882; border-radius:999px; font-size:0.6rem; padding:0.05rem 0.45rem; margin-left:0.25rem;"></span></button>
+    <button class="admin-tab" id="tab-reservations" onclick="switchTab('reservations')"><i class="fas fa-calendar me-1"></i>Reservations <span id="res-pending-badge" style="display:none; background:rgba(151,131,107,0.25); color:#c4a882; border-radius:999px; font-size:0.6rem; padding:0.05rem 0.45rem; margin-left:0.25rem;"></span></button>
     <button class="admin-tab" id="tab-settings" onclick="switchTab('settings')"><i class="fas fa-sliders-h me-1"></i>Settings</button>
     <button class="admin-tab" id="tab-customers" onclick="switchTab('customers')"><i class="fas fa-users me-1"></i>Customers</button>
   </div>
@@ -168,7 +168,7 @@
     </div>
     <div class="res-filter-bar">
       <input type="date" id="res-date-filter" onchange="loadReservations()" />
-      <button class="btn btn-sm" style="background:rgba(212,175,55,0.12);color:#d4af37;border:1px solid rgba(212,175,55,0.3);font-size:0.75rem;" onclick="setResDateToday()">Today</button>
+      <button class="btn btn-sm" style="background:rgba(151,131,107,0.12);color:#97836B;border:1px solid rgba(151,131,107,0.3);font-size:0.75rem;" onclick="setResDateToday()">Today</button>
       <select id="res-status-filter" onchange="renderReservations()">
         <option value="">All statuses</option>
         <option value="pending">Pending</option>
@@ -176,7 +176,7 @@
         <option value="seated">Seated</option>
         <option value="cancelled">Cancelled</option>
       </select>
-      <input type="text" id="res-search" placeholder="Search name / phone…" oninput="renderReservations()" style="background:#1a1a1a;border:1px solid rgba(212,175,55,0.25);color:#f0ede8;border-radius:6px;padding:0.35rem 0.6rem;font-size:0.8rem;min-width:150px;flex:1;" />
+      <input type="text" id="res-search" placeholder="Search name / phone…" oninput="renderReservations()" style="background:#1a1a1a;border:1px solid rgba(151,131,107,0.25);color:#f0ede8;border-radius:6px;padding:0.35rem 0.6rem;font-size:0.8rem;min-width:150px;flex:1;" />
       <button class="res-refresh-btn" onclick="loadReservations()"><i class="fas fa-sync-alt me-1"></i>Refresh</button>
       <button class="btn-print-sheet" onclick="printTodaySheet()"><i class="fas fa-print me-1"></i>Today's Sheet</button>
       <button class="btn btn-sm" style="background:transparent;color:#555;border:1px solid rgba(255,255,255,0.1);font-size:0.75rem;" onclick="document.getElementById('res-date-filter').value='';document.getElementById('res-search').value='';loadReservations();">Clear</button>
@@ -193,7 +193,7 @@
     <div style="display:flex; align-items:center; gap:0.75rem; margin-bottom:1rem; flex-wrap:wrap;">
       <button class="res-refresh-btn" onclick="loadOrders()"><i class="fas fa-sync-alt me-1"></i>Refresh</button>
       <label style="font-size:0.75rem; color:#888; display:flex; align-items:center; gap:0.4rem; cursor:pointer;">
-        <input type="checkbox" id="orders-show-done" onchange="renderOrders()" style="accent-color:#d4af37;"> Show done orders
+        <input type="checkbox" id="orders-show-done" onchange="renderOrders()" style="accent-color:#97836B;"> Show done orders
       </label>
       <span id="orders-count" style="font-size:0.72rem; color:#555; margin-left:auto;"></span>
     </div>
@@ -207,7 +207,7 @@
 
     <!-- Analytics strip -->
     <div id="cust-analytics" style="display:none;gap:0.5rem;flex-wrap:wrap;margin-bottom:1rem;">
-      <div style="flex:1;min-width:90px;background:#1a1a1a;border:1px solid rgba(212,175,55,0.15);border-radius:9px;padding:0.7rem 0.9rem;text-align:center;">
+      <div style="flex:1;min-width:90px;background:#1a1a1a;border:1px solid rgba(151,131,107,0.15);border-radius:9px;padding:0.7rem 0.9rem;text-align:center;">
         <div id="cust-stat-total" style="font-size:1.4rem;font-weight:700;color:#f0ede8;line-height:1.2;">—</div>
         <div style="font-size:0.6rem;color:#666;text-transform:uppercase;letter-spacing:0.07em;margin-top:0.15rem;">Customers</div>
       </div>
@@ -215,33 +215,33 @@
         <div id="cust-stat-phone" style="font-size:1.4rem;font-weight:700;color:#2ecc71;line-height:1.2;">—</div>
         <div style="font-size:0.6rem;color:#666;text-transform:uppercase;letter-spacing:0.07em;margin-top:0.15rem;">With Phone</div>
       </div>
-      <div style="flex:1;min-width:90px;background:#1a1a1a;border:1px solid rgba(212,175,55,0.25);border-radius:9px;padding:0.7rem 0.9rem;text-align:center;">
-        <div id="cust-stat-vip" style="font-size:1.4rem;font-weight:700;color:#d4af37;line-height:1.2;">—</div>
+      <div style="flex:1;min-width:90px;background:#1a1a1a;border:1px solid rgba(151,131,107,0.25);border-radius:9px;padding:0.7rem 0.9rem;text-align:center;">
+        <div id="cust-stat-vip" style="font-size:1.4rem;font-weight:700;color:#97836B;line-height:1.2;">—</div>
         <div style="font-size:0.6rem;color:#666;text-transform:uppercase;letter-spacing:0.07em;margin-top:0.15rem;">VIP Regulars</div>
       </div>
-      <div style="flex:1;min-width:90px;background:#1a1a1a;border:1px solid rgba(212,175,55,0.15);border-radius:9px;padding:0.7rem 0.9rem;text-align:center;">
-        <div id="cust-stat-revenue" style="font-size:1.4rem;font-weight:700;color:#d4af37;line-height:1.2;">—</div>
+      <div style="flex:1;min-width:90px;background:#1a1a1a;border:1px solid rgba(151,131,107,0.15);border-radius:9px;padding:0.7rem 0.9rem;text-align:center;">
+        <div id="cust-stat-revenue" style="font-size:1.4rem;font-weight:700;color:#97836B;line-height:1.2;">—</div>
         <div style="font-size:0.6rem;color:#666;text-transform:uppercase;letter-spacing:0.07em;margin-top:0.15rem;">Est. Revenue</div>
       </div>
     </div>
 
     <!-- Top regulars -->
     <div id="cust-top" style="display:none;margin-bottom:1rem;">
-      <div style="font-size:0.63rem;color:#666;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.5rem;"><i class="fas fa-crown" style="color:#d4af37;margin-right:0.3rem;"></i>Top Regulars — Reach Out</div>
+      <div style="font-size:0.63rem;color:#666;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.5rem;"><i class="fas fa-crown" style="color:#97836B;margin-right:0.3rem;"></i>Top Regulars — Reach Out</div>
       <div id="cust-top-cards" style="display:flex;gap:0.5rem;overflow-x:auto;padding-bottom:0.3rem;"></div>
     </div>
 
     <!-- Sort + export -->
     <div id="cust-controls" style="display:none;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.4rem;margin-bottom:0.75rem;">
       <div id="cust-sort-btns" style="display:flex;gap:0.3rem;flex-wrap:wrap;"></div>
-      <button onclick="exportCustomersCSV()" style="background:rgba(212,175,55,0.1);border:1px solid rgba(212,175,55,0.3);color:#d4af37;border-radius:6px;padding:0.28rem 0.7rem;font-size:0.72rem;cursor:pointer;white-space:nowrap;"><i class="fas fa-download" style="margin-right:0.3rem;"></i>Export CSV</button>
+      <button onclick="exportCustomersCSV()" style="background:rgba(151,131,107,0.1);border:1px solid rgba(151,131,107,0.3);color:#97836B;border-radius:6px;padding:0.28rem 0.7rem;font-size:0.72rem;cursor:pointer;white-space:nowrap;"><i class="fas fa-download" style="margin-right:0.3rem;"></i>Export CSV</button>
     </div>
 
     <!-- Search + count -->
     <div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:1rem;">
       <div style="position:relative;flex:1;">
         <i class="fas fa-search" style="position:absolute;left:0.75rem;top:50%;transform:translateY(-50%);color:#666;font-size:0.8rem;pointer-events:none;"></i>
-        <input id="customer-search" type="text" placeholder="Search by name, phone or email…" oninput="filterCustomers()" style="width:100%;padding:0.45rem 0.75rem 0.45rem 2.1rem;background:#1a1a1a;border:1px solid rgba(212,175,55,0.2);border-radius:8px;color:#f0ede8;font-size:0.82rem;">
+        <input id="customer-search" type="text" placeholder="Search by name, phone or email…" oninput="filterCustomers()" style="width:100%;padding:0.45rem 0.75rem 0.45rem 2.1rem;background:#1a1a1a;border:1px solid rgba(151,131,107,0.2);border-radius:8px;color:#f0ede8;font-size:0.82rem;">
       </div>
       <span id="customer-count" style="font-size:0.72rem;color:#555;white-space:nowrap;"></span>
     </div>
@@ -255,113 +255,113 @@
     <div id="settings-loading" class="text-center py-5"><div class="spinner-border"></div><p class="mt-3 text-muted">Loading settings...</p></div>
     <div id="settings-form" style="display:none;">
 
-      <div class="card mb-3" style="background:#1a1a1a;border:1px solid rgba(212,175,55,0.2);border-radius:10px;">
+      <div class="card mb-3" style="background:#1a1a1a;border:1px solid rgba(151,131,107,0.2);border-radius:10px;">
         <div class="card-body">
-          <h6 class="mb-3" style="color:#d4af37;font-size:0.75rem;text-transform:uppercase;letter-spacing:0.08em;">Contact</h6>
+          <h6 class="mb-3" style="color:#97836B;font-size:0.75rem;text-transform:uppercase;letter-spacing:0.08em;">Contact</h6>
           <div class="mb-3">
             <label class="form-label" style="font-size:0.8rem;color:#aaa;">Phone Number</label>
-            <input type="text" id="set-phone" class="form-control" style="background:#111;border-color:rgba(212,175,55,0.25);color:#f0ede8;" placeholder="+220 2222208">
+            <input type="text" id="set-phone" class="form-control" style="background:#111;border-color:rgba(151,131,107,0.25);color:#f0ede8;" placeholder="+220 2222208">
           </div>
           <div class="mb-3">
             <label class="form-label" style="font-size:0.8rem;color:#aaa;">WhatsApp Number <span style="color:#555;font-size:0.72rem;">(digits only, no +)</span></label>
-            <input type="text" id="set-whatsapp" class="form-control" style="background:#111;border-color:rgba(212,175,55,0.25);color:#f0ede8;" placeholder="2202222208">
+            <input type="text" id="set-whatsapp" class="form-control" style="background:#111;border-color:rgba(151,131,107,0.25);color:#f0ede8;" placeholder="2202222208">
           </div>
           <div class="mb-0">
             <label class="form-label" style="font-size:0.8rem;color:#aaa;">Email</label>
-            <input type="email" id="set-email" class="form-control" style="background:#111;border-color:rgba(212,175,55,0.25);color:#f0ede8;" placeholder="comedine@koya.living">
+            <input type="email" id="set-email" class="form-control" style="background:#111;border-color:rgba(151,131,107,0.25);color:#f0ede8;" placeholder="comedine@koya.living">
           </div>
         </div>
       </div>
 
-      <div class="card mb-3" style="background:#1a1a1a;border:1px solid rgba(212,175,55,0.2);border-radius:10px;">
+      <div class="card mb-3" style="background:#1a1a1a;border:1px solid rgba(151,131,107,0.2);border-radius:10px;">
         <div class="card-body">
-          <h6 class="mb-3" style="color:#d4af37;font-size:0.75rem;text-transform:uppercase;letter-spacing:0.08em;">Opening Hours</h6>
+          <h6 class="mb-3" style="color:#97836B;font-size:0.75rem;text-transform:uppercase;letter-spacing:0.08em;">Opening Hours</h6>
           <div class="row">
             <div class="col-6">
               <label class="form-label" style="font-size:0.8rem;color:#aaa;">Opens</label>
-              <input type="text" id="set-hours-open" class="form-control" style="background:#111;border-color:rgba(212,175,55,0.25);color:#f0ede8;" placeholder="18:00">
+              <input type="text" id="set-hours-open" class="form-control" style="background:#111;border-color:rgba(151,131,107,0.25);color:#f0ede8;" placeholder="18:00">
             </div>
             <div class="col-6">
               <label class="form-label" style="font-size:0.8rem;color:#aaa;">Closes</label>
-              <input type="text" id="set-hours-close" class="form-control" style="background:#111;border-color:rgba(212,175,55,0.25);color:#f0ede8;" placeholder="01:30">
+              <input type="text" id="set-hours-close" class="form-control" style="background:#111;border-color:rgba(151,131,107,0.25);color:#f0ede8;" placeholder="01:30">
             </div>
           </div>
         </div>
       </div>
 
-      <div class="card mb-3" style="background:#1a1a1a;border:1px solid rgba(212,175,55,0.2);border-radius:10px;">
+      <div class="card mb-3" style="background:#1a1a1a;border:1px solid rgba(151,131,107,0.2);border-radius:10px;">
         <div class="card-body">
-          <h6 class="mb-3" style="color:#d4af37;font-size:0.75rem;text-transform:uppercase;letter-spacing:0.08em;">Social Media</h6>
+          <h6 class="mb-3" style="color:#97836B;font-size:0.75rem;text-transform:uppercase;letter-spacing:0.08em;">Social Media</h6>
           <div class="mb-3">
             <label class="form-label" style="font-size:0.8rem;color:#aaa;"><i class="fab fa-instagram me-1"></i>Instagram handle <span style="color:#555;font-size:0.72rem;">(without @)</span></label>
-            <input type="text" id="set-instagram" class="form-control" style="background:#111;border-color:rgba(212,175,55,0.25);color:#f0ede8;" placeholder="koyarestaurant">
+            <input type="text" id="set-instagram" class="form-control" style="background:#111;border-color:rgba(151,131,107,0.25);color:#f0ede8;" placeholder="koyarestaurant">
           </div>
           <div class="mb-3">
             <label class="form-label" style="font-size:0.8rem;color:#aaa;"><i class="fab fa-facebook me-1"></i>Facebook page handle</label>
-            <input type="text" id="set-facebook" class="form-control" style="background:#111;border-color:rgba(212,175,55,0.25);color:#f0ede8;" placeholder="koyarestaurant">
+            <input type="text" id="set-facebook" class="form-control" style="background:#111;border-color:rgba(151,131,107,0.25);color:#f0ede8;" placeholder="koyarestaurant">
           </div>
           <div class="mb-0">
             <label class="form-label" style="font-size:0.8rem;color:#aaa;"><i class="fab fa-tiktok me-1"></i>TikTok handle <span style="color:#555;font-size:0.72rem;">(with @)</span></label>
-            <input type="text" id="set-tiktok" class="form-control" style="background:#111;border-color:rgba(212,175,55,0.25);color:#f0ede8;" placeholder="@koyarestaurant">
+            <input type="text" id="set-tiktok" class="form-control" style="background:#111;border-color:rgba(151,131,107,0.25);color:#f0ede8;" placeholder="@koyarestaurant">
           </div>
         </div>
       </div>
 
-      <div class="card mb-3" style="background:#1a1a1a;border:1px solid rgba(212,175,55,0.2);border-radius:10px;">
+      <div class="card mb-3" style="background:#1a1a1a;border:1px solid rgba(151,131,107,0.2);border-radius:10px;">
         <div class="card-body">
-          <h6 class="mb-3" style="color:#d4af37;font-size:0.75rem;text-transform:uppercase;letter-spacing:0.08em;">Content</h6>
+          <h6 class="mb-3" style="color:#97836B;font-size:0.75rem;text-transform:uppercase;letter-spacing:0.08em;">Content</h6>
           <div class="mb-3">
             <label class="form-label" style="font-size:0.8rem;color:#aaa;">Cover Tagline</label>
-            <input type="text" id="set-cover-tagline" class="form-control" style="background:#111;border-color:rgba(212,175,55,0.25);color:#f0ede8;" placeholder="Fine Dining · The Gambia">
+            <input type="text" id="set-cover-tagline" class="form-control" style="background:#111;border-color:rgba(151,131,107,0.25);color:#f0ede8;" placeholder="Fine Dining · The Gambia">
           </div>
           <div class="mb-3">
             <label class="form-label" style="font-size:0.8rem;color:#aaa;">Google Maps URL</label>
-            <input type="text" id="set-maps-url" class="form-control" style="background:#111;border-color:rgba(212,175,55,0.25);color:#f0ede8;" placeholder="https://maps.app.goo.gl/...">
+            <input type="text" id="set-maps-url" class="form-control" style="background:#111;border-color:rgba(151,131,107,0.25);color:#f0ede8;" placeholder="https://maps.app.goo.gl/...">
           </div>
           <div class="mb-0">
             <label class="form-label" style="font-size:0.8rem;color:#aaa;">About Description</label>
-            <textarea id="set-about-description" class="form-control" rows="4" style="background:#111;border-color:rgba(212,175,55,0.25);color:#f0ede8;resize:vertical;"></textarea>
+            <textarea id="set-about-description" class="form-control" rows="4" style="background:#111;border-color:rgba(151,131,107,0.25);color:#f0ede8;resize:vertical;"></textarea>
           </div>
         </div>
       </div>
 
       <div class="d-flex gap-2 justify-content-end mb-4">
         <button class="btn btn-sm" style="background:transparent;border:1px solid rgba(255,255,255,0.15);color:#888;" onclick="loadSettings()">Discard</button>
-        <button class="btn btn-sm" style="background:rgba(212,175,55,0.15);border:1px solid rgba(212,175,55,0.4);color:#d4af37;font-weight:600;" onclick="saveSettings()">Save Settings</button>
+        <button class="btn btn-sm" style="background:rgba(151,131,107,0.15);border:1px solid rgba(151,131,107,0.4);color:#97836B;font-weight:600;" onclick="saveSettings()">Save Settings</button>
       </div>
 
-      <div class="card mb-4" style="background:#1a1a1a;border:1px solid rgba(212,175,55,0.2);border-radius:10px;">
+      <div class="card mb-4" style="background:#1a1a1a;border:1px solid rgba(151,131,107,0.2);border-radius:10px;">
         <div class="card-body">
-          <h6 class="mb-3" style="color:#d4af37;font-size:0.75rem;text-transform:uppercase;letter-spacing:0.08em;">Security</h6>
+          <h6 class="mb-3" style="color:#97836B;font-size:0.75rem;text-transform:uppercase;letter-spacing:0.08em;">Security</h6>
           <div class="mb-3">
             <label class="form-label" style="font-size:0.8rem;color:#aaa;">New Admin Password</label>
-            <input type="password" id="set-new-password" class="form-control" style="background:#111;border-color:rgba(212,175,55,0.25);color:#f0ede8;" placeholder="Min. 6 characters">
+            <input type="password" id="set-new-password" class="form-control" style="background:#111;border-color:rgba(151,131,107,0.25);color:#f0ede8;" placeholder="Min. 6 characters">
           </div>
           <div class="mb-3">
             <label class="form-label" style="font-size:0.8rem;color:#aaa;">Confirm New Password</label>
-            <input type="password" id="set-confirm-password" class="form-control" style="background:#111;border-color:rgba(212,175,55,0.25);color:#f0ede8;" placeholder="Repeat new password">
+            <input type="password" id="set-confirm-password" class="form-control" style="background:#111;border-color:rgba(151,131,107,0.25);color:#f0ede8;" placeholder="Repeat new password">
           </div>
           <div id="pw-change-msg" style="display:none;font-size:0.8rem;margin-bottom:0.75rem;"></div>
-          <button class="btn btn-sm" style="background:rgba(212,175,55,0.15);border:1px solid rgba(212,175,55,0.4);color:#d4af37;font-weight:600;" onclick="changeAdminPassword()">Change Password</button>
+          <button class="btn btn-sm" style="background:rgba(151,131,107,0.15);border:1px solid rgba(151,131,107,0.4);color:#97836B;font-weight:600;" onclick="changeAdminPassword()">Change Password</button>
         </div>
       </div>
 
       <!-- Staff Management card -->
-      <div class="card mb-4" style="background:#1a1a1a;border:1px solid rgba(212,175,55,0.2);border-radius:10px;">
+      <div class="card mb-4" style="background:#1a1a1a;border:1px solid rgba(151,131,107,0.2);border-radius:10px;">
         <div class="card-body">
-          <h6 class="mb-3" style="color:#d4af37;font-size:0.75rem;text-transform:uppercase;letter-spacing:0.08em;">Staff Accounts</h6>
+          <h6 class="mb-3" style="color:#97836B;font-size:0.75rem;text-transform:uppercase;letter-spacing:0.08em;">Staff Accounts</h6>
           <div id="staff-list" style="margin-bottom:1rem;"></div>
           <!-- Add staff form -->
           <div style="background:#111;border-radius:8px;padding:0.85rem 1rem;border:1px solid rgba(255,255,255,0.06);">
             <div style="font-size:0.72rem;color:#888;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:0.65rem;">Add Staff</div>
             <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
-              <input type="text" id="new-staff-username" class="form-control" style="flex:1;min-width:110px;background:#1a1a1a;border-color:rgba(212,175,55,0.2);color:#f0ede8;font-size:0.82rem;" placeholder="Username" />
-              <input type="password" id="new-staff-password" class="form-control" style="flex:1;min-width:110px;background:#1a1a1a;border-color:rgba(212,175,55,0.2);color:#f0ede8;font-size:0.82rem;" placeholder="Password (min 6)" />
-              <select id="new-staff-role" class="form-control" style="flex:0 0 130px;background:#1a1a1a;border-color:rgba(212,175,55,0.2);color:#f0ede8;font-size:0.82rem;">
+              <input type="text" id="new-staff-username" class="form-control" style="flex:1;min-width:110px;background:#1a1a1a;border-color:rgba(151,131,107,0.2);color:#f0ede8;font-size:0.82rem;" placeholder="Username" />
+              <input type="password" id="new-staff-password" class="form-control" style="flex:1;min-width:110px;background:#1a1a1a;border-color:rgba(151,131,107,0.2);color:#f0ede8;font-size:0.82rem;" placeholder="Password (min 6)" />
+              <select id="new-staff-role" class="form-control" style="flex:0 0 130px;background:#1a1a1a;border-color:rgba(151,131,107,0.2);color:#f0ede8;font-size:0.82rem;">
                 <option value="waiter">Waiter</option>
                 <option value="receptionist">Receptionist</option>
               </select>
-              <button onclick="addStaff()" style="background:rgba(212,175,55,0.15);border:1px solid rgba(212,175,55,0.4);color:#d4af37;font-weight:700;border-radius:6px;padding:0.3rem 0.85rem;cursor:pointer;font-size:0.8rem;white-space:nowrap;">Add</button>
+              <button onclick="addStaff()" style="background:rgba(151,131,107,0.15);border:1px solid rgba(151,131,107,0.4);color:#97836B;font-weight:700;border-radius:6px;padding:0.3rem 0.85rem;cursor:pointer;font-size:0.8rem;white-space:nowrap;">Add</button>
             </div>
             <div id="staff-add-msg" style="display:none;font-size:0.78rem;margin-top:0.5rem;"></div>
           </div>
@@ -375,7 +375,7 @@
   <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Add Items — <span id="aito-table-label" style="color:#d4af37;"></span></h5>
+        <h5 class="modal-title">Add Items — <span id="aito-table-label" style="color:#97836B;"></span></h5>
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
       </div>
       <div class="modal-body" style="max-height:65vh;overflow-y:auto;">
@@ -468,7 +468,7 @@
           <input type="file" id="add-image-file" class="form-control mt-1" accept="image/jpeg,image/png,image/webp,image/gif" onchange="previewAddImage()" />
           <small class="text-muted d-block mt-2">JPEG, PNG, WebP, or GIF · Max 20MB (compressed automatically)</small>
           <div id="add-image-preview" style="margin-top:0.75rem; display:none;">
-            <img id="add-image-thumb" src="" alt="preview" style="max-width:100px; max-height:100px; border-radius:8px; border: 1px solid rgba(212,175,55,0.3);" />
+            <img id="add-image-thumb" src="" alt="preview" style="max-width:100px; max-height:100px; border-radius:8px; border: 1px solid rgba(151,131,107,0.3);" />
           </div>
           <input type="hidden" id="add-image" />
         </div>
@@ -572,7 +572,7 @@
           <input type="file" id="edit-image-file" class="form-control mt-1" accept="image/jpeg,image/png,image/webp,image/gif" onchange="previewEditImage()" />
           <small class="text-muted d-block mt-2">JPEG, PNG, WebP, or GIF · Max 20MB (compressed automatically)</small>
           <div id="edit-image-preview" style="margin-top:0.75rem;">
-            <img id="edit-image-thumb" src="" alt="preview" style="max-width:100px; max-height:100px; border-radius:8px; border: 1px solid rgba(212,175,55,0.3); display:none;" />
+            <img id="edit-image-thumb" src="" alt="preview" style="max-width:100px; max-height:100px; border-radius:8px; border: 1px solid rgba(151,131,107,0.3); display:none;" />
           </div>
           <input type="hidden" id="edit-image" />
         </div>
@@ -680,10 +680,10 @@ function setLoginMode(mode) {
   document.getElementById('login-admin-fields').style.display = isStaff ? 'none' : '';
   document.getElementById('login-staff-fields').style.display = isStaff ? '' : 'none';
   document.getElementById('login-tab-admin').style.cssText = !isStaff
-    ? 'flex:1;padding:0.4rem;border-radius:7px;border:1px solid rgba(212,175,55,0.4);background:rgba(212,175,55,0.15);color:#d4af37;font-weight:700;cursor:pointer;font-size:0.8rem;'
+    ? 'flex:1;padding:0.4rem;border-radius:7px;border:1px solid rgba(151,131,107,0.4);background:rgba(151,131,107,0.15);color:#97836B;font-weight:700;cursor:pointer;font-size:0.8rem;'
     : 'flex:1;padding:0.4rem;border-radius:7px;border:1px solid rgba(255,255,255,0.1);background:transparent;color:#888;font-weight:700;cursor:pointer;font-size:0.8rem;';
   document.getElementById('login-tab-staff').style.cssText = isStaff
-    ? 'flex:1;padding:0.4rem;border-radius:7px;border:1px solid rgba(212,175,55,0.4);background:rgba(212,175,55,0.15);color:#d4af37;font-weight:700;cursor:pointer;font-size:0.8rem;'
+    ? 'flex:1;padding:0.4rem;border-radius:7px;border:1px solid rgba(151,131,107,0.4);background:rgba(151,131,107,0.15);color:#97836B;font-weight:700;cursor:pointer;font-size:0.8rem;'
     : 'flex:1;padding:0.4rem;border-radius:7px;border:1px solid rgba(255,255,255,0.1);background:transparent;color:#888;font-weight:700;cursor:pointer;font-size:0.8rem;';
   document.getElementById('error-msg').style.display = 'none';
 }
@@ -1394,23 +1394,23 @@ function renderOrders() {
     try { items = JSON.parse(o.items); } catch {}
     const itemsHtml = items.map(i =>
       `<span style="display:inline-flex;align-items:center;gap:0.3rem;background:rgba(255,255,255,0.05);border-radius:6px;padding:0.2rem 0.55rem;font-size:0.78rem;color:#ddd;">
-        <strong style="color:#f5d060;">${i.qty}&times;</strong> ${escHtml(i.name)}
+        <strong style="color:#c4a882;">${i.qty}&times;</strong> ${escHtml(i.name)}
         ${i.price ? `<span style="color:#666;font-size:0.72rem;">${escHtml(i.price)}</span>` : ''}
       </span>`
     ).join('');
     const timeAgo = formatTimeAgo(o.created_at);
     const isDone = o.status === 'done';
     return `
-      <div style="background:${isDone ? '#0e0e0e' : '#141414'};border:1px solid ${isDone ? 'rgba(255,255,255,0.07)' : 'rgba(212,175,55,0.2)'};border-radius:10px;padding:1rem 1.1rem;margin-bottom:0.65rem;opacity:${isDone ? '0.55' : '1'};">
+      <div style="background:${isDone ? '#0e0e0e' : '#141414'};border:1px solid ${isDone ? 'rgba(255,255,255,0.07)' : 'rgba(151,131,107,0.2)'};border-radius:10px;padding:1rem 1.1rem;margin-bottom:0.65rem;opacity:${isDone ? '0.55' : '1'};">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.55rem;">
           <div style="display:flex;align-items:center;gap:0.6rem;">
-            <span style="background:rgba(212,175,55,0.15);color:#d4af37;border-radius:8px;padding:0.25rem 0.7rem;font-weight:800;font-size:1rem;">T${escHtml(o.table_number)}</span>
+            <span style="background:rgba(151,131,107,0.15);color:#97836B;border-radius:8px;padding:0.25rem 0.7rem;font-weight:800;font-size:1rem;">T${escHtml(o.table_number)}</span>
             <span style="font-size:0.7rem;color:#666;">${timeAgo}</span>
             ${isDone ? '<span style="font-size:0.65rem;background:rgba(80,200,80,0.12);color:#5c9;border-radius:999px;padding:0.1rem 0.5rem;">Done</span>' : ''}
           </div>
           <div style="display:flex;align-items:center;gap:0.5rem;">
-            <span style="font-family:'Playfair Display',serif;font-size:1.05rem;font-weight:600;color:#d4af37;">${escHtml(o.total || '—')}</span>
-            ${!isDone ? `<button onclick="openAddItemsToOrder('${o.id}','${escHtml(o.table_number)}')" style="background:rgba(212,175,55,0.1);color:#d4af37;border:1px solid rgba(212,175,55,0.3);border-radius:8px;padding:0.3rem 0.75rem;font-size:0.72rem;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;margin-right:0.25rem;"><i class="fas fa-plus me-1"></i>Add Items</button>` : ''}
+            <span style="font-family:'Poppins',sans-serif;font-size:1.05rem;font-weight:600;color:#97836B;">${escHtml(o.total || '—')}</span>
+            ${!isDone ? `<button onclick="openAddItemsToOrder('${o.id}','${escHtml(o.table_number)}')" style="background:rgba(151,131,107,0.1);color:#97836B;border:1px solid rgba(151,131,107,0.3);border-radius:8px;padding:0.3rem 0.75rem;font-size:0.72rem;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;margin-right:0.25rem;"><i class="fas fa-plus me-1"></i>Add Items</button>` : ''}
             ${!isDone ? `<button onclick="markOrderDone('${o.id}')" style="background:rgba(80,200,80,0.12);color:#5c9;border:1px solid rgba(80,200,80,0.25);border-radius:8px;padding:0.3rem 0.75rem;font-size:0.72rem;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;"><i class="fas fa-check me-1"></i>Mark Done</button>` : ''}
           </div>
         </div>
@@ -1442,7 +1442,7 @@ function renderAitoMenu() {
   const grouped = {};
   filtered.forEach(i => { (grouped[i.section] = grouped[i.section] || []).push(i); });
   el.innerHTML = Object.entries(grouped).map(([sec, items]) => `
-    <div style="font-size:0.68rem;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:#d4af37;padding:0.6rem 0 0.3rem;">${escHtml(SECTION_LABELS[sec] || sec)}</div>
+    <div style="font-size:0.68rem;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:#97836B;padding:0.6rem 0 0.3rem;">${escHtml(SECTION_LABELS[sec] || sec)}</div>
     ${items.map(i => `
       <div style="display:flex;align-items:center;justify-content:space-between;padding:0.45rem 0.1rem;border-bottom:1px solid rgba(255,255,255,0.04);">
         <div>
@@ -1452,7 +1452,7 @@ function renderAitoMenu() {
         <div style="display:flex;align-items:center;gap:0.4rem;">
           <button onclick="aitoAdjust('${i.id}','${escHtml(i.name)}','${escHtml(i.price||'')}', -1)" style="background:rgba(255,255,255,0.07);border:none;color:#f0ede8;border-radius:5px;width:26px;height:26px;cursor:pointer;font-size:1rem;line-height:1;">−</button>
           <span id="aito-qty-${i.id}" style="min-width:18px;text-align:center;font-size:0.85rem;">${aitoCart[i.id]?.qty || 0}</span>
-          <button onclick="aitoAdjust('${i.id}','${escHtml(i.name)}','${escHtml(i.price||'')}', 1)" style="background:rgba(212,175,55,0.15);border:none;color:#d4af37;border-radius:5px;width:26px;height:26px;cursor:pointer;font-size:1rem;line-height:1;">+</button>
+          <button onclick="aitoAdjust('${i.id}','${escHtml(i.name)}','${escHtml(i.price||'')}', 1)" style="background:rgba(151,131,107,0.15);border:none;color:#97836B;border-radius:5px;width:26px;height:26px;cursor:pointer;font-size:1rem;line-height:1;">+</button>
         </div>
       </div>`).join('')}
   `).join('');
@@ -1471,7 +1471,7 @@ function updateAitoCart() {
   const el = document.getElementById('aito-cart');
   const entries = Object.values(aitoCart);
   if (!entries.length) { el.textContent = 'No items selected yet.'; return; }
-  el.innerHTML = '<strong style="color:#d4af37;">Adding:</strong> ' + entries.map(e => `${e.qty}× ${escHtml(e.name)}`).join(', ');
+  el.innerHTML = '<strong style="color:#97836B;">Adding:</strong> ' + entries.map(e => `${e.qty}× ${escHtml(e.name)}`).join(', ');
 }
 
 async function submitAddItemsToOrder() {
@@ -1591,7 +1591,7 @@ function renderReservations() {
       const label    = new Date(date + 'T00:00').toLocaleDateString('en-GB', { weekday:'long', day:'numeric', month:'long' });
       const isToday  = date === today;
       const covers   = groups[date].reduce((s, r) => s + (Number(r.party_size) || 0), 0);
-      html += `<div class="res-date-group-hdr"><span>${isToday ? '<i class="fas fa-star" style="color:#d4af37;font-size:0.55rem;margin-right:0.35rem;"></i>' : ''}${label}${isToday ? ' <span style="background:rgba(212,175,55,0.2);color:#d4af37;font-size:0.58rem;font-weight:800;border-radius:999px;padding:0.05rem 0.5rem;margin-left:0.35rem;letter-spacing:0.06em;">TODAY</span>' : ''}</span><span style="font-size:0.65rem;color:#888;">${groups[date].length} res &middot; ${covers} covers</span></div>`;
+      html += `<div class="res-date-group-hdr"><span>${isToday ? '<i class="fas fa-star" style="color:#97836B;font-size:0.55rem;margin-right:0.35rem;"></i>' : ''}${label}${isToday ? ' <span style="background:rgba(151,131,107,0.2);color:#97836B;font-size:0.58rem;font-weight:800;border-radius:999px;padding:0.05rem 0.5rem;margin-left:0.35rem;letter-spacing:0.06em;">TODAY</span>' : ''}</span><span style="font-size:0.65rem;color:#888;">${groups[date].length} res &middot; ${covers} covers</span></div>`;
       for (const r of groups[date]) html += buildResCard(r);
     }
   } else {
@@ -1615,7 +1615,7 @@ function buildResCard(r) {
           <div class="res-name">${escHtml(r.name)} <span class="res-status ${sm.cls} ms-1">${sm.label}</span></div>
           <div class="res-meta">${dateStr} &nbsp;·&nbsp; ${escHtml(r.time)} &nbsp;·&nbsp; <i class="fas fa-users" style="font-size:0.6rem;opacity:0.7;margin-right:0.2rem;"></i>${r.party_size} guest${r.party_size !== 1 ? 's' : ''}</div>
           ${contact ? `<div class="res-meta">${contact}</div>` : ''}
-          <div class="res-notes-display" id="notes-display-${r.id}">${r.notes ? `<div class="res-meta mt-1" style="color:#a09880;"><i class="fas fa-comment-dots me-1" style="color:#d4af37;"></i>${escHtml(r.notes)}</div>` : ''}</div>
+          <div class="res-notes-display" id="notes-display-${r.id}">${r.notes ? `<div class="res-meta mt-1" style="color:#a09880;"><i class="fas fa-comment-dots me-1" style="color:#97836B;"></i>${escHtml(r.notes)}</div>` : ''}</div>
           ${createdStr ? `<div class="res-meta" style="font-size:0.65rem;color:#555;margin-top:0.15rem;"><i class="fas fa-clock me-1"></i>Booked ${createdStr}</div>` : ''}
         </div>
         <div class="d-flex flex-column align-items-end gap-1" style="flex-shrink:0;">
@@ -1710,7 +1710,7 @@ async function saveInlineNotes(id) {
     });
     r.notes = notes;
     const displayEl = document.getElementById(`notes-display-${id}`);
-    if (displayEl) displayEl.innerHTML = notes ? `<div class="res-meta mt-1" style="color:#a09880;"><i class="fas fa-comment-dots me-1" style="color:#d4af37;"></i>${escHtml(notes)}</div>` : '';
+    if (displayEl) displayEl.innerHTML = notes ? `<div class="res-meta mt-1" style="color:#a09880;"><i class="fas fa-comment-dots me-1" style="color:#97836B;"></i>${escHtml(notes)}</div>` : '';
     const btnEl = document.getElementById(`notes-btn-${id}`);
     if (btnEl) { btnEl.innerHTML = `<i class="fas fa-pen me-1"></i>${notes ? 'Edit Note' : 'Add Note'}`; btnEl.className = `res-note-btn${notes ? ' has-note' : ''}`; }
     document.getElementById(`notes-editor-${id}`).style.display = 'none';
@@ -1737,7 +1737,7 @@ function showToast(msg) {
   if (!t) {
     t = document.createElement('div');
     t.id = 'admin-toast';
-    t.style.cssText = 'position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%);background:rgba(212,175,55,0.92);color:#000;font-size:0.78rem;font-weight:700;padding:0.45rem 1.25rem;border-radius:999px;z-index:9999;pointer-events:none;opacity:0;transition:opacity 0.3s;';
+    t.style.cssText = 'position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%);background:rgba(151,131,107,0.92);color:#000;font-size:0.78rem;font-weight:700;padding:0.45rem 1.25rem;border-radius:999px;z-index:9999;pointer-events:none;opacity:0;transition:opacity 0.3s;';
     document.body.appendChild(t);
   }
   t.textContent = msg;
@@ -1929,9 +1929,9 @@ function setCustSort(sort) {
   _custPage = 1;
   document.querySelectorAll('#cust-sort-btns button').forEach(b => {
     const on = b.dataset.sort === sort;
-    b.style.background = on ? 'rgba(212,175,55,0.18)' : 'transparent';
-    b.style.color = on ? '#d4af37' : '#888';
-    b.style.borderColor = on ? 'rgba(212,175,55,0.5)' : 'rgba(255,255,255,0.1)';
+    b.style.background = on ? 'rgba(151,131,107,0.18)' : 'transparent';
+    b.style.color = on ? '#97836B' : '#888';
+    b.style.borderColor = on ? 'rgba(151,131,107,0.5)' : 'rgba(255,255,255,0.1)';
     b.style.fontWeight = on ? '700' : '400';
   });
   renderCustomersPage();
@@ -1950,19 +1950,19 @@ function _buildAnalytics(all) {
   const top = [...all].sort((a, b) => b.order_count - a.order_count).slice(0, 5).filter(c => c.order_count >= 2);
   const cardsEl = document.getElementById('cust-top-cards');
   if (top.length) {
-    const cols = ['#d4af37','#e08c3a','#5bc0de','#2ecc71','#9b59b6'];
+    const cols = ['#97836B','#e08c3a','#5bc0de','#2ecc71','#9b59b6'];
     cardsEl.innerHTML = top.map((c, i) => {
       const ini = c.name.split(' ').map(w => w[0]).join('').slice(0,2).toUpperCase();
       const callLink = c.phone
         ? `<a href="tel:${c.phone}" style="display:block;margin-top:0.4rem;color:#2ecc71;font-size:0.72rem;font-weight:700;text-decoration:none;"><i class="fas fa-phone" style="margin-right:0.25rem;"></i>${escHtml(c.phone)}</a>`
         : (c.email ? `<a href="mailto:${escHtml(c.email)}" style="display:block;margin-top:0.4rem;color:#888;font-size:0.68rem;text-decoration:none;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:140px;">${escHtml(c.email)}</a>` : '<span style="font-size:0.68rem;color:#444;">No contact saved</span>');
-      const spendLine = c.total_spend > 0 ? `<div style="font-size:0.63rem;color:#d4af37;margin-top:0.2rem;">D${Math.round(c.total_spend).toLocaleString()} spent</div>` : '';
-      return `<div style="flex:0 0 auto;background:#1a1a1a;border:1px solid rgba(212,175,55,0.2);border-radius:10px;padding:0.75rem;min-width:155px;max-width:185px;">
+      const spendLine = c.total_spend > 0 ? `<div style="font-size:0.63rem;color:#97836B;margin-top:0.2rem;">D${Math.round(c.total_spend).toLocaleString()} spent</div>` : '';
+      return `<div style="flex:0 0 auto;background:#1a1a1a;border:1px solid rgba(151,131,107,0.2);border-radius:10px;padding:0.75rem;min-width:155px;max-width:185px;">
         <div style="display:flex;align-items:center;gap:0.45rem;margin-bottom:0.4rem;">
           <div style="width:34px;height:34px;border-radius:50%;background:${cols[i]||'#555'};display:flex;align-items:center;justify-content:center;font-size:0.72rem;font-weight:700;color:#000;flex-shrink:0;">${ini}</div>
           <div>
             <div style="font-size:0.8rem;font-weight:700;color:#f0ede8;line-height:1.2;">${escHtml(c.name.split(' ')[0])}</div>
-            <div style="font-size:0.63rem;color:#d4af37;">${c.order_count} order${c.order_count!==1?'s':''}</div>
+            <div style="font-size:0.63rem;color:#97836B;">${c.order_count} order${c.order_count!==1?'s':''}</div>
           </div>
         </div>
         ${callLink}${spendLine}
@@ -2034,20 +2034,20 @@ function renderCustomersPage() {
 
   const rows = slice.map(c => {
     const isVip = c.order_count >= 5;
-    const method = c.has_google ? '<i class="fab fa-google" style="color:#d4af37;"></i> Google' : (c.has_password ? '<i class="fas fa-key" style="color:#aaa;"></i> PIN' : '—');
+    const method = c.has_google ? '<i class="fab fa-google" style="color:#97836B;"></i> Google' : (c.has_password ? '<i class="fas fa-key" style="color:#aaa;"></i> PIN' : '—');
     const contact = c.phone
       ? `<a href="tel:${c.phone}" style="color:#2ecc71;text-decoration:none;font-size:0.78rem;">${escHtml(c.phone)}</a>`
       : (c.email ? `<a href="mailto:${escHtml(c.email)}" style="color:#aaa;text-decoration:none;font-size:0.75rem;">${escHtml(c.email)}</a>` : '<span style="color:#333">—</span>');
     const last = c.last_login ? new Date(c.last_login).toLocaleDateString('en-GB') : '—';
     const av = c.avatar ? `<img src="${escHtml(c.avatar)}" style="width:28px;height:28px;border-radius:50%;object-fit:cover;">` : '<i class="fas fa-user-circle" style="font-size:1.4rem;color:#555;"></i>';
-    const vipBadge = isVip ? ' <i class="fas fa-crown" style="color:#d4af37;font-size:0.6rem;vertical-align:middle;" title="VIP — 5+ orders"></i>' : '';
-    const spendStr = c.total_spend > 0 ? `<span style="color:#d4af37;font-weight:700;">D${Math.round(c.total_spend).toLocaleString()}</span>` : '<span style="color:#2a2a2a;">—</span>';
+    const vipBadge = isVip ? ' <i class="fas fa-crown" style="color:#97836B;font-size:0.6rem;vertical-align:middle;" title="VIP — 5+ orders"></i>' : '';
+    const spendStr = c.total_spend > 0 ? `<span style="color:#97836B;font-weight:700;">D${Math.round(c.total_spend).toLocaleString()}</span>` : '<span style="color:#2a2a2a;">—</span>';
     return `<tr style="border-bottom:1px solid rgba(255,255,255,0.04);">
       <td style="padding:0.55rem 0.5rem;">${av}</td>
       <td style="padding:0.55rem 0.5rem;font-size:0.82rem;color:#f0ede8;">${escHtml(c.name)}${vipBadge}</td>
       <td style="padding:0.55rem 0.5rem;">${contact}</td>
       <td style="padding:0.55rem 0.5rem;font-size:0.75rem;">${method}</td>
-      <td style="padding:0.55rem 0.5rem;font-size:0.78rem;color:#d4af37;text-align:center;font-weight:700;">${c.order_count}</td>
+      <td style="padding:0.55rem 0.5rem;font-size:0.78rem;color:#97836B;text-align:center;font-weight:700;">${c.order_count}</td>
       <td style="padding:0.55rem 0.5rem;font-size:0.78rem;text-align:right;">${spendStr}</td>
       <td style="padding:0.55rem 0.5rem;font-size:0.75rem;color:#aaa;text-align:center;">${c.reservation_count}</td>
       <td style="padding:0.55rem 0.5rem;font-size:0.7rem;color:#555;">${last}</td>
@@ -2072,7 +2072,7 @@ function renderCustomersPage() {
 
   const pgEl = document.getElementById('customers-pagination');
   if (pages <= 1) { pgEl.innerHTML = ''; return; }
-  const btnStyle = (active) => `cursor:pointer;border-radius:6px;padding:0.3rem 0.65rem;font-size:0.78rem;border:1px solid ${active?'rgba(212,175,55,0.6)':'rgba(255,255,255,0.1)'};background:${active?'rgba(212,175,55,0.15)':'transparent'};color:${active?'#d4af37':'#aaa'};font-weight:${active?'700':'400'};`;
+  const btnStyle = (active) => `cursor:pointer;border-radius:6px;padding:0.3rem 0.65rem;font-size:0.78rem;border:1px solid ${active?'rgba(151,131,107,0.6)':'rgba(255,255,255,0.1)'};background:${active?'rgba(151,131,107,0.15)':'transparent'};color:${active?'#97836B':'#aaa'};font-weight:${active?'700':'400'};`;
   let html = `<button style="${btnStyle(false)}" ${_custPage===1?'disabled':''} onclick="_custPage--;renderCustomersPage()">‹</button>`;
   const range = [...new Set([1,2,_custPage-1,_custPage,_custPage+1,pages-1,pages])].filter(p=>p>=1&&p<=pages).sort((a,b)=>a-b);
   let prev = 0;

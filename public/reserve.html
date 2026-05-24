@@ -9,26 +9,29 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'" />
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Kaushan+Script&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
     <style>
         :root {
             --ink: #f8f6f0;
-            --muted: #b8b1a6;
+            --muted: #95897B;
             --black: #0b0b0b;
             --charcoal: #141414;
-            --gold: #d4af37;
-            --gold-soft: rgba(212,175,55,0.2);
+            --gold: #97836B;
+            --gold-bright: #b09b82;
+            --gold-soft: rgba(151,131,107,0.2);
+            --olive: #4A5A38;
+            --taupe: #61584F;
             --card: #111111;
         }
         *, *::before, *::after { box-sizing: border-box; }
         body {
-            font-family: 'Source Sans 3', sans-serif;
+            font-family: 'Poppins', sans-serif;
             color: var(--ink);
             background: #000;
             min-height: 100vh;
             overflow-x: hidden;
         }
-        h1,h2,h3 { font-family: 'Playfair Display', serif; }
+        h1,h2,h3 { font-family: 'Poppins', sans-serif; }
 
         /* ── Header ── */
         .site-header {
@@ -36,7 +39,7 @@
             height: 56px;
             background: rgba(11,11,11,0.92);
             backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(212,175,55,0.15);
+            border-bottom: 1px solid rgba(151,131,107,0.15);
             display: flex; align-items: center; justify-content: space-between;
             padding: 0 1rem;
         }
@@ -45,7 +48,7 @@
             text-decoration: none; color: var(--ink);
         }
         .header-logo img { height: 36px; width: auto; object-fit: contain; }
-        .header-logo-name { font-family: 'Playfair Display', serif; font-size: 1.05rem; font-weight: 600; }
+        .header-logo-name { font-family: 'Kaushan Script', cursive; font-size: 1.05rem; font-weight: 400; }
         .back-link {
             display: flex; align-items: center; gap: 0.4rem;
             font-size: 0.8rem; color: var(--muted); text-decoration: none;
@@ -53,7 +56,7 @@
             padding: 0.3rem 0.65rem;
             transition: color 0.15s, border-color 0.15s;
         }
-        .back-link:hover { color: var(--gold); border-color: rgba(212,175,55,0.3); }
+        .back-link:hover { color: var(--gold); border-color: rgba(151,131,107,0.3); }
 
         /* ── Hero ── */
         .reserve-hero {
@@ -74,7 +77,7 @@
         }
         .reserve-hero-text p {
             font-size: 0.58rem; letter-spacing: 0.38em; text-transform: uppercase;
-            color: rgba(212,175,55,0.9); margin: 0 0 0.45rem;
+            color: rgba(151,131,107,0.9); margin: 0 0 0.45rem;
             animation: fadeUp 0.8s 0.2s ease both;
         }
         .reserve-hero-text h1 {
@@ -121,8 +124,8 @@
             appearance: none;
         }
         .form-field:focus {
-            border-color: rgba(212,175,55,0.55);
-            box-shadow: 0 0 0 3px rgba(212,175,55,0.1);
+            border-color: rgba(151,131,107,0.55);
+            box-shadow: 0 0 0 3px rgba(151,131,107,0.1);
         }
         .form-field::placeholder { color: rgba(255,255,255,0.2); }
         select.form-field { cursor: pointer; }
@@ -152,9 +155,9 @@
             cursor: pointer;
             display: flex; align-items: center; justify-content: center; gap: 0.5rem;
             transition: background 0.18s, transform 0.12s, box-shadow 0.18s;
-            box-shadow: 0 4px 18px rgba(212,175,55,0.3);
+            box-shadow: 0 4px 18px rgba(151,131,107,0.3);
         }
-        .btn-reserve:hover { background: #e8c84a; box-shadow: 0 6px 26px rgba(212,175,55,0.45); }
+        .btn-reserve:hover { background: #b09b82; box-shadow: 0 6px 26px rgba(151,131,107,0.45); }
         .btn-reserve:active { transform: scale(0.98); }
         .btn-reserve:disabled { opacity: 0.55; cursor: not-allowed; }
 
@@ -168,8 +171,8 @@
         .success-icon {
             width: 64px; height: 64px;
             border-radius: 50%;
-            background: rgba(212,175,55,0.1);
-            border: 1px solid rgba(212,175,55,0.3);
+            background: rgba(151,131,107,0.1);
+            border: 1px solid rgba(151,131,107,0.3);
             display: flex; align-items: center; justify-content: center;
             margin: 0 auto 1.25rem;
             font-size: 1.6rem; color: var(--gold);
@@ -179,8 +182,8 @@
         .success-ref {
             display: inline-block;
             font-size: 0.68rem; letter-spacing: 0.18em; text-transform: uppercase;
-            color: var(--gold); background: rgba(212,175,55,0.08);
-            border: 1px solid rgba(212,175,55,0.25); border-radius: 999px;
+            color: var(--gold); background: rgba(151,131,107,0.08);
+            border: 1px solid rgba(151,131,107,0.25); border-radius: 999px;
             padding: 0.25rem 0.75rem; margin-top: 0.75rem;
         }
 
@@ -210,7 +213,7 @@
         body::before {
             content: ''; position: fixed; top:-10%; right:-12%;
             width:620px; height:620px; border-radius:50%;
-            background: radial-gradient(circle, rgba(212,175,55,0.055) 0%, transparent 62%);
+            background: radial-gradient(circle, rgba(151,131,107,0.055) 0%, transparent 62%);
             pointer-events: none; z-index:0;
         }
 
@@ -362,9 +365,9 @@
           // Show sign-in nudge
           const shell = document.getElementById('my-reservations-shell');
           shell.style.display = 'block';
-          shell.innerHTML = `<div style="background:rgba(212,175,55,0.06);border:1px solid rgba(212,175,55,0.18);border-radius:10px;padding:0.85rem 1rem;font-size:0.78rem;color:#aaa;">
-            <i class="fas fa-user" style="color:#d4af37;"></i>&nbsp;
-            <a href="index.html?signin=1&back=reserve" style="color:#d4af37;text-decoration:underline;">Sign in</a> to track your reservations and pre-fill this form.
+          shell.innerHTML = `<div style="background:rgba(151,131,107,0.06);border:1px solid rgba(151,131,107,0.18);border-radius:10px;padding:0.85rem 1rem;font-size:0.78rem;color:#aaa;">
+            <i class="fas fa-user" style="color:#97836B;"></i>&nbsp;
+            <a href="index.html?signin=1&back=reserve" style="color:#97836B;text-decoration:underline;">Sign in</a> to track your reservations and pre-fill this form.
           </div>`;
         }
 
@@ -378,16 +381,16 @@
             if (!res.ok) { shell.style.display = 'none'; return; }
             const data = await res.json();
             if (!data.reservations || data.reservations.length === 0) {
-              shell.innerHTML = `<div style="background:rgba(212,175,55,0.06);border:1px solid rgba(212,175,55,0.18);border-radius:10px;padding:0.85rem 1rem;font-size:0.78rem;color:#888;"><i class="fas fa-calendar" style="color:#d4af37;"></i>&nbsp; You have no reservations yet.</div>`;
+              shell.innerHTML = `<div style="background:rgba(151,131,107,0.06);border:1px solid rgba(151,131,107,0.18);border-radius:10px;padding:0.85rem 1rem;font-size:0.78rem;color:#888;"><i class="fas fa-calendar" style="color:#97836B;"></i>&nbsp; You have no reservations yet.</div>`;
               return;
             }
             const rows = data.reservations.map(r => `
               <div style="display:flex;justify-content:space-between;align-items:center;padding:0.55rem 0;border-bottom:1px solid rgba(255,255,255,0.05);font-size:0.8rem;">
                 <span>${r.date} &nbsp;${r.time} &nbsp;&middot;&nbsp; ${r.party_size} guest${r.party_size>1?'s':''}</span>
-                <span style="font-size:0.72rem;padding:2px 8px;border-radius:20px;background:rgba(212,175,55,0.1);color:#d4af37;">${r.status}</span>
+                <span style="font-size:0.72rem;padding:2px 8px;border-radius:20px;background:rgba(151,131,107,0.1);color:#97836B;">${r.status}</span>
               </div>`).join('');
-            shell.innerHTML = `<div style="background:rgba(212,175,55,0.05);border:1px solid rgba(212,175,55,0.15);border-radius:10px;padding:0.85rem 1rem;">
-              <div style="font-size:0.72rem;font-weight:700;letter-spacing:0.08em;color:#d4af37;margin-bottom:0.5rem;text-transform:uppercase;">My Reservations</div>
+            shell.innerHTML = `<div style="background:rgba(151,131,107,0.05);border:1px solid rgba(151,131,107,0.15);border-radius:10px;padding:0.85rem 1rem;">
+              <div style="font-size:0.72rem;font-weight:700;letter-spacing:0.08em;color:#97836B;margin-bottom:0.5rem;text-transform:uppercase;">My Reservations</div>
               ${rows}
             </div>`;
           } catch { shell.style.display = 'none'; }

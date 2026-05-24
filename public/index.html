@@ -25,8 +25,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'" />
     <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" /></noscript>
     <!-- Google Fonts — loaded async so it never blocks first paint -->
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
-    <noscript><link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet" /></noscript>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Kaushan+Script&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Kaushan+Script&display=swap" rel="stylesheet" /></noscript>
     <style>
                 /* Blur effect for images until loaded */
                 .menu-img-blur {
@@ -35,11 +35,14 @@
                 }
         :root {
             --ink: #f8f6f0;
-            --muted: #b8b1a6;
+            --muted: #95897B;
             --black: #0b0b0b;
             --charcoal: #141414;
-            --gold: #d4af37;
-            --gold-soft: rgba(212, 175, 55, 0.2);
+            --gold: #97836B;
+            --gold-bright: #b09b82;
+            --gold-soft: rgba(151, 131, 107, 0.2);
+            --olive: #4A5A38;
+            --taupe: #61584F;
             --card: #111111;
             --shadow: 0 20px 45px rgba(0, 0, 0, 0.5);
             --shadow-soft: 0 12px 28px rgba(0, 0, 0, 0.35);
@@ -49,7 +52,7 @@
         }
 
         body {
-            font-family: 'Source Sans 3', sans-serif;
+            font-family: 'Poppins', sans-serif;
             color: var(--ink);
             background: #090907;
             min-height: 100vh;
@@ -57,8 +60,8 @@
         }
 
         h1, h2, h3, h4, h5 {
-            font-family: 'Playfair Display', serif;
-            letter-spacing: -0.02em;
+            font-family: 'Poppins', sans-serif;
+            letter-spacing: -0.01em;
         }
 
         /* ── Sticky header ── */
@@ -70,7 +73,7 @@
             background: rgba(11,11,11,0.92);
             -webkit-backdrop-filter: blur(12px);
             backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(212,175,55,0.15);
+            border-bottom: 1px solid rgba(151,131,107,0.15);
             display: grid;
             grid-template-columns: 1fr auto 1fr;
             align-items: center;
@@ -93,16 +96,16 @@
         }
 
         .header-logo-name {
-            font-family: 'Playfair Display', serif;
+            font-family: 'Kaushan Script', cursive;
             font-size: 1.05rem;
-            font-weight: 600;
+            font-weight: 400;
             color: var(--ink);
             letter-spacing: 0.02em;
         }
 
         .header-btn {
             background: transparent;
-            border: 1px solid rgba(212,175,55,0.25);
+            border: 1px solid rgba(151,131,107,0.25);
             color: var(--ink);
             border-radius: 8px;
             width: 36px;
@@ -117,7 +120,7 @@
 
         .header-btn:hover, .header-btn.active {
             border-color: var(--gold);
-            background: rgba(212,175,55,0.08);
+            background: rgba(151,131,107,0.08);
             color: var(--gold);
         }
         .header-btn svg { display: block; }
@@ -141,7 +144,7 @@
             background: rgba(10,10,10,0.97);
             -webkit-backdrop-filter: blur(12px);
             backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(212,175,55,0.15);
+            border-bottom: 1px solid rgba(151,131,107,0.15);
             padding: 0.65rem var(--page-gutter) 0.9rem;
             display: none;
         }
@@ -159,7 +162,7 @@
         .search-bar input {
             width: 100%;
             background: #0a0a0a;
-            border: 1px solid rgba(212, 175, 55, 0.3);
+            border: 1px solid rgba(151, 131, 107, 0.3);
             color: var(--ink);
             padding: 0.85rem 1rem 0.85rem 2.75rem;
             border-radius: 999px;
@@ -169,7 +172,7 @@
 
         .search-bar input:focus {
             border-color: var(--gold);
-            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.2);
+            box-shadow: 0 0 0 3px rgba(151, 131, 107, 0.2);
         }
 
         .search-bar i {
@@ -206,7 +209,7 @@
 
         .nav-pill.active,
         .nav-pill:hover {
-            background: rgba(212,175,55,0.09);
+            background: rgba(151,131,107,0.09);
             color: var(--gold);
             border-radius: 999px;
         }
@@ -219,12 +222,12 @@
         }
 
         .nav-link:focus-visible {
-            outline: 2px solid rgba(212, 175, 55, 0.6);
+            outline: 2px solid rgba(151, 131, 107, 0.6);
             outline-offset: 4px;
         }
 
         .nav-pill.active {
-            border: 1px solid rgba(212,175,55,0.22);
+            border: 1px solid rgba(151,131,107,0.22);
             text-decoration: none;
         }
 
@@ -262,7 +265,7 @@
 
         .menu-card:hover {
             background: rgba(255,255,255,0.025) !important;
-            box-shadow: inset 3px 0 0 rgba(212,175,55,0.18) !important;
+            box-shadow: inset 3px 0 0 rgba(151,131,107,0.18) !important;
             transform: none;
         }
 
@@ -306,7 +309,7 @@
             margin: 0;
             font-size: 1rem;
             font-weight: 600;
-            font-family: 'Source Sans 3', sans-serif;
+            font-family: 'Poppins', sans-serif;
             letter-spacing: 0.005em;
             color: var(--ink);
             line-height: 1.2;
@@ -374,11 +377,11 @@
             content: '';
             flex: 1;
             height: 1px;
-            background: linear-gradient(90deg, rgba(212,175,55,0.24), rgba(255,255,255,0.02));
+            background: linear-gradient(90deg, rgba(151,131,107,0.24), rgba(255,255,255,0.02));
         }
 
         .section-title i {
-            color: rgba(212,175,55,0.45);
+            color: rgba(151,131,107,0.45);
             font-size: 0.92rem;
             margin-bottom: 0;
         }
@@ -435,7 +438,7 @@
             border-radius: 32px;
             object-fit: cover;
             box-shadow: 0 24px 70px rgba(0, 0, 0, 0.6);
-            border: 1px solid rgba(212, 175, 55, 0.3);
+            border: 1px solid rgba(151, 131, 107, 0.3);
             background: rgba(255, 255, 255, 0.04);
         }
 
@@ -456,7 +459,7 @@
             height: 60px;
             border-radius: 50%;
             border: 1px solid rgba(255,255,255,0.08);
-            background: rgba(212, 175, 55, 0.06);
+            background: rgba(151, 131, 107, 0.06);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -475,7 +478,7 @@
             color: var(--gold);
             padding: 1rem 0.25rem 0.4rem 0.75rem;
             border-left: 2px solid var(--gold);
-            font-family: 'Source Sans 3', sans-serif;
+            font-family: 'Poppins', sans-serif;
             font-weight: 700;
             margin-top: 0.75rem;
         }
@@ -483,7 +486,7 @@
         /* ── Section ornament ── */
         .section-ornament {
             text-align: center;
-            color: rgba(212,175,55,0.15);
+            color: rgba(151,131,107,0.15);
             font-size: 0.42rem;
             letter-spacing: 0.55em;
             margin: 0.65rem 0 2rem;
@@ -501,7 +504,7 @@
             border-radius: 50%;
             background: rgba(11,11,11,0.82);
             color: var(--gold);
-            border: 1px solid rgba(212,175,55,0.38);
+            border: 1px solid rgba(151,131,107,0.38);
             cursor: pointer;
             display: flex; align-items: center; justify-content: center;
             font-size: 0.78rem;
@@ -513,8 +516,8 @@
 
         .scroll-top-btn:hover {
             border-color: var(--gold);
-            background: rgba(212,175,55,0.1);
-            box-shadow: 0 6px 24px rgba(212,175,55,0.22);
+            background: rgba(151,131,107,0.1);
+            box-shadow: 0 6px 24px rgba(151,131,107,0.22);
         }
 
         /* ── Marketing badges ── */
@@ -523,7 +526,7 @@
             align-items: center;
             gap: 0.2rem;
             font-size: 0.6rem;
-            font-family: 'Source Sans 3', sans-serif;
+            font-family: 'Poppins', sans-serif;
             font-weight: 800;
             letter-spacing: 0.14em;
             text-transform: uppercase;
@@ -537,14 +540,14 @@
         }
 
         .item-badge-new {
-            background: linear-gradient(90deg, rgba(212,175,55,0.18), rgba(212,175,55,0.08));
-            color: #f5d060;
-            border: 1px solid rgba(212,175,55,0.55);
+            background: linear-gradient(90deg, rgba(151,131,107,0.18), rgba(151,131,107,0.08));
+            color: #c4a882;
+            border: 1px solid rgba(151,131,107,0.55);
             animation: badgeShimmer 2.4s ease-in-out infinite;
         }
         @keyframes badgeShimmer {
-            0%, 100% { box-shadow: 0 0 0 0 rgba(212,175,55,0); }
-            50%       { box-shadow: 0 0 10px 3px rgba(212,175,55,0.28); }
+            0%, 100% { box-shadow: 0 0 0 0 rgba(151,131,107,0); }
+            50%       { box-shadow: 0 0 10px 3px rgba(151,131,107,0.28); }
         }
 
         .item-badge-popular {
@@ -591,13 +594,13 @@
             align-items: center;
             justify-content: space-between;
             gap: 0.75rem;
-            background: linear-gradient(90deg, rgba(212,175,55,0.12), rgba(212,175,55,0.04));
-            border: 1px solid rgba(212,175,55,0.35);
+            background: linear-gradient(90deg, rgba(151,131,107,0.12), rgba(151,131,107,0.04));
+            border: 1px solid rgba(151,131,107,0.35);
             border-radius: 10px;
             padding: 0.65rem 1rem;
             margin-bottom: 1.25rem;
             font-size: 0.82rem;
-            color: #f5d060;
+            color: #c4a882;
             font-weight: 600;
             letter-spacing: 0.04em;
             animation: fadeUp 0.5s ease both;
@@ -605,13 +608,13 @@
         .whats-new-banner .close-banner {
             background: transparent;
             border: none;
-            color: rgba(212,175,55,0.55);
+            color: rgba(151,131,107,0.55);
             font-size: 1rem;
             cursor: pointer;
             padding: 0 0.2rem;
             line-height: 1;
         }
-        .whats-new-banner .close-banner:hover { color: #f5d060; }
+        .whats-new-banner .close-banner:hover { color: #c4a882; }
 
         /* ── Price updated toast ── */
         .price-toast {
@@ -620,11 +623,11 @@
             right: 1.25rem;
             z-index: 99998;
             background: #1a1a1a;
-            border: 1px solid rgba(212,175,55,0.45);
+            border: 1px solid rgba(151,131,107,0.45);
             border-radius: 10px;
             padding: 0.6rem 1rem;
             font-size: 0.78rem;
-            color: #f5d060;
+            color: #c4a882;
             font-weight: 600;
             box-shadow: 0 8px 28px rgba(0,0,0,0.5);
             animation: fadeUp 0.3s ease both;
@@ -736,7 +739,7 @@
             content: '\2726  \00B7  \2726';
             display: block;
             text-align: center;
-            color: rgba(212,175,55,0.28);
+            color: rgba(151,131,107,0.28);
             font-size: 0.52rem;
             letter-spacing: 0.55em;
             padding: 1.75rem 0 0;
@@ -744,16 +747,16 @@
             border-top: 1px solid rgba(255,255,255,0.05);
         }
         .info-block-name {
-            font-family: 'Source Sans 3', sans-serif;
+            font-family: 'Poppins', sans-serif;
             font-size: 0.6rem;
             font-weight: 700;
-            color: rgba(212,175,55,0.5);
+            color: rgba(151,131,107,0.5);
             margin: 0 0 0.85rem;
             letter-spacing: 0.5em;
             text-transform: uppercase;
         }
         .info-block-headline {
-            font-family: 'Playfair Display', serif;
+            font-family: 'Kaushan Script', cursive;
             font-size: clamp(1.75rem, 7.5vw, 2.6rem);
             font-weight: 600;
             font-style: normal;
@@ -768,7 +771,7 @@
             display: block;
             width: 40px;
             height: 1px;
-            background: linear-gradient(to right, transparent, rgba(212,175,55,0.45), transparent);
+            background: linear-gradient(to right, transparent, rgba(151,131,107,0.45), transparent);
             margin: 1.1rem auto 1.2rem;
         }
         .info-block-desc {
@@ -804,8 +807,8 @@
             transition: border-color 0.18s, background 0.18s, color 0.18s;
         }
         .info-chip-link:hover {
-            border-color: rgba(212,175,55,0.45);
-            background: rgba(212,175,55,0.07);
+            border-color: rgba(151,131,107,0.45);
+            background: rgba(151,131,107,0.07);
             color: var(--ink);
         }
         .info-chip-eta {
@@ -813,7 +816,7 @@
             color: var(--gold);
             font-weight: 600;
             padding-left: 0.25rem;
-            border-left: 1px solid rgba(212,175,55,0.3);
+            border-left: 1px solid rgba(151,131,107,0.3);
             margin-left: 0.15rem;
         }
         /* Reserve CTA */
@@ -831,11 +834,11 @@
             padding: 0.6rem 1.5rem;
             text-decoration: none;
             transition: background 0.18s, box-shadow 0.18s, transform 0.15s;
-            box-shadow: 0 4px 20px rgba(212,175,55,0.35);
+            box-shadow: 0 4px 20px rgba(151,131,107,0.35);
         }
         .info-reserve-btn:hover {
-            background: #e8c84a;
-            box-shadow: 0 6px 28px rgba(212,175,55,0.5);
+            background: #b09b82;
+            box-shadow: 0 6px 28px rgba(151,131,107,0.5);
             transform: translateY(-1px);
             color: #000;
         }
@@ -909,20 +912,20 @@
             content: '';
             position: absolute;
             inset: 0;
-            background: linear-gradient(105deg, transparent 35%, rgba(212,175,55,0.08) 50%, transparent 65%);
+            background: linear-gradient(105deg, transparent 35%, rgba(151,131,107,0.08) 50%, transparent 65%);
             transform: translateX(-100%);
             pointer-events: none;
             border-radius: inherit;
         }
         .cat-card:hover::after { transform: translateX(150%); transition: transform 0.5s ease; }
         .cat-card:hover, .cat-card.cat-active {
-            border-color: rgba(212,175,55,0.42);
-            background: rgba(212,175,55,0.05);
+            border-color: rgba(151,131,107,0.42);
+            background: rgba(151,131,107,0.05);
             transform: translateY(-2px);
         }
         .cat-card i {
             font-size: 1rem;
-            color: rgba(212,175,55,0.45);
+            color: rgba(151,131,107,0.45);
             transition: color 0.2s;
         }
         .cat-card:hover i, .cat-card.cat-active i { color: var(--gold); }
@@ -947,7 +950,7 @@
             margin-top: 2rem;
         }
         .footer-wordmark {
-            font-family: 'Playfair Display', serif;
+            font-family: 'Kaushan Script', cursive;
             font-size: 1.5rem;
             font-weight: 600;
             color: rgba(248,246,240,0.1);
@@ -963,8 +966,8 @@
         .footer-block-icon {
             width: 32px; height: 32px;
             border-radius: 8px;
-            background: rgba(212,175,55,0.08);
-            border: 1px solid rgba(212,175,55,0.15);
+            background: rgba(151,131,107,0.08);
+            border: 1px solid rgba(151,131,107,0.15);
             display: flex; align-items: center; justify-content: center;
             color: var(--gold); font-size: 0.78rem; flex-shrink: 0;
         }
@@ -1000,7 +1003,7 @@
             text-decoration: none;
             transition: border-color 0.18s, color 0.18s;
         }
-        .footer-social-btn:hover { border-color: rgba(212,175,55,0.3); color: var(--gold); }
+        .footer-social-btn:hover { border-color: rgba(151,131,107,0.3); color: var(--gold); }
         .footer-social-btn i { font-size: 0.8rem; }
         .footer-powered {
             text-align: center;
@@ -1019,7 +1022,7 @@
             left: 0; right: 0;
             z-index: 999;
             background: #0f0f0f;
-            border-bottom: 1px solid rgba(212,175,55,0.15);
+            border-bottom: 1px solid rgba(151,131,107,0.15);
             transform: translateY(-8px);
             opacity: 0;
             pointer-events: none;
@@ -1068,7 +1071,7 @@
         .nav-dropdown-item:hover { color: var(--gold); }
         .nav-dropdown-item i.item-icon { color: var(--gold); width: 18px; font-size: 0.82rem; margin-right: 0.65rem; }
         .nav-dropdown-item .item-label { flex: 1; }
-        .nav-dropdown-item .item-arrow { color: rgba(212,175,55,0.35); font-size: 0.7rem; }
+        .nav-dropdown-item .item-arrow { color: rgba(151,131,107,0.35); font-size: 0.7rem; }
         .nav-dropdown-divider {
             border: none;
             border-top: 1px solid rgba(255,255,255,0.06);
@@ -1105,7 +1108,7 @@
             font-size: 0.52rem;
             letter-spacing: 0.45em;
             text-transform: uppercase;
-            color: rgba(212,175,55,0.78);
+            color: rgba(151,131,107,0.78);
             margin: 0 0 0.7rem;
             animation: heroFade 1.2s 0.2s ease both;
             display: flex;
@@ -1117,13 +1120,13 @@
             content: '';
             width: 26px;
             height: 1px;
-            background: rgba(212,175,55,0.4);
+            background: rgba(151,131,107,0.4);
             flex-shrink: 0;
         }
         .hero-brand-title {
-            font-family: 'Playfair Display', serif;
+            font-family: 'Kaushan Script', cursive;
             font-size: clamp(4rem, 17vw, 8.5rem);
-            font-weight: 700;
+            font-weight: 400;
             color: #fff;
             margin: 0 0 0.65rem;
             text-shadow: 0 8px 52px rgba(0,0,0,0.5);
@@ -1146,6 +1149,18 @@
             margin: 0;
             animation: heroFade 1.2s 0.65s ease both;
         }
+        /* ── Hero brand slogan ── */
+        .hero-tagline {
+            font-family: 'Kaushan Script', cursive;
+            font-size: clamp(1rem, 3.8vw, 1.55rem);
+            color: rgba(248,246,240,0.72);
+            margin: 0.4rem 0 0.55rem;
+            font-weight: 400;
+            letter-spacing: 0.03em;
+            text-shadow: 0 2px 14px rgba(0,0,0,0.5);
+            animation: heroFade 1.2s 0.52s ease both;
+        }
+
         @keyframes heroFade {
             from { opacity: 0; transform: translateY(14px); }
             to   { opacity: 1; transform: translateY(0); }
@@ -1178,7 +1193,7 @@
             position: absolute;
             width: 6px; height: 6px;
             border-radius: 50%;
-            background: rgba(212,175,55,0.28);
+            background: rgba(151,131,107,0.28);
             transform: translate(-50%, -50%) scale(0);
             animation: rippleOut 0.55s ease-out forwards;
             pointer-events: none;
@@ -1207,7 +1222,7 @@
             top: -10%; right: -12%;
             width: 620px; height: 620px;
             border-radius: 50%;
-            background: radial-gradient(circle, rgba(212,175,55,0.055) 0%, transparent 62%);
+            background: radial-gradient(circle, rgba(151,131,107,0.055) 0%, transparent 62%);
             pointer-events: none;
             z-index: 0;
         }
@@ -1218,7 +1233,7 @@
             position: absolute;
             bottom: 0; left: 0; right: 0;
             height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(212,175,55,0.6), transparent);
+            background: linear-gradient(90deg, transparent, rgba(151,131,107,0.6), transparent);
             transform: scaleX(0);
             transform-origin: left center;
             animation: headerGold 1.4s 0.5s cubic-bezier(0.22,1,0.36,1) forwards;
@@ -1254,7 +1269,7 @@
             justify-content: center;
             min-height: calc(100svh - 56px);
             position: relative;
-            background: radial-gradient(ellipse 90% 55% at 50% 36%, rgba(212,175,55,0.06) 0%, transparent 68%);
+            background: radial-gradient(ellipse 90% 55% at 50% 36%, rgba(151,131,107,0.06) 0%, transparent 68%);
         }
 
         /* Forward: new page enters from the right */
@@ -1294,7 +1309,7 @@
             text-transform: uppercase;
             color: var(--gold);
             background: rgba(0,0,0,0.35);
-            border: 1.5px solid rgba(212,175,55,0.55);
+            border: 1.5px solid rgba(151,131,107,0.55);
             border-radius: 999px;
             padding: 0.6rem 1.7rem;
             cursor: pointer;
@@ -1305,7 +1320,7 @@
             font-family: inherit;
         }
         .cover-reserve-btn:hover {
-            background: rgba(212,175,55,0.12);
+            background: rgba(151,131,107,0.12);
             border-color: var(--gold);
             transform: translateY(-1px);
         }
@@ -1351,13 +1366,13 @@
             border-radius: 999px;
             padding: 0.65rem 1.8rem;
             cursor: pointer;
-            box-shadow: 0 4px 24px rgba(212,175,55,0.45);
+            box-shadow: 0 4px 24px rgba(151,131,107,0.45);
             transition: background 0.18s, box-shadow 0.18s, transform 0.15s;
             font-family: inherit;
         }
         .page-explore-btn:hover {
-            background: #e8c84a;
-            box-shadow: 0 8px 32px rgba(212,175,55,0.6);
+            background: #b09b82;
+            box-shadow: 0 8px 32px rgba(151,131,107,0.6);
             transform: translateY(-1px);
         }
 
@@ -1372,14 +1387,14 @@
         .about-cta-row .page-explore-btn {
             background: transparent;
             color: var(--gold);
-            border: 1.5px solid rgba(212,175,55,0.48);
+            border: 1.5px solid rgba(151,131,107,0.48);
             box-shadow: none;
         }
         .about-cta-row .page-explore-btn:hover {
-            background: rgba(212,175,55,0.08);
+            background: rgba(151,131,107,0.08);
             border-color: var(--gold);
             color: var(--gold);
-            box-shadow: 0 4px 20px rgba(212,175,55,0.18);
+            box-shadow: 0 4px 20px rgba(151,131,107,0.18);
         }
         .footer-follow-label { padding-bottom: 0.5rem; }
 
@@ -1391,7 +1406,7 @@
         .about-logo-wrap img {
             height: 62px;
             opacity: 0.9;
-            filter: drop-shadow(0 4px 24px rgba(212,175,55,0.22));
+            filter: drop-shadow(0 4px 24px rgba(151,131,107,0.22));
         }
         #page-menu .cat-scroll-hdr { padding-top: 1.25rem; }
 
@@ -1463,7 +1478,7 @@
         }
         .back-arrow-btn.visible { display: flex; }
         .back-arrow-btn:hover {
-            background: rgba(212,175,55,0.12);
+            background: rgba(151,131,107,0.12);
             padding-right: 0.9rem;
         }
 
@@ -1567,8 +1582,8 @@
         .add-btn {
             width: 32px; height: 32px;
             border-radius: 50%;
-            border: 1.5px solid rgba(212,175,55,0.38);
-            background: rgba(212,175,55,0.06);
+            border: 1.5px solid rgba(151,131,107,0.38);
+            background: rgba(151,131,107,0.06);
             color: var(--gold);
             font-size: 1.15rem;
             cursor: pointer;
@@ -1581,7 +1596,7 @@
             /* larger tap target without enlarging visual */
             touch-action: manipulation;
         }
-        .add-btn:hover { background: rgba(212,175,55,0.18); border-color: var(--gold); transform: scale(1.1); }
+        .add-btn:hover { background: rgba(151,131,107,0.18); border-color: var(--gold); transform: scale(1.1); }
         .add-btn.in-cart {
             background: var(--gold);
             border-color: var(--gold);
@@ -1612,11 +1627,11 @@
             justify-content: center;
             color: #000;
             font-size: 1.1rem;
-            box-shadow: 0 4px 22px rgba(212,175,55,0.55);
+            box-shadow: 0 4px 22px rgba(151,131,107,0.55);
             transition: transform 0.2s, box-shadow 0.2s;
             touch-action: manipulation;
         }
-        .cart-fab:hover { transform: scale(1.08); box-shadow: 0 6px 30px rgba(212,175,55,0.7); }
+        .cart-fab:hover { transform: scale(1.08); box-shadow: 0 6px 30px rgba(151,131,107,0.7); }
         .cart-fab .cart-count {
             position: absolute;
             top: -4px; right: -4px;
@@ -1650,7 +1665,7 @@
             bottom: 0; left: 0; right: 0;
             z-index: 99989;
             background: #141414;
-            border-top: 1px solid rgba(212,175,55,0.2);
+            border-top: 1px solid rgba(151,131,107,0.2);
             border-radius: 20px 20px 0 0;
             max-height: 82vh;
             display: flex;
@@ -1676,7 +1691,7 @@
             border-bottom: 1px solid rgba(255,255,255,0.06);
         }
         .cart-drawer-title {
-            font-family: 'Playfair Display', serif;
+            font-family: 'Poppins', sans-serif;
             font-size: 1.05rem;
             font-weight: 600;
             color: var(--ink);
@@ -1700,7 +1715,7 @@
             overflow-y: auto;
             padding: 0.25rem 0;
             scrollbar-width: thin;
-            scrollbar-color: rgba(212,175,55,0.2) transparent;
+            scrollbar-color: rgba(151,131,107,0.2) transparent;
         }
         .cart-item {
             display: grid;
@@ -1743,8 +1758,8 @@
         .cart-qty-btn {
             width: 28px; height: 28px;
             border-radius: 50%;
-            border: 1px solid rgba(212,175,55,0.3);
-            background: rgba(212,175,55,0.07);
+            border: 1px solid rgba(151,131,107,0.3);
+            background: rgba(151,131,107,0.07);
             color: var(--gold);
             font-size: 1rem;
             cursor: pointer;
@@ -1755,7 +1770,7 @@
             padding: 0;
             touch-action: manipulation;
         }
-        .cart-qty-btn:hover { background: rgba(212,175,55,0.2); border-color: var(--gold); }
+        .cart-qty-btn:hover { background: rgba(151,131,107,0.2); border-color: var(--gold); }
         .cart-qty-btn.minus {
             color: rgba(255,255,255,0.5);
             border-color: rgba(255,255,255,0.12);
@@ -1776,7 +1791,7 @@
             font-size: 0.85rem;
             line-height: 1.7;
         }
-        .cart-empty i { font-size: 2.2rem; display: block; margin-bottom: 0.85rem; color: rgba(212,175,55,0.2); }
+        .cart-empty i { font-size: 2.2rem; display: block; margin-bottom: 0.85rem; color: rgba(151,131,107,0.2); }
         .cart-drawer-footer {
             padding: 0.9rem 1.25rem calc(0.9rem + env(safe-area-inset-bottom));
             border-top: 1px solid rgba(255,255,255,0.07);
@@ -1795,7 +1810,7 @@
             color: var(--muted);
         }
         .cart-total-amount {
-            font-family: 'Playfair Display', serif;
+            font-family: 'Poppins', sans-serif;
             font-size: 1.3rem;
             font-weight: 600;
             color: var(--gold);
@@ -1818,10 +1833,10 @@
             gap: 0.55rem;
             font-family: inherit;
             transition: background 0.18s, box-shadow 0.18s;
-            box-shadow: 0 4px 20px rgba(212,175,55,0.38);
+            box-shadow: 0 4px 20px rgba(151,131,107,0.38);
             touch-action: manipulation;
         }
-        .cart-waiter-btn:hover { background: #e8c84a; box-shadow: 0 6px 28px rgba(212,175,55,0.58); }
+        .cart-waiter-btn:hover { background: #b09b82; box-shadow: 0 6px 28px rgba(151,131,107,0.58); }
 
         /* Table number + notes inputs in cart drawer */
         .cart-table-row {
@@ -1839,7 +1854,7 @@
         .cart-table-input {
             flex: 1;
             background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(212,175,55,0.25);
+            border: 1px solid rgba(151,131,107,0.25);
             border-radius: 8px;
             color: var(--ink);
             padding: 0.45rem 0.7rem;
@@ -1850,7 +1865,7 @@
             outline: none;
             transition: border-color 0.18s;
         }
-        .cart-table-input:focus { border-color: rgba(212,175,55,0.6); }
+        .cart-table-input:focus { border-color: rgba(151,131,107,0.6); }
         .cart-table-input.input-error { border-color: #e74c3c; animation: shake 0.3s; }
         @keyframes shake {
             0%,100% { transform: translateX(0); }
@@ -1861,7 +1876,7 @@
         .cart-notes-input {
             width: 100%;
             background: rgba(255,255,255,0.04);
-            border: 1px solid rgba(212,175,55,0.18);
+            border: 1px solid rgba(151,131,107,0.18);
             border-radius: 8px;
             color: var(--ink);
             padding: 0.45rem 0.7rem;
@@ -1871,7 +1886,7 @@
             outline: none;
             transition: border-color 0.18s;
         }
-        .cart-notes-input:focus { border-color: rgba(212,175,55,0.5); }
+        .cart-notes-input:focus { border-color: rgba(151,131,107,0.5); }
         .cart-notes-input::placeholder { color: rgba(255,255,255,0.22); }
 
         /* Waiter view (full-screen order summary) */
@@ -1890,7 +1905,7 @@
         .waiter-view-header {
             text-align: center;
             padding: 2.5rem 1.5rem 1.5rem;
-            border-bottom: 1px solid rgba(212,175,55,0.15);
+            border-bottom: 1px solid rgba(151,131,107,0.15);
             flex-shrink: 0;
         }
         .waiter-view-logo { height: 40px; margin-bottom: 1.2rem; opacity: 0.9; }
@@ -1918,7 +1933,7 @@
         }
         .waiter-item:last-child { border-bottom: none; }
         .waiter-item-qty {
-            font-family: 'Playfair Display', serif;
+            font-family: 'Poppins', sans-serif;
             font-size: 1.6rem;
             font-weight: 700;
             color: var(--gold);
@@ -1929,13 +1944,13 @@
         }
         .waiter-item-x {
             font-size: 0.72rem;
-            color: rgba(212,175,55,0.4);
+            color: rgba(151,131,107,0.4);
             flex-shrink: 0;
             margin: 0 -0.2rem;
         }
         .waiter-item-name {
             flex: 1;
-            font-family: 'Source Sans 3', sans-serif;
+            font-family: 'Poppins', sans-serif;
             font-size: 1.05rem;
             font-weight: 600;
             color: var(--ink);
@@ -1944,12 +1959,12 @@
         .waiter-item-price {
             font-size: 0.88rem;
             font-weight: 700;
-            color: rgba(212,175,55,0.8);
+            color: rgba(151,131,107,0.8);
             flex-shrink: 0;
         }
         .waiter-view-total {
             padding: 1.5rem;
-            border-top: 1px solid rgba(212,175,55,0.2);
+            border-top: 1px solid rgba(151,131,107,0.2);
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -1962,7 +1977,7 @@
             color: var(--muted);
         }
         .waiter-total-amount {
-            font-family: 'Playfair Display', serif;
+            font-family: 'Poppins', sans-serif;
             font-size: 2.2rem;
             font-weight: 700;
             color: var(--gold);
@@ -2018,10 +2033,10 @@
                 <button class="header-btn" id="searchToggle" aria-label="Search">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M9 2C5.146 2 2 5.146 2 9s3.146 7 7 7c1.748 0 3.345-.652 4.574-1.719l.426.426V16l6 6 2-2-6-6h-1.293l-.426-.426A6.965 6.965 0 0 0 16 9c0-3.854-3.146-7-7-7zm0 2c2.773 0 5 2.227 5 5s-2.227 5-5 5-5-2.227-5-5 2.227-5 5-5z" fill="currentColor"/></svg>
                 </button>
-                <button class="header-btn" id="header-signin-btn" aria-label="Sign In" onclick="openAuthModal()" style="font-size:0.7rem;font-weight:700;letter-spacing:0.04em;padding:0.3rem 0.65rem;width:auto;gap:0.3rem;color:var(--gold,#d4af37);border:1px solid rgba(212,175,55,0.35);border-radius:6px;">
+                <button class="header-btn" id="header-signin-btn" aria-label="Sign In" onclick="openAuthModal()" style="font-size:0.7rem;font-weight:700;letter-spacing:0.04em;padding:0.3rem 0.65rem;width:auto;gap:0.3rem;color:var(--gold,#97836B);border:1px solid rgba(151,131,107,0.35);border-radius:6px;">
                     <i class="fas fa-user" style="font-size:0.75rem;"></i> Sign In
                 </button>
-                <button class="header-btn" id="header-user-btn" aria-label="Account" onclick="ORDERING_ENABLED ? openMyOrders() : null" style="display:none;font-size:0.7rem;font-weight:700;letter-spacing:0.04em;padding:0.3rem 0.65rem;width:auto;gap:0.3rem;color:var(--gold,#d4af37);cursor:default;">
+                <button class="header-btn" id="header-user-btn" aria-label="Account" onclick="ORDERING_ENABLED ? openMyOrders() : null" style="display:none;font-size:0.7rem;font-weight:700;letter-spacing:0.04em;padding:0.3rem 0.65rem;width:auto;gap:0.3rem;color:var(--gold,#97836B);cursor:default;">
                     <i class="fas fa-user-circle" style="font-size:0.85rem;"></i><span id="header-user-name"></span>
                 </button>
                 <button class="header-btn" id="navToggle" aria-label="Menu">
@@ -2105,6 +2120,7 @@
                     <div class="slide" style="background-image:url('images/profi.webp')"></div>
                     <div class="hero-overlay">
                         <h2 class="hero-brand-title"><img src="images/koya_logo_gold.png" alt="Koya" class="hero-logo-img" /></h2>
+                        <p class="hero-tagline">Modern Dining. Rooted in Soul</p>
                         <p id="cover-hours" class="hero-sub-line">Open nightly &nbsp;·&nbsp; 18:00 – 01:30</p>
                         <div style="margin-top:2rem;pointer-events:auto;display:flex;flex-direction:column;align-items:center;gap:0.65rem;">
                             <button class="page-explore-btn" onclick="bookGoTo(2)">
@@ -3050,10 +3066,10 @@
       const isSignin = tab === 'signin';
       const isRegister = tab === 'register';
       document.getElementById('auth-tab-signin').style.cssText = isSignin
-        ? 'flex:1;padding:0.5rem;border-radius:6px;border:none;background:rgba(212,175,55,0.2);color:#d4af37;font-weight:700;font-size:0.8rem;cursor:pointer;'
+        ? 'flex:1;padding:0.5rem;border-radius:6px;border:none;background:rgba(151,131,107,0.2);color:#97836B;font-weight:700;font-size:0.8rem;cursor:pointer;'
         : 'flex:1;padding:0.5rem;border-radius:6px;border:none;background:transparent;color:#666;font-weight:600;font-size:0.8rem;cursor:pointer;';
       document.getElementById('auth-tab-register').style.cssText = isRegister
-        ? 'flex:1;padding:0.5rem;border-radius:6px;border:none;background:rgba(212,175,55,0.2);color:#d4af37;font-weight:700;font-size:0.8rem;cursor:pointer;'
+        ? 'flex:1;padding:0.5rem;border-radius:6px;border:none;background:rgba(151,131,107,0.2);color:#97836B;font-weight:700;font-size:0.8rem;cursor:pointer;'
         : 'flex:1;padding:0.5rem;border-radius:6px;border:none;background:transparent;color:#666;font-weight:600;font-size:0.8rem;cursor:pointer;';
     }
 
@@ -3225,7 +3241,7 @@
         return;
       }
       const STATUS_PILL = {
-        new:        { color: '#d4af37', bg: 'rgba(212,175,55,0.15)',  label: 'New' },
+        new:        { color: '#97836B', bg: 'rgba(151,131,107,0.15)',  label: 'New' },
         preparing:  { color: '#e08c3a', bg: 'rgba(224,140,58,0.15)', label: 'Preparing' },
         ready:      { color: '#4caf50', bg: 'rgba(76,175,80,0.15)',  label: 'Ready!' },
         done:       { color: '#666',    bg: 'rgba(255,255,255,0.05)', label: 'Done' },
@@ -3236,13 +3252,13 @@
         const itemsHtml = items.map(i => `<span style="display:block;font-size:0.78rem;color:#aaa;">${i.qty}× ${i.name}</span>`).join('');
         const dateStr = o.created_at ? new Date(o.created_at).toLocaleDateString('en-GB', {day:'numeric',month:'short',year:'numeric'}) : '';
         const pill = STATUS_PILL[o.status] || { color: '#888', bg: 'rgba(255,255,255,0.05)', label: o.status };
-        return `<div style="background:#1a1a1a;border:1px solid rgba(212,175,55,0.12);border-radius:12px;padding:1rem 1.1rem;margin-bottom:0.75rem;">
+        return `<div style="background:#1a1a1a;border:1px solid rgba(151,131,107,0.12);border-radius:12px;padding:1rem 1.1rem;margin-bottom:0.75rem;">
           <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:0.5rem;">
             <div style="font-size:0.75rem;color:#666;">${dateStr} · Table ${o.table_number}</div>
             <span style="font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:${pill.color};background:${pill.bg};border-radius:999px;padding:0.15rem 0.6rem;">${pill.label}</span>
           </div>
           ${itemsHtml}
-          ${o.total ? `<div style="margin-top:0.5rem;font-size:0.8rem;color:#d4af37;font-weight:700;">${o.total.startsWith('D') ? '' : 'D'}${o.total}</div>` : ''}
+          ${o.total ? `<div style="margin-top:0.5rem;font-size:0.8rem;color:#97836B;font-weight:700;">${o.total.startsWith('D') ? '' : 'D'}${o.total}</div>` : ''}
         </div>`;
       }).join('');
     }
@@ -3376,7 +3392,7 @@
       const finishBtn = document.getElementById('finishOrderingBtn');
 
       if (cart.length === 0) {
-        body.innerHTML = `<div class="cart-empty"><i class="fas fa-utensils"></i>Your order is empty.<br>Tap <strong style="color:rgba(212,175,55,0.7)">+</strong> on any item to add it.</div>`;
+        body.innerHTML = `<div class="cart-empty"><i class="fas fa-utensils"></i>Your order is empty.<br>Tap <strong style="color:rgba(151,131,107,0.7)">+</strong> on any item to add it.</div>`;
         if (footer) footer.style.display = 'none';
         return;
       }
@@ -3396,7 +3412,7 @@
         ...sentItems.map(item => {
           const imgHtml = item.image
             ? `<img src="${item.image}" alt="${item.name}" class="cart-item-img" style="opacity:0.4;">`
-            : `<div class="cart-item-img" style="opacity:0.4;"><i class="fas fa-utensils" style="color:rgba(212,175,55,0.25);font-size:0.9rem;"></i></div>`;
+            : `<div class="cart-item-img" style="opacity:0.4;"><i class="fas fa-utensils" style="color:rgba(151,131,107,0.25);font-size:0.9rem;"></i></div>`;
           return `
             <div class="cart-item" style="opacity:0.5;">
               ${imgHtml}
@@ -3412,7 +3428,7 @@
           const lineTotalStr = lineTotal > 0 ? 'D' + lineTotal.toLocaleString() : (item.price || '—');
           const imgHtml = item.image
             ? `<img src="${item.image}" alt="${item.name}" class="cart-item-img">`
-            : `<div class="cart-item-img"><i class="fas fa-utensils" style="color:rgba(212,175,55,0.25);font-size:0.9rem;"></i></div>`;
+            : `<div class="cart-item-img"><i class="fas fa-utensils" style="color:rgba(151,131,107,0.25);font-size:0.9rem;"></i></div>`;
           return `
             <div class="cart-item">
               ${imgHtml}
@@ -3675,11 +3691,11 @@
 
     <!-- Auth Modal -->
     <div id="auth-modal" onclick="if(event.target===this)closeAuthModal()" style="display:none;position:fixed;inset:0;z-index:9500;touch-action:none;background:rgba(0,0,0,0.88);align-items:center;justify-content:center;">
-      <div style="background:#111;border:1px solid rgba(212,175,55,0.2);border-radius:16px;padding:2rem 1.75rem;width:min(360px,90vw);position:relative;">
+      <div style="background:#111;border:1px solid rgba(151,131,107,0.2);border-radius:16px;padding:2rem 1.75rem;width:min(360px,90vw);position:relative;">
         <button onclick="closeAuthModal()" style="position:absolute;top:0.9rem;right:1rem;background:none;border:none;color:#555;font-size:1.1rem;cursor:pointer;"><i class="fas fa-times"></i></button>
         <img src="images/koya_logo_gold.png" alt="Koya" style="height:28px;display:block;margin:0 auto 1.5rem;">
         <div style="display:flex;gap:4px;margin-bottom:1.5rem;background:rgba(255,255,255,0.04);border-radius:8px;padding:3px;">
-          <button id="auth-tab-signin" onclick="switchAuthTab('signin')" style="flex:1;padding:0.5rem;border-radius:6px;border:none;background:rgba(212,175,55,0.2);color:#d4af37;font-weight:700;font-size:0.8rem;cursor:pointer;">Sign In</button>
+          <button id="auth-tab-signin" onclick="switchAuthTab('signin')" style="flex:1;padding:0.5rem;border-radius:6px;border:none;background:rgba(151,131,107,0.2);color:#97836B;font-weight:700;font-size:0.8rem;cursor:pointer;">Sign In</button>
           <button id="auth-tab-register" onclick="switchAuthTab('register')" style="flex:1;padding:0.5rem;border-radius:6px;border:none;background:transparent;color:#666;font-weight:600;font-size:0.8rem;cursor:pointer;">Create Account</button>
         </div>
         <div id="google-signin-btn" style="margin-bottom:1rem;display:none;justify-content:center;">
@@ -3690,10 +3706,10 @@
           <hr style="position:absolute;top:50%;left:0;right:0;border:none;border-top:1px solid #2a2a2a;margin:0;">
         </div>
         <div id="auth-form-signin">
-          <input id="auth-identifier" type="text" inputmode="email" placeholder="Email or phone number" autocomplete="username" style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(212,175,55,0.2);border-radius:8px;color:#f0ede8;padding:0.65rem 0.85rem;font-size:0.85rem;margin-bottom:0.65rem;outline:none;box-sizing:border-box;" />
-          <input id="auth-pin" type="tel" inputmode="numeric" placeholder="4-digit PIN" maxlength="4" pattern="\d{4}" autocomplete="current-password" style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(212,175,55,0.2);border-radius:8px;color:#f0ede8;padding:0.65rem 0.85rem;font-size:0.85rem;margin-bottom:0.65rem;outline:none;box-sizing:border-box;letter-spacing:0.25em;" onkeydown="if(event.key==='Enter')doSignIn()" />
+          <input id="auth-identifier" type="text" inputmode="email" placeholder="Email or phone number" autocomplete="username" style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(151,131,107,0.2);border-radius:8px;color:#f0ede8;padding:0.65rem 0.85rem;font-size:0.85rem;margin-bottom:0.65rem;outline:none;box-sizing:border-box;" />
+          <input id="auth-pin" type="tel" inputmode="numeric" placeholder="4-digit PIN" maxlength="4" pattern="\d{4}" autocomplete="current-password" style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(151,131,107,0.2);border-radius:8px;color:#f0ede8;padding:0.65rem 0.85rem;font-size:0.85rem;margin-bottom:0.65rem;outline:none;box-sizing:border-box;letter-spacing:0.25em;" onkeydown="if(event.key==='Enter')doSignIn()" />
           <div id="auth-error" style="color:#e74c3c;font-size:0.75rem;margin-bottom:0.65rem;display:none;"></div>
-          <button onclick="doSignIn()" style="width:100%;background:rgba(212,175,55,0.15);border:1px solid rgba(212,175,55,0.4);border-radius:8px;color:#d4af37;padding:0.65rem;font-weight:700;font-size:0.85rem;cursor:pointer;letter-spacing:0.04em;">Sign In</button>
+          <button onclick="doSignIn()" style="width:100%;background:rgba(151,131,107,0.15);border:1px solid rgba(151,131,107,0.4);border-radius:8px;color:#97836B;padding:0.65rem;font-weight:700;font-size:0.85rem;cursor:pointer;letter-spacing:0.04em;">Sign In</button>
           <div style="text-align:center;margin-top:0.6rem;">
             <button onclick="openForgotPin()" style="background:transparent;border:none;color:#888;font-size:0.75rem;cursor:pointer;text-decoration:underline;">Forgot PIN?</button>
           </div>
@@ -3703,27 +3719,27 @@
         <!-- Forgot PIN flow -->
         <div id="auth-form-forgot" style="display:none;">
           <p style="color:#aaa;font-size:0.8rem;margin:0 0 0.75rem;">Enter your email or phone and we'll send you a reset code.</p>
-          <input id="forgot-identifier" type="text" inputmode="email" placeholder="Email or phone number" style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(212,175,55,0.2);border-radius:8px;color:#f0ede8;padding:0.65rem 0.85rem;font-size:0.85rem;margin-bottom:0.65rem;outline:none;box-sizing:border-box;" />
+          <input id="forgot-identifier" type="text" inputmode="email" placeholder="Email or phone number" style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(151,131,107,0.2);border-radius:8px;color:#f0ede8;padding:0.65rem 0.85rem;font-size:0.85rem;margin-bottom:0.65rem;outline:none;box-sizing:border-box;" />
           <div id="forgot-error" style="color:#e74c3c;font-size:0.75rem;margin-bottom:0.65rem;display:none;"></div>
-          <button onclick="doForgotPin()" style="width:100%;background:rgba(212,175,55,0.15);border:1px solid rgba(212,175,55,0.4);border-radius:8px;color:#d4af37;padding:0.65rem;font-weight:700;font-size:0.85rem;cursor:pointer;">Send Code</button>
+          <button onclick="doForgotPin()" style="width:100%;background:rgba(151,131,107,0.15);border:1px solid rgba(151,131,107,0.4);border-radius:8px;color:#97836B;padding:0.65rem;font-weight:700;font-size:0.85rem;cursor:pointer;">Send Code</button>
           <button onclick="switchAuthTab('signin')" style="width:100%;background:transparent;border:none;color:#555;padding:0.5rem;font-size:0.78rem;cursor:pointer;margin-top:0.2rem;">Back to Sign In</button>
         </div>
 
         <!-- Reset PIN flow -->
         <div id="auth-form-reset" style="display:none;">
           <p style="color:#aaa;font-size:0.8rem;margin:0 0 0.75rem;">Enter the 6-digit code sent to your email and choose a new PIN.</p>
-          <input id="reset-code" type="tel" inputmode="numeric" placeholder="6-digit code" maxlength="6" style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(212,175,55,0.2);border-radius:8px;color:#f0ede8;padding:0.65rem 0.85rem;font-size:0.85rem;margin-bottom:0.65rem;outline:none;box-sizing:border-box;letter-spacing:0.3em;" />
-          <input id="reset-new-pin" type="tel" inputmode="numeric" placeholder="New 4-digit PIN" maxlength="4" style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(212,175,55,0.2);border-radius:8px;color:#f0ede8;padding:0.65rem 0.85rem;font-size:0.85rem;margin-bottom:0.65rem;outline:none;box-sizing:border-box;letter-spacing:0.25em;" />
+          <input id="reset-code" type="tel" inputmode="numeric" placeholder="6-digit code" maxlength="6" style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(151,131,107,0.2);border-radius:8px;color:#f0ede8;padding:0.65rem 0.85rem;font-size:0.85rem;margin-bottom:0.65rem;outline:none;box-sizing:border-box;letter-spacing:0.3em;" />
+          <input id="reset-new-pin" type="tel" inputmode="numeric" placeholder="New 4-digit PIN" maxlength="4" style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(151,131,107,0.2);border-radius:8px;color:#f0ede8;padding:0.65rem 0.85rem;font-size:0.85rem;margin-bottom:0.65rem;outline:none;box-sizing:border-box;letter-spacing:0.25em;" />
           <div id="reset-error" style="color:#e74c3c;font-size:0.75rem;margin-bottom:0.65rem;display:none;"></div>
-          <button onclick="doResetPin()" style="width:100%;background:rgba(212,175,55,0.15);border:1px solid rgba(212,175,55,0.4);border-radius:8px;color:#d4af37;padding:0.65rem;font-weight:700;font-size:0.85rem;cursor:pointer;">Reset PIN</button>
+          <button onclick="doResetPin()" style="width:100%;background:rgba(151,131,107,0.15);border:1px solid rgba(151,131,107,0.4);border-radius:8px;color:#97836B;padding:0.65rem;font-weight:700;font-size:0.85rem;cursor:pointer;">Reset PIN</button>
           <button onclick="openForgotPin()" style="width:100%;background:transparent;border:none;color:#555;padding:0.5rem;font-size:0.78rem;cursor:pointer;margin-top:0.2rem;">Resend code</button>
         </div>
         <div id="auth-form-register" style="display:none;">
-          <input id="reg-name" type="text" placeholder="Your name" autocomplete="name" style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(212,175,55,0.2);border-radius:8px;color:#f0ede8;padding:0.65rem 0.85rem;font-size:0.85rem;margin-bottom:0.65rem;outline:none;box-sizing:border-box;" />
-          <input id="reg-email" type="email" inputmode="email" placeholder="Email address" autocomplete="email" style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(212,175,55,0.2);border-radius:8px;color:#f0ede8;padding:0.65rem 0.85rem;font-size:0.85rem;margin-bottom:0.65rem;outline:none;box-sizing:border-box;" />
-          <input id="reg-pin" type="tel" inputmode="numeric" placeholder="Choose a 4-digit PIN" maxlength="4" pattern="\d{4}" autocomplete="new-password" style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(212,175,55,0.2);border-radius:8px;color:#f0ede8;padding:0.65rem 0.85rem;font-size:0.85rem;margin-bottom:0.65rem;outline:none;box-sizing:border-box;letter-spacing:0.25em;" onkeydown="if(event.key==='Enter')doRegister()" />
+          <input id="reg-name" type="text" placeholder="Your name" autocomplete="name" style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(151,131,107,0.2);border-radius:8px;color:#f0ede8;padding:0.65rem 0.85rem;font-size:0.85rem;margin-bottom:0.65rem;outline:none;box-sizing:border-box;" />
+          <input id="reg-email" type="email" inputmode="email" placeholder="Email address" autocomplete="email" style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(151,131,107,0.2);border-radius:8px;color:#f0ede8;padding:0.65rem 0.85rem;font-size:0.85rem;margin-bottom:0.65rem;outline:none;box-sizing:border-box;" />
+          <input id="reg-pin" type="tel" inputmode="numeric" placeholder="Choose a 4-digit PIN" maxlength="4" pattern="\d{4}" autocomplete="new-password" style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(151,131,107,0.2);border-radius:8px;color:#f0ede8;padding:0.65rem 0.85rem;font-size:0.85rem;margin-bottom:0.65rem;outline:none;box-sizing:border-box;letter-spacing:0.25em;" onkeydown="if(event.key==='Enter')doRegister()" />
           <div id="reg-error" style="color:#e74c3c;font-size:0.75rem;margin-bottom:0.65rem;display:none;"></div>
-          <button onclick="doRegister()" style="width:100%;background:rgba(212,175,55,0.15);border:1px solid rgba(212,175,55,0.4);border-radius:8px;color:#d4af37;padding:0.65rem;font-weight:700;font-size:0.85rem;cursor:pointer;letter-spacing:0.04em;">Create Account</button>
+          <button onclick="doRegister()" style="width:100%;background:rgba(151,131,107,0.15);border:1px solid rgba(151,131,107,0.4);border-radius:8px;color:#97836B;padding:0.65rem;font-weight:700;font-size:0.85rem;cursor:pointer;letter-spacing:0.04em;">Create Account</button>
           <button onclick="closeAuthModal()" style="width:100%;background:transparent;border:none;color:#555;padding:0.5rem;font-size:0.78rem;cursor:pointer;margin-top:0.4rem;">Continue as guest</button>
         </div>
       </div>
@@ -3731,7 +3747,7 @@
 
     <!-- My Orders Drawer -->
     <div id="myOrdersDrawer" onclick="if(event.target===this)closeMyOrders()" style="display:none;position:fixed;inset:0;z-index:9400;background:rgba(0,0,0,0.75);align-items:flex-end;justify-content:center;">
-      <div style="background:#111;border:1px solid rgba(212,175,55,0.15);border-radius:20px 20px 0 0;width:min(540px,100%);max-height:80vh;display:flex;flex-direction:column;">
+      <div style="background:#111;border:1px solid rgba(151,131,107,0.15);border-radius:20px 20px 0 0;width:min(540px,100%);max-height:80vh;display:flex;flex-direction:column;">
         <div style="display:flex;align-items:center;justify-content:space-between;padding:1.25rem 1.5rem 0.75rem;border-bottom:1px solid rgba(255,255,255,0.06);">
           <span style="font-size:0.95rem;font-weight:700;color:#f0ede8;letter-spacing:0.03em;">My Orders</span>
           <button onclick="closeMyOrders()" style="background:none;border:none;color:#555;font-size:1rem;cursor:pointer;"><i class="fas fa-times"></i></button>
