@@ -1437,6 +1437,19 @@
             align-items: center;
             gap: 0.35rem;
         }
+        .header-signin-btn {
+            height: 36px;
+            width: auto;
+            padding: 0 0.75rem;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            gap: 0.35rem;
+            white-space: nowrap;
+            color: var(--gold);
+            border: 1px solid rgba(151,131,107,0.35);
+            border-radius: 6px;
+        }
         .header-page-dots {
             display: flex;
             align-items: center;
@@ -2034,11 +2047,11 @@
                 <button class="header-btn" id="searchToggle" aria-label="Search">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M9 2C5.146 2 2 5.146 2 9s3.146 7 7 7c1.748 0 3.345-.652 4.574-1.719l.426.426V16l6 6 2-2-6-6h-1.293l-.426-.426A6.965 6.965 0 0 0 16 9c0-3.854-3.146-7-7-7zm0 2c2.773 0 5 2.227 5 5s-2.227 5-5 5-5-2.227-5-5 2.227-5 5-5z" fill="currentColor"/></svg>
                 </button>
-                <button class="header-btn" id="header-signin-btn" aria-label="Sign In" onclick="openAuthModal()" style="font-size:0.7rem;font-weight:700;letter-spacing:0.04em;padding:0.3rem 0.65rem;width:auto;gap:0.3rem;color:var(--gold,#97836B);border:1px solid rgba(151,131,107,0.35);border-radius:6px;">
-                    <i class="fas fa-user" style="font-size:0.75rem;"></i> Sign In
+                <button class="header-btn header-signin-btn" id="header-signin-btn" aria-label="Sign In" onclick="openAuthModal()">
+                    <i class="fas fa-user"></i> Sign In
                 </button>
-                <button class="header-btn" id="header-user-btn" aria-label="Account" onclick="ORDERING_ENABLED ? openMyOrders() : null" style="display:none;font-size:0.7rem;font-weight:700;letter-spacing:0.04em;padding:0.3rem 0.65rem;width:auto;gap:0.3rem;color:var(--gold,#97836B);cursor:default;">
-                    <i class="fas fa-user-circle" style="font-size:0.85rem;"></i><span id="header-user-name"></span>
+                <button class="header-btn header-signin-btn" id="header-user-btn" aria-label="Account" onclick="ORDERING_ENABLED ? openMyOrders() : null" style="display:none;cursor:default;">
+                    <i class="fas fa-user-circle"></i><span id="header-user-name"></span>
                 </button>
                 <button class="header-btn" id="navToggle" aria-label="Menu">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="4" y="6" width="16" height="2" fill="currentColor"/><rect x="4" y="11" width="16" height="2" fill="currentColor"/><rect x="4" y="16" width="16" height="2" fill="currentColor"/></svg>
