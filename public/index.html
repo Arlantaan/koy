@@ -2288,7 +2288,7 @@
 
     async function loadSectionMeta() {
       try {
-        const res = await fetch(`${API_BASE}/api/sections`);
+        const res = await fetch(`${API}/api/sections`);
         const sections = await res.json();
         SECTION_META = {};
         sections.forEach(s => {
