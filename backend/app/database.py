@@ -111,7 +111,7 @@ CREATE TABLE IF NOT EXISTS sections (
     key      TEXT PRIMARY KEY,
     label    TEXT NOT NULL,
     icon     TEXT NOT NULL DEFAULT 'fa-utensils',
-    ornament BOOLEAN NOT NULL DEFAULT 'false'
+    ornament BOOLEAN NOT NULL DEFAULT false,
     sort_order INTEGER NOT NULL DEFAULT 999
 )
 """
