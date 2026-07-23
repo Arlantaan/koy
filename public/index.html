@@ -2284,28 +2284,20 @@
     let cart = JSON.parse(sessionStorage.getItem('koya-cart') || '[]');
     let _activeTableNumber = sessionStorage.getItem('koya-active-table');  // Track which table the current order is for (persists)
 
-    const SECTION_META = {
-      starters:   { label: 'Starters',         icon: 'fa-leaf',                  ornament: true },
-      salads:     { label: 'Salads',            icon: 'fa-seedling',              ornament: false },
-      fish:       { label: 'Fish & Seafood',    icon: 'fa-fish',                  ornament: true },
-      meat:       { label: 'Meat',              icon: 'fa-drumstick-bite',        ornament: true },
-      pizza:      { label: 'Pizza',             icon: 'fa-pizza-slice',           ornament: true },
-      pasta:      { label: 'Pasta',             icon: 'fa-wheat-awn',             ornament: false },
-      calzone:    { label: 'Calzone',           icon: 'fa-bread-slice',           ornament: false },
-      sharing:    { label: 'Sharing Mix',       icon: 'fa-people-group',          ornament: true },
-      sides:      { label: 'Sides',             icon: 'fa-bowl-food',             ornament: false },
-      sauces:     { label: 'Sauces',            icon: 'fa-mortar-pestle',         ornament: false },
-      desserts:   { label: 'Desserts',          icon: 'fa-ice-cream',             ornament: true },
-      softdrinks: { label: 'Soft Drinks',       icon: 'fa-glass-water',           ornament: false },
-      freshjuices:{ label: 'Fresh Juices',      icon: 'fa-lemon',                 ornament: false },
-      localjuices:{ label: 'Local Juices',      icon: 'fa-leaf',                  ornament: false },
-      milkshakes: { label: 'Milkshakes',        icon: 'fa-blender',               ornament: false },
-      coffee:     { label: 'Coffee',            icon: 'fa-mug-hot',               ornament: false },
-      hottea:     { label: 'Hot Tea',           icon: 'fa-mug-saucer',            ornament: false },
-      matchas:    { label: 'Matchas',           icon: 'fa-spa',                   ornament: false },
-      mocktails:  { label: 'Mocktails',         icon: 'fa-martini-glass-citrus',  ornament: true },
-      icedtea:    { label: 'Iced Tea',          icon: 'fa-snowflake',             ornament: false },
-    };
+    let SECTION_META = {};
+
+    async function loadSectionMeta() {
+      try {
+        const res = await fetch(`${API_BASE}/api/sections`);
+        const sections = await res.json();
+        SECTION_META = {};
+        sections.forEach(s => {
+          SECTION_META[s.key] = { label: s.label, icon: s.icon, ornament: s.ornament };
+        });
+      } catch(e) {
+        console.warn('Could not load sections from API', e);
+      }
+    }
 
     function openImage(src) {
       const lightbox = document.getElementById('imageLightbox');
@@ -2787,7 +2779,7 @@
     let koyaUser = JSON.parse(localStorage.getItem('koya_user') || 'null');
     let koyaToken = localStorage.getItem('koya_token') || '';
 
-    loadMenu();
+    loadSectionMeta().then(() => loadMenu());
     applySettings();
     initAuth();
     if (!ORDERING_ENABLED) {

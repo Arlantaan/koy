@@ -199,3 +199,17 @@ class MyOrder(BaseModel):
     notes: str
     status: str
     created_at: str
+
+    # ── Sections ──────────────────────────────────────────────────────────────────
+
+class Section(BaseModel):
+    key: str
+    label: str
+    icon: str
+    ornament: bool
+    sort_order: int
+
+
+class SectionLabelUpdate(BaseModel):
+    label: str = Field(..., min_length=1, max_length=80)
+

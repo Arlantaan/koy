@@ -106,6 +106,15 @@ CREATE TABLE IF NOT EXISTS pin_reset_tokens (
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 )
 """
+CREATE_SECTIONS = """
+CREATE TABLE IF NOT EXISTS sections (
+    key      TEXT PRIMARY KEY,
+    label    TEXT NOT NULL,
+    icon     TEXT NOT NULL DEFAULT 'fa-utensils',
+    ornament BOOLEAN NOT NULL DEFAULT 'false'
+    sort_order INTEGER NOT NULL DEFAULT 999
+)
+"""
 
 CREATE_STAFF = """
 CREATE TABLE IF NOT EXISTS staff (
@@ -131,6 +140,30 @@ DEFAULT_SETTINGS = [
     ("maps_url", "https://maps.app.goo.gl/fcSsMLpHL6t6gf6G6"),
 ]
 
+DEFAULT_SECTIONS = [
+    ("starters",    "Starters",         "fa-leaf",                  True,  1),
+    ("salads",      "Salads & Bowls",   "fa-seedling",              False, 2),
+    ("fish",        "Fish & Seafood",   "fa-fish",                  True,  3),
+    ("meat",        "Meat",             "fa-drumstick-bite",        True,  4),
+    ("pizza",       "Pizza",            "fa-pizza-slice",           True,  5),
+    ("pasta",       "Pasta",            "fa-wheat-awn",             False, 6),
+    ("calzone",     "Calzone",          "fa-bread-slice",           False, 7),
+    ("sharing",     "Sharing Mix",      "fa-people-group",          True,  8),
+    ("sides",       "Sides",            "fa-bowl-food",             False, 9),
+    ("sauces",      "Sauces",           "fa-mortar-pestle",         False, 10),
+    ("desserts",    "Desserts",         "fa-ice-cream",             True,  11),
+    ("softdrinks",  "Soft Drinks",      "fa-glass-water",           False, 12),
+    ("freshjuices", "Fresh Juices",     "fa-lemon",                 False, 13),
+    ("localjuices", "Local Juices",     "fa-leaf",                  False, 14),
+    ("milkshakes",  "Milkshakes",       "fa-blender",               False, 15),
+    ("coffee",      "Coffee",           "fa-mug-hot",               False, 16),
+    ("hottea",      "Hot Tea",          "fa-mug-saucer",            False, 17),
+    ("matchas",     "Matchas",          "fa-spa",                   False, 18),
+    ("mocktails",   "Mocktails",        "fa-martini-glass-citrus",  True,  19),
+    ("icedtea",     "Iced Tea",         "fa-snowflake",             False, 20),
+]
+
+
 
 async def create_pool() -> asyncpg.Pool:
     return await asyncpg.create_pool(settings.database_url)  # type: ignore[return-value]
@@ -149,6 +182,14 @@ async def init_db(conn: asyncpg.Connection) -> None:
     await conn.execute(ALTER_ORDERS_ADD_CUSTOMER_ID)
     await conn.execute(CREATE_STAFF)
     await conn.execute(CREATE_PIN_RESET_TOKENS)
+    await conn.execute(CREATE_SECTIONS)
+    for key, label, icon, ornament, sort_order in DEFAULT_SECTIONS:
+        await conn.execute(
+            "INSERT INTO sections (key, label, icon, ornament, sort_order) VALUES ($1, $2, $3, $4, $5) ON CONFLICT (key) DO NOTHING",
+            key, label, icon, ornament, sort_order,
+        )
+
+
     # Seed defaults only if the table is empty
     for key, value in DEFAULT_SETTINGS:
         await conn.execute(
