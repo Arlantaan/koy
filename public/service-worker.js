@@ -1,4 +1,4 @@
-const CACHE_NAME = 'koya-menu-v1';
+const CACHE_NAME = 'koya-menu-v2';
 const ASSETS_TO_CACHE = [
   '/',
   '/index.html',
@@ -63,6 +63,7 @@ self.addEventListener('fetch', event => {
     event.respondWith((async () => {
       const cache = await caches.open(CACHE_NAME);
       const cached = await cache.match(request);
+      const cachedForCompare = cached ? cached.clone() : null;
 
       const META_KEY = 'koya-last-menu-refresh';
       let lastRefresh = 0;
@@ -90,10 +91,21 @@ self.addEventListener('fetch', event => {
         try {
           const fresh = await fetch(request);
           if (fresh.status === 200) {
+            // Detect whether the menu actually changed since the last cache
+            let changed = true;
+            if (cachedForCompare) {
+              try {
+                const freshText = await fresh.clone().text();
+                const cachedText = await cachedForCompare.text();
+                changed = freshText !== cachedText;
+              } catch { changed = true; }
+            }
             cache.put(request, fresh.clone());
             const metaCache = await caches.open('koya-meta');
             metaCache.put(META_KEY, new Response(now.toString()));
-            if (needsHardRefresh) {
+            // Tell any open pages to re-render whenever the menu changed
+            // (or on the daily 5am hard refresh)
+            if (changed || needsHardRefresh) {
               const clients = await self.clients.matchAll({ type: 'window' });
               clients.forEach(c => c.postMessage({ type: 'MENU_UPDATED' }));
             }
