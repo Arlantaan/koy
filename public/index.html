@@ -2489,7 +2489,10 @@
       document.querySelectorAll('.header-page-dot').forEach((dot, i) => {
         dot.addEventListener('click', () => bookGoTo(i));
       });
-      document.getElementById('headerBackBtn')?.addEventListener('click', () => bookGoTo(currentBookPage - 1));
+      document.getElementById('headerBackBtn')?.addEventListener('click', () => {
+        if (menuIsDrilledIn()) { backToMenuGrid(); }
+        else { bookGoTo(currentBookPage - 1); }
+      });
 
       // ── Book: touch swipe ──
       let tsX = 0, tsY = 0, tsTarget = null;
@@ -2728,7 +2731,16 @@
     }
 
     // ── Category grid ⇄ single section page ──
+    let menuViewIsSection = false;
+
+    // True when we're on the menu page but drilled into a section (grid hidden)
+    function menuIsDrilledIn() {
+      const grid = document.getElementById('menuGrid');
+      return currentBookPage === 2 && grid && grid.style.display === 'none';
+    }
+
     function resetMenuToGrid() {
+      menuViewIsSection = false;
       const grid = document.getElementById('menuGrid');
       if (!grid) return; // menu content not built yet
       const backBar = document.getElementById('menuBackBar');
@@ -2742,9 +2754,23 @@
     }
 
     function backToMenuGrid() {
+      // If we drilled in with a history entry, let Back handle it (keeps history in sync)
+      if (menuViewIsSection && history.state && history.state.koyaMenuSection) {
+        history.back(); // the popstate handler below resets to the grid
+        return;
+      }
       resetMenuToGrid();
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
+
+    // Phone / browser Back button: if drilled into a section, return to the grid
+    // instead of leaving the menu page.
+    window.addEventListener('popstate', () => {
+      if (menuViewIsSection || menuIsDrilledIn()) {
+        resetMenuToGrid();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    });
 
     function openMenuSection(key) {
       // If we're not on the menu page yet, go there first, then open
@@ -2759,6 +2785,13 @@
       if (nd) { nd.classList.remove('open'); nd.setAttribute('aria-hidden', 'true'); }
       if (nt) nt.classList.remove('active');
       unlockScroll();
+
+      // Push one history entry the first time we drill in, so the phone's
+      // Back button returns to the grid rather than exiting the menu.
+      if (!menuViewIsSection) {
+        history.pushState({ koyaMenuSection: true }, '');
+      }
+      menuViewIsSection = true;
 
       const grid = document.getElementById('menuGrid');
       const backBar = document.getElementById('menuBackBar');
@@ -2852,6 +2885,7 @@
           resetMenuToGrid();
         } else {
           if (menuPg) menuPg.style.paddingTop = '';
+          menuViewIsSection = false;
         }
       }
       updateCartFab();
