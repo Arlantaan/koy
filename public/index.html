@@ -1411,6 +1411,57 @@
         }
         #page-menu .cat-scroll-hdr { padding-top: 1.25rem; }
 
+        /* ── Category grid menu (grid → section page) ── */
+        #page-menu .sticky-nav-wrap { display: none !important; }
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(104px, 1fr));
+            gap: 0.65rem;
+            padding: 0.4rem var(--page-gutter, 1rem) 2.5rem;
+        }
+        @media (min-width: 640px) {
+            .menu-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 0.8rem; }
+        }
+        .menu-grid-card {
+            background: #171717;
+            border: 1px solid rgba(151,131,107,0.22);
+            border-radius: 12px;
+            padding: 1.05rem 0.55rem 0.85rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.35rem;
+            cursor: pointer;
+            color: #f0ede8;
+            font-family: inherit;
+            transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+        }
+        .menu-grid-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--gold);
+            background: #1d1b18;
+        }
+        .menu-grid-card i { font-size: 1.3rem; color: var(--gold); }
+        .menu-grid-card .mg-name { font-weight: 500; font-size: 0.82rem; text-align: center; line-height: 1.2; }
+        .menu-grid-card .mg-count { font-size: 0.6rem; letter-spacing: 0.07em; text-transform: uppercase; color: #95897b; }
+        .menu-back-bar { padding: 0.4rem var(--page-gutter, 1rem) 0.6rem; }
+        .menu-back-btn {
+            background: none;
+            border: 1px solid rgba(151,131,107,0.3);
+            color: var(--gold);
+            font-family: inherit;
+            font-size: 0.8rem;
+            letter-spacing: 0.04em;
+            padding: 0.45rem 1rem;
+            border-radius: 999px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: background 0.15s, border-color 0.15s;
+        }
+        .menu-back-btn:hover { background: #1d1b18; border-color: var(--gold); }
+
         /* ── Fixed category band (shown only on menu page via JS) ── */
         .cat-sticky-band {
             position: fixed;
@@ -2346,13 +2397,14 @@
           const noResults = document.getElementById('menu-no-results');
           const queryEl  = document.getElementById('menu-no-results-query');
           if (!q) {
-            document.querySelectorAll('.menu-section').forEach(s => {
-              s.style.display = '';
-              s.querySelectorAll('.col-12').forEach(c => c.style.display = '');
-            });
-            if (noResults) noResults.style.display = 'none';
+            backToMenuGrid();
             return;
           }
+          // search mode: hide the category grid and reveal matching dishes
+          const _grid = document.getElementById('menuGrid');
+          const _backBar = document.getElementById('menuBackBar');
+          if (_grid) _grid.style.display = 'none';
+          if (_backBar) _backBar.style.display = 'none';
           let totalVisible = 0;
           document.querySelectorAll('.menu-section').forEach(section => {
             let visible = 0;
@@ -2605,14 +2657,14 @@
         // Build nav
         const nav = document.getElementById('menuNav');
         nav.innerHTML = orderedSections.map((s, i) =>
-          `<li class="nav-item"><a class="nav-link nav-pill${i === 0 ? ' active' : ''} px-4 py-2 rounded-pill" href="#${s.key}" onclick="event.preventDefault();scrollToSection('${s.key}')"><i class="fas ${s.icon} me-2"></i>${s.label}</a></li>`
+          `<li class="nav-item"><a class="nav-link nav-pill${i === 0 ? ' active' : ''} px-4 py-2 rounded-pill" href="#${s.key}" onclick="event.preventDefault();openMenuSection('${s.key}')"><i class="fas ${s.icon} me-2"></i>${s.label}</a></li>`
         ).join('');
 
         // Populate nav dropdown items
         const dropdownItems = document.getElementById('navDropdownItems');
         if (dropdownItems) {
           dropdownItems.innerHTML = orderedSections.map(s =>
-            `<button class="nav-dropdown-item" onclick="scrollToSection('${s.key}')">
+            `<button class="nav-dropdown-item" onclick="openMenuSection('${s.key}')">
               <i class="item-icon fas ${s.icon}"></i>
               <span class="item-label">${s.label}</span>
               <i class="item-arrow fas fa-chevron-right"></i>
@@ -2624,7 +2676,7 @@
         const tilesEl = document.getElementById('sectionTiles');
         if (tilesEl) {
           tilesEl.innerHTML = orderedSections.map(s =>
-            `<button class="cat-card" data-section="${s.key}" onclick="scrollToSection('${s.key}')">
+            `<button class="cat-card" data-section="${s.key}" onclick="openMenuSection('${s.key}')">
               <i class="fas ${s.icon}"></i>
               <div class="cat-card-name">${s.label}</div>
               <div class="cat-card-count">${s.items.length}</div>
@@ -2638,12 +2690,25 @@
           });
         }
 
-        // Build menu content
-        let html = '';
+        // Build menu content: category grid (landing) + one section page at a time
+        const gridHtml = `<div id="menuGrid" class="menu-grid">` +
+          orderedSections.map(s =>
+            `<button class="menu-grid-card" onclick="openMenuSection('${s.key}')">
+               <i class="fas ${s.icon}"></i>
+               <span class="mg-name">${s.label}</span>
+               <span class="mg-count">${s.items.length} item${s.items.length !== 1 ? 's' : ''}</span>
+             </button>`
+          ).join('') + `</div>`;
+
+        const backHtml = `<div id="menuBackBar" class="menu-back-bar" style="display:none;">
+             <button class="menu-back-btn" onclick="backToMenuGrid()"><i class="fas fa-chevron-left"></i> All Sections</button>
+           </div>`;
+
+        let sectionsHtml = '';
         for (const s of orderedSections) {
           const ornament = s.ornament ? `<p class="section-ornament">&#10022; &nbsp; &#10022; &nbsp; &#10022;</p>` : '';
-          html += `
-            <section id="${s.key}" class="menu-section mb-5">
+          sectionsHtml += `
+            <section id="${s.key}" class="menu-section mb-5" style="display:none;">
               <h2 class="section-title fw-bold mb-3"><i class="fas ${s.icon}"></i>${s.label}</h2>
               ${ornament}
               <div class="row g-4 justify-content-center">
@@ -2651,8 +2716,8 @@
               </div>
             </section>`;
         }
-        
-        container.innerHTML = html;
+
+        container.innerHTML = backHtml + gridHtml + sectionsHtml;
         setupReveal(!isBackgroundRefresh);
         loadImages(items);
         syncAddButtons();
@@ -2660,6 +2725,54 @@
       } catch (e) {
         container.innerHTML = '<p class="text-center text-muted-soft py-5">Unable to load menu. Please refresh.</p>';
       }
+    }
+
+    // ── Category grid ⇄ single section page ──
+    function resetMenuToGrid() {
+      const grid = document.getElementById('menuGrid');
+      if (!grid) return; // menu content not built yet
+      const backBar = document.getElementById('menuBackBar');
+      const si = document.getElementById('menuSearch');
+      const nr = document.getElementById('menu-no-results');
+      if (si) si.value = '';
+      if (nr) nr.style.display = 'none';
+      if (backBar) backBar.style.display = 'none';
+      document.querySelectorAll('#menu-content .menu-section').forEach(s => s.style.display = 'none');
+      grid.style.display = '';
+    }
+
+    function backToMenuGrid() {
+      resetMenuToGrid();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function openMenuSection(key) {
+      // If we're not on the menu page yet, go there first, then open
+      if (currentBookPage !== 2) {
+        bookGoTo(2);
+        setTimeout(() => openMenuSection(key), 420);
+        return;
+      }
+      // Close the hamburger dropdown if it's open
+      const nd = document.getElementById('navDropdown');
+      const nt = document.getElementById('navToggle');
+      if (nd) { nd.classList.remove('open'); nd.setAttribute('aria-hidden', 'true'); }
+      if (nt) nt.classList.remove('active');
+      unlockScroll();
+
+      const grid = document.getElementById('menuGrid');
+      const backBar = document.getElementById('menuBackBar');
+      if (grid) grid.style.display = 'none';
+      if (backBar) backBar.style.display = '';
+      document.querySelectorAll('#menu-content .menu-section').forEach(s => {
+        if (s.id === key) {
+          s.style.display = '';
+          s.querySelectorAll('.col-12').forEach(c => c.style.display = '');
+        } else {
+          s.style.display = 'none';
+        }
+      });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     function scrollToSection(key) {
@@ -2733,13 +2846,11 @@
       const catBand = document.getElementById('catBand');
       const menuPg  = document.getElementById('page-menu');
       if (catBand) {
+        catBand.style.display = 'none'; // replaced by the in-content category grid
         if (n === 2) {
-          catBand.style.display = 'block';
-          requestAnimationFrame(() => requestAnimationFrame(() => {
-            if (menuPg) menuPg.style.paddingTop = catBand.offsetHeight + 'px';
-          }));
+          if (menuPg) menuPg.style.paddingTop = '64px'; // clear the 56px fixed header
+          resetMenuToGrid();
         } else {
-          catBand.style.display = 'none';
           if (menuPg) menuPg.style.paddingTop = '';
         }
       }
