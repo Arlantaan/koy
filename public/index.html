@@ -2234,16 +2234,16 @@
             <div class="book-page pg-active" id="page-cover">
                 <div class="hero-slider" id="heroSlider">
                     <div class="slide active" style="background-image:url('koya_bg/bg1.webp')"></div>
-                    <div class="slide" style="background-image:url('koya_bg/bg2.webp')"></div>
-                    <div class="slide" style="background-image:url('koya_bg/bg3.webp')"></div>
-                    <div class="slide" style="background-image:url('koya_bg/bg4.webp')"></div>
-                    <div class="slide" style="background-image:url('koya_bg/bg6.webp')"></div>
-                    <div class="slide" style="background-image:url('koya_bg/bg7.webp')"></div>
-                    <div class="slide" style="background-image:url('koya_bg/bg8.webp')"></div>
-                    <div class="slide" style="background-image:url('koya_bg/bg9.webp')"></div>
-                    <div class="slide" style="background-image:url('koya_bg/bg10.webp')"></div>
-                    <div class="slide" style="background-image:url('koya_bg/bg11.webp')"></div>
-                    <div class="slide" style="background-image:url('koya_bg/bg12.webp')"></div>
+                    <div class="slide" data-bg="koya_bg/bg2.webp"></div>
+                    <div class="slide" data-bg="koya_bg/bg3.webp"></div>
+                    <div class="slide" data-bg="koya_bg/bg4.webp"></div>
+                    <div class="slide" data-bg="koya_bg/bg6.webp"></div>
+                    <div class="slide" data-bg="koya_bg/bg7.webp"></div>
+                    <div class="slide" data-bg="koya_bg/bg8.webp"></div>
+                    <div class="slide" data-bg="koya_bg/bg9.webp"></div>
+                    <div class="slide" data-bg="koya_bg/bg10.webp"></div>
+                    <div class="slide" data-bg="koya_bg/bg11.webp"></div>
+                    <div class="slide" data-bg="koya_bg/bg12.webp"></div>
                     <div class="hero-overlay">
                         <h2 class="hero-brand-title"><img src="koya_pics/Koya_Logos-02-WHITE.png" alt="Koya" class="hero-logo-img" /></h2>
                         <p class="hero-tagline">Modern Dining. Rooted in Soul</p>
@@ -2583,13 +2583,24 @@
           dotsContainer.appendChild(d);
         });
         const dots = dotsContainer.querySelectorAll('.hero-dot');
+        // Lazy-load: only bg1 loads up front; the rest load just before they're shown
+        function ensureBg(slide) {
+          if (slide && slide.dataset.bg) {
+            slide.style.backgroundImage = `url('${slide.dataset.bg}')`;
+            delete slide.dataset.bg;
+          }
+        }
         function goTo(n) {
           slides[current].classList.remove('active');
           dots[current].classList.remove('active');
           current = (n + slides.length) % slides.length;
+          ensureBg(slides[current]);                          // the slide we're showing
+          ensureBg(slides[(current + 1) % slides.length]);    // preload the next one
           slides[current].classList.add('active');
           dots[current].classList.add('active');
         }
+        // Warm the 2nd slide shortly after first paint so the first transition is smooth
+        setTimeout(() => ensureBg(slides[1 % slides.length]), 700);
         setInterval(() => goTo(current + 1), 4000);
       }
 
