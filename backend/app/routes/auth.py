@@ -10,11 +10,12 @@ from typing import Any
 
 import asyncpg
 import bcrypt as _bcrypt
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, Request, status
 
 from app.auth import get_current_user, get_optional_user, make_token, require_admin
 from app.config import settings
 from app.database import get_db
+from app.ratelimit import rate_limit
 from app.models import (
     AdminCustomer,
     ForgotPinRequest,
@@ -129,9 +130,11 @@ def _verify_password(password: str, hashed: str) -> bool:
 
 @router.post("/auth/register", response_model=TokenResponse, status_code=status.HTTP_201_CREATED)
 async def register(
+    request: Request,
     body: UserRegister,
     db: asyncpg.Connection = Depends(get_db),
 ) -> dict[str, Any]:
+    rate_limit(request, "register", limit=5, window_seconds=300)
     if not body.email and not body.phone:
         raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail="Email or phone is required")
     # Normalise
@@ -164,9 +167,11 @@ async def register(
 
 @router.post("/auth/login", response_model=TokenResponse)
 async def login(
+    request: Request,
     body: UserLogin,
     db: asyncpg.Connection = Depends(get_db),
 ) -> dict[str, Any]:
+    rate_limit(request, "login", limit=15, window_seconds=60)
     identifier = body.identifier.strip()
     normalized = identifier.lower() if "@" in identifier else identifier
 

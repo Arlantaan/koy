@@ -5,11 +5,12 @@ from typing import Any, Literal, Optional
 
 import asyncpg
 import jwt
-from fastapi import Depends, HTTPException, status
+from fastapi import Depends, HTTPException, Request, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 
 from app.config import settings
 from app.database import get_db
+from app.ratelimit import rate_limit
 
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_DAYS = 7
@@ -41,6 +42,7 @@ async def _resolve_admin_password(db: asyncpg.Connection) -> str:
 
 
 async def require_admin(
+    request: Request,
     credentials: HTTPAuthorizationCredentials | None = Depends(bearer_scheme),
     db: asyncpg.Connection = Depends(get_db),
 ) -> None:
@@ -63,6 +65,9 @@ async def require_admin(
             return
     except HTTPException:
         pass
+    # Failed admin auth — throttle brute-force by IP. Legit requests (correct
+    # password/token) return above and never reach here, so admins aren't limited.
+    rate_limit(request, "admin-auth", limit=10, window_seconds=300)
     raise HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Invalid or missing credentials",

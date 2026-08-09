@@ -5,11 +5,12 @@ from typing import Any
 
 import asyncpg
 import bcrypt
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request
 from pydantic import BaseModel, Field
 
 from app.auth import make_staff_token, require_admin
 from app.database import get_db
+from app.ratelimit import rate_limit
 
 router = APIRouter(prefix="/api")
 
@@ -38,9 +39,11 @@ class StaffUpdateRequest(BaseModel):
 
 @router.post("/staff/login")
 async def staff_login(
+    request: Request,
     body: StaffLoginRequest,
     db: asyncpg.Connection = Depends(get_db),
 ) -> dict[str, Any]:
+    rate_limit(request, "staff-login", limit=8, window_seconds=60)
     row = await db.fetchrow(
         "SELECT id, hashed_password, role FROM staff WHERE username = $1",
         body.username,
