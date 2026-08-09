@@ -56,16 +56,22 @@ async def admin_upload_image(file: UploadFile = File(...)) -> dict[str, Any]:
             rgb_img = Image.new("RGB", img.size, (255, 255, 255))
             rgb_img.paste(img, mask=img.split()[-1] if img.mode == "RGBA" else None)
             img = rgb_img
-        
+
+        # Downscale very large uploads so pages stay fast (cap width at 1600px)
+        MAX_W = 1600
+        if img.width > MAX_W:
+            new_h = round(img.height * MAX_W / img.width)
+            img = img.resize((MAX_W, new_h), Image.LANCZOS)
+
         # Generate unique filename
         filename = f"{uuid.uuid4()}.webp"
         filepath = Path(settings.upload_dir) / filename
 
         # Ensure directory exists
         filepath.parent.mkdir(parents=True, exist_ok=True)
-        
+
         # Save as WebP
-        img.save(str(filepath), "WEBP", quality=85, method=6)
+        img.save(str(filepath), "WEBP", quality=82, method=6)
         
         # Return the URL path
         return {

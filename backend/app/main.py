@@ -16,6 +16,7 @@ from app.routes.auth import router as auth_router
 from app.routes.orders import router as orders_router
 from app.routes.staff import router as staff_router
 from app.routes.sections import router as sections_router
+from app.routes.gallery import router as gallery_router
 
 
 @asynccontextmanager
@@ -50,6 +51,7 @@ app.include_router(auth_router)
 app.include_router(orders_router)
 app.include_router(staff_router)
 app.include_router(sections_router)
+app.include_router(gallery_router)
 
 
 @app.get("/api/health")

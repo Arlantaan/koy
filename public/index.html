@@ -2427,7 +2427,8 @@
     }
 
     // ── Background photo gallery (reuses the lightbox) ──
-    const GALLERY_IMAGES = [
+    // Fallback list; replaced at runtime by the DB-managed gallery (loadGalleryData)
+    let GALLERY_IMAGES = [
       'koya_bg/bg1.webp','koya_bg/bg2.webp','koya_bg/bg3.webp','koya_bg/bg4.webp',
       'koya_bg/bg6.webp','koya_bg/bg7.webp','koya_bg/bg8.webp','koya_bg/bg9.webp',
       'koya_bg/bg10.webp','koya_bg/bg11.webp','koya_bg/bg12.webp'
@@ -2462,6 +2463,76 @@
       lightbox.classList.remove('open', 'gallery-mode');
       lightbox.setAttribute('aria-hidden', 'true');
       unlockScroll();
+    }
+
+    // ── Hero slideshow (photos come from the DB-managed gallery) ──
+    let heroSlideTimer = null;
+
+    function startHeroSlideshow() {
+      const slides = document.querySelectorAll('.hero-slider .slide');
+      const dotsContainer = document.getElementById('heroDots');
+      if (!slides.length || !dotsContainer) return;
+      if (heroSlideTimer) { clearInterval(heroSlideTimer); heroSlideTimer = null; }
+      dotsContainer.innerHTML = '';
+      let current = 0;
+      slides.forEach((_, i) => {
+        const d = document.createElement('span');
+        d.className = 'hero-dot' + (i === 0 ? ' active' : '');
+        d.addEventListener('click', () => goTo(i));
+        dotsContainer.appendChild(d);
+      });
+      const dots = dotsContainer.querySelectorAll('.hero-dot');
+      // Lazy-load: only the first bg loads up front; the rest load just before shown
+      function ensureBg(slide) {
+        if (slide && slide.dataset.bg) {
+          slide.style.backgroundImage = `url('${slide.dataset.bg}')`;
+          delete slide.dataset.bg;
+        }
+      }
+      function goTo(n) {
+        slides[current].classList.remove('active');
+        dots[current].classList.remove('active');
+        current = (n + slides.length) % slides.length;
+        ensureBg(slides[current]);
+        ensureBg(slides[(current + 1) % slides.length]);
+        slides[current].classList.add('active');
+        dots[current].classList.add('active');
+      }
+      setTimeout(() => ensureBg(slides[1 % slides.length]), 700);
+      if (slides.length > 1) heroSlideTimer = setInterval(() => goTo(current + 1), 4000);
+    }
+
+    // Rebuild the hero slides from a list of image paths, then restart the show
+    function buildHero(images) {
+      const slider = document.getElementById('heroSlider');
+      if (!slider || !images || !images.length) return;
+      slider.querySelectorAll('.slide').forEach(s => s.remove());
+      const overlay = slider.querySelector('.hero-overlay');
+      const frag = document.createDocumentFragment();
+      images.forEach((src, i) => {
+        const d = document.createElement('div');
+        d.className = 'slide' + (i === 0 ? ' active' : '');
+        if (i === 0) d.style.backgroundImage = `url('${src}')`;
+        else d.dataset.bg = src;
+        frag.appendChild(d);
+      });
+      slider.insertBefore(frag, overlay || null);
+      startHeroSlideshow();
+    }
+
+    // Fetch the managed photo set → drives BOTH the hero backgrounds and the gallery viewer
+    async function loadGalleryData() {
+      try {
+        const res = await fetch(`${API}/api/gallery`);
+        const items = await res.json();
+        const paths = (items || []).map(g => g.image).filter(Boolean);
+        if (paths.length) {
+          GALLERY_IMAGES = paths;
+          buildHero(paths);
+        }
+      } catch (e) {
+        // keep the hardcoded fallback slides
+      }
     }
 
     document.addEventListener('DOMContentLoaded', () => {
@@ -2571,38 +2642,7 @@
       }
 
       // Hero slideshow
-      const slides = document.querySelectorAll('.hero-slider .slide');
-      const dotsContainer = document.getElementById('heroDots');
-      if (slides.length && dotsContainer) {
-        let current = 0;
-        // build dots
-        slides.forEach((_, i) => {
-          const d = document.createElement('span');
-          d.className = 'hero-dot' + (i === 0 ? ' active' : '');
-          d.addEventListener('click', () => goTo(i));
-          dotsContainer.appendChild(d);
-        });
-        const dots = dotsContainer.querySelectorAll('.hero-dot');
-        // Lazy-load: only bg1 loads up front; the rest load just before they're shown
-        function ensureBg(slide) {
-          if (slide && slide.dataset.bg) {
-            slide.style.backgroundImage = `url('${slide.dataset.bg}')`;
-            delete slide.dataset.bg;
-          }
-        }
-        function goTo(n) {
-          slides[current].classList.remove('active');
-          dots[current].classList.remove('active');
-          current = (n + slides.length) % slides.length;
-          ensureBg(slides[current]);                          // the slide we're showing
-          ensureBg(slides[(current + 1) % slides.length]);    // preload the next one
-          slides[current].classList.add('active');
-          dots[current].classList.add('active');
-        }
-        // Warm the 2nd slide shortly after first paint so the first transition is smooth
-        setTimeout(() => ensureBg(slides[1 % slides.length]), 700);
-        setInterval(() => goTo(current + 1), 4000);
-      }
+      startHeroSlideshow();
 
       // Tap ripple on section tiles
       document.addEventListener('click', e => {
@@ -3057,6 +3097,7 @@
     let koyaToken = localStorage.getItem('koya_token') || '';
 
     loadSectionMeta().then(() => loadMenu());
+    loadGalleryData();
     applySettings();
     initAuth();
     if (!ORDERING_ENABLED) {

@@ -126,6 +126,30 @@ CREATE TABLE IF NOT EXISTS staff (
 )
 """
 
+CREATE_GALLERY = """
+CREATE TABLE IF NOT EXISTS gallery (
+    id         TEXT PRIMARY KEY,
+    image      TEXT NOT NULL,
+    sort_order INTEGER NOT NULL DEFAULT 999,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+)
+"""
+
+# Seeded from the existing hero background photos so the gallery/hero work immediately.
+DEFAULT_GALLERY = [
+    ("bg1",  "koya_bg/bg1.webp",  1),
+    ("bg2",  "koya_bg/bg2.webp",  2),
+    ("bg3",  "koya_bg/bg3.webp",  3),
+    ("bg4",  "koya_bg/bg4.webp",  4),
+    ("bg6",  "koya_bg/bg6.webp",  5),
+    ("bg7",  "koya_bg/bg7.webp",  6),
+    ("bg8",  "koya_bg/bg8.webp",  7),
+    ("bg9",  "koya_bg/bg9.webp",  8),
+    ("bg10", "koya_bg/bg10.webp", 9),
+    ("bg11", "koya_bg/bg11.webp", 10),
+    ("bg12", "koya_bg/bg12.webp", 11),
+]
+
 DEFAULT_SETTINGS = [
     ("phone", "+220 2222208"),
     ("whatsapp", "2202222208"),
@@ -188,6 +212,15 @@ async def init_db(conn: asyncpg.Connection) -> None:
             "INSERT INTO sections (key, label, icon, ornament, sort_order) VALUES ($1, $2, $3, $4, $5) ON CONFLICT (key) DO NOTHING",
             key, label, icon, ornament, sort_order,
         )
+    await conn.execute(CREATE_GALLERY)
+    # Seed the default photos only on a fresh table, so admin deletions stick across restarts
+    gallery_count = await conn.fetchval("SELECT COUNT(*) FROM gallery")
+    if not gallery_count:
+        for gid, image, sort_order in DEFAULT_GALLERY:
+            await conn.execute(
+                "INSERT INTO gallery (id, image, sort_order) VALUES ($1, $2, $3)",
+                gid, image, sort_order,
+            )
 
 
     # Seed defaults only if the table is empty

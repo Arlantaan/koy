@@ -58,6 +58,18 @@ class MenuItemImageResponse(BaseModel):
     image: Optional[str] = None
 
 
+# ── Gallery ───────────────────────────────────────────────────────────────────
+
+class GalleryImage(BaseModel):
+    id: str
+    image: str
+    sort_order: int
+
+
+class GalleryAdd(BaseModel):
+    image: str = Field(..., min_length=1, max_length=300)
+
+
 # ── Reservations ──────────────────────────────────────────────────────────────
 
 class ReservationCreate(BaseModel):
