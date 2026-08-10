@@ -226,6 +226,16 @@ class SectionLabelUpdate(BaseModel):
     label: str = Field(..., min_length=1, max_length=80)
 
 
+class SectionEdit(BaseModel):
+    label: Optional[str] = Field(None, min_length=1, max_length=80)
+    icon: Optional[str] = Field(None, min_length=1, max_length=60)
+
+
+class SectionCreate(BaseModel):
+    label: str = Field(..., min_length=1, max_length=80)
+    icon: str = Field("fa-utensils", min_length=1, max_length=60)
+
+
 class SectionReorder(BaseModel):
     keys: list[str] = Field(..., min_length=1)
 

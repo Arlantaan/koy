@@ -624,6 +624,19 @@
   <div id="gallery-grid" style="display:none; grid-template-columns:repeat(auto-fill, minmax(140px, 1fr)); gap:0.75rem;"></div>
 </div>
 
+<!-- Icon picker overlay (all Font Awesome icons, searchable) -->
+<div id="iconPicker" style="display:none; position:fixed; inset:0; z-index:20000; background:rgba(0,0,0,0.72); align-items:flex-start; justify-content:center; padding:4vh 1rem;">
+  <div style="background:#1a1a1a; border:1px solid rgba(151,131,107,0.3); border-radius:12px; width:100%; max-width:560px; max-height:88vh; display:flex; flex-direction:column; overflow:hidden;">
+    <div style="padding:0.85rem 1rem; display:flex; gap:0.6rem; align-items:center; border-bottom:1px solid rgba(255,255,255,0.08);">
+      <i class="fas fa-magnifying-glass" style="color:#666;"></i>
+      <input id="icon-search" type="text" oninput="renderIconGrid(this.value)" placeholder="Search icons — e.g. coffee, fish, star, fire" autocomplete="off"
+        style="flex:1; background:#111; border:1px solid rgba(151,131,107,0.3); border-radius:6px; color:#f0ede8; padding:0.5rem 0.7rem; font-size:0.9rem;" />
+      <button onclick="closeIconPicker()" style="background:none; border:none; color:#888; font-size:1.15rem; cursor:pointer;"><i class="fas fa-times"></i></button>
+    </div>
+    <div id="icon-grid" style="padding:0.8rem; overflow-y:auto; display:grid; grid-template-columns:repeat(auto-fill, minmax(54px,1fr)); gap:0.4rem;"></div>
+  </div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js"></script>
 <script>
@@ -655,24 +668,26 @@ async function loadSectionsTab() {
   await loadSections();
   const list = document.getElementById('sections-list');
   list.innerHTML = `
-    <p style="color:#888; font-size:0.8rem; margin-bottom:1.25rem;">
-      Drag <i class="fas fa-grip-vertical"></i> to reorder sections — this order is the order shown on the site. Rename any section in its box (the internal ID never changes).
-    </p>
+    <div style="display:flex; align-items:center; justify-content:space-between; gap:1rem; flex-wrap:wrap; margin-bottom:0.75rem;">
+      <p style="color:#888; font-size:0.8rem; margin:0;">
+        Drag <i class="fas fa-grip-vertical"></i> to reorder · click an icon to change it · rename in the box.
+      </p>
+      <button class="btn btn-gold" onclick="startNewSection()" style="white-space:nowrap;"><i class="fas fa-plus me-1"></i>New Section</button>
+    </div>
+    <div id="new-section-form" style="display:none; align-items:center; gap:0.5rem; padding:0.7rem; margin-bottom:1rem; background:#141414; border:1px solid rgba(151,131,107,0.25); border-radius:8px;">
+      <button id="new-section-icon-btn" onclick="pickNewSectionIcon()" title="Choose icon" style="background:#1a1a1a; border:1px solid rgba(151,131,107,0.3); border-radius:6px; color:#c4a882; width:38px; height:38px; flex-shrink:0; cursor:pointer;"><i class="fas fa-utensils"></i></button>
+      <input id="new-section-name" type="text" placeholder="New section name" style="flex:1; min-width:60px; background:#1a1a1a; border:1px solid rgba(151,131,107,0.3); border-radius:6px; color:#f0ede8; padding:0.45rem 0.65rem; font-size:0.85rem;" />
+      <button onclick="createSection()" style="background:#2ecc71; color:#fff; border:none; border-radius:6px; padding:0.45rem 0.9rem; font-size:0.78rem; font-weight:600; cursor:pointer;">Create</button>
+      <button onclick="cancelNewSection()" style="background:none; border:none; color:#888; cursor:pointer; font-size:1rem;"><i class="fas fa-times"></i></button>
+    </div>
     <div id="sections-sortable">
     ${sectionsData.map(s => `
-      <div class="section-sort-row" data-key="${s.key}" style="display:flex; align-items:center; gap:0.6rem; padding:0.65rem 0; border-bottom:1px solid rgba(255,255,255,0.06);">
+      <div class="section-sort-row" data-key="${s.key}" style="display:flex; align-items:center; gap:0.5rem; padding:0.55rem 0; border-bottom:1px solid rgba(255,255,255,0.06);">
         <span class="drag-handle" title="Drag to reorder" style="cursor:grab; color:#777; flex-shrink:0;"><i class="fas fa-grip-vertical"></i></span>
-        <i class="fas ${s.icon}" style="width:18px; text-align:center; color:#97836B; flex-shrink:0;"></i>
-        <input
-          id="sec-input-${s.key}"
-          type="text"
-          value="${escHtml(s.label)}"
-          style="flex:1; background:#1a1a1a; border:1px solid rgba(151,131,107,0.3); border-radius:6px; color:#f0ede8; padding:0.4rem 0.65rem; font-size:0.85rem;"
-        />
-        <button
-          onclick="saveSectionLabel('${s.key}')"
-          style="background:#97836B; color:#fff; border:none; border-radius:6px; padding:0.4rem 0.85rem; font-size:0.78rem; font-weight:600; cursor:pointer; white-space:nowrap;"
-        >Save</button>
+        <button onclick="changeSectionIcon('${s.key}')" title="Change icon" style="background:#1a1a1a; border:1px solid rgba(151,131,107,0.25); border-radius:6px; color:#c4a882; width:34px; height:34px; flex-shrink:0; cursor:pointer;"><i class="fas ${s.icon}"></i></button>
+        <input id="sec-input-${s.key}" type="text" value="${escHtml(s.label)}" style="flex:1; min-width:60px; background:#1a1a1a; border:1px solid rgba(151,131,107,0.3); border-radius:6px; color:#f0ede8; padding:0.4rem 0.65rem; font-size:0.85rem;" />
+        <button onclick="saveSectionLabel('${s.key}')" style="background:#97836B; color:#fff; border:none; border-radius:6px; padding:0.4rem 0.7rem; font-size:0.78rem; font-weight:600; cursor:pointer; white-space:nowrap;">Save</button>
+        <button onclick="deleteSection('${s.key}')" title="Delete section" style="background:rgba(255,60,60,0.1); border:1px solid rgba(255,60,60,0.3); color:#ff6b6b; border-radius:6px; padding:0.4rem 0.55rem; cursor:pointer; flex-shrink:0;"><i class="fas fa-trash"></i></button>
       </div>
     `).join('')}
     </div>
@@ -712,6 +727,144 @@ async function saveSectionOrder(keys) {
   } catch (e) {
     showToast('Could not save order');
     loadSectionsTab();
+  }
+}
+
+// ── Icon picker (all Font Awesome free-solid icons, searchable) ──
+let ALL_ICONS = null;
+let iconPickerCallback = null;
+
+function openIconPicker(callback) {
+  iconPickerCallback = callback;
+  document.getElementById('iconPicker').style.display = 'flex';
+  document.getElementById('icon-search').value = '';
+  if (ALL_ICONS === null) loadIconList();
+  else renderIconGrid('');
+  setTimeout(() => document.getElementById('icon-search').focus(), 60);
+}
+
+function closeIconPicker() {
+  document.getElementById('iconPicker').style.display = 'none';
+  iconPickerCallback = null;
+}
+
+async function loadIconList() {
+  const grid = document.getElementById('icon-grid');
+  grid.innerHTML = `<p style="grid-column:1/-1; text-align:center; color:#888; padding:2rem;">Loading icons…</p>`;
+  try {
+    const res = await fetch('https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/metadata/icons.json');
+    const data = await res.json();
+    ALL_ICONS = [];
+    for (const [name, meta] of Object.entries(data)) {
+      const free = meta.free || meta.styles || [];
+      if (free.includes('solid')) {
+        const terms = (meta.search && meta.search.terms) ? meta.search.terms.join(' ') : '';
+        ALL_ICONS.push({ name, terms: (name + ' ' + terms).toLowerCase() });
+      }
+    }
+    renderIconGrid('');
+  } catch (e) {
+    // Fallback curated set so the picker still works if the CDN is unreachable
+    ALL_ICONS = ['utensils','bowl-food','bowl-rice','plate-wheat','fish','shrimp','drumstick-bite','bacon','cheese','egg','pizza-slice','burger','hotdog','bread-slice','wheat-awn','carrot','pepper-hot','lemon','apple-whole','seedling','leaf','ice-cream','cake-candles','cookie','mug-hot','mug-saucer','bottle-water','glass-water','wine-glass','martini-glass-citrus','beer-mug-empty','blender','jar','mortar-pestle','fire','star','heart','crown','people-group','bell'].map(n => ({ name: n, terms: n }));
+    renderIconGrid('');
+  }
+}
+
+function renderIconGrid(query) {
+  const grid = document.getElementById('icon-grid');
+  if (!ALL_ICONS) return;
+  const q = (query || '').trim().toLowerCase();
+  const matches = (q ? ALL_ICONS.filter(i => i.terms.includes(q)) : ALL_ICONS).slice(0, 300);
+  if (!matches.length) {
+    grid.innerHTML = `<p style="grid-column:1/-1; text-align:center; color:#666; padding:2rem;">No icons match "${escHtml(query)}"</p>`;
+    return;
+  }
+  grid.innerHTML = matches.map(i => `
+    <button type="button" onclick="pickIcon('${i.name}')" title="${i.name}"
+      style="aspect-ratio:1; background:#111; border:1px solid rgba(151,131,107,0.2); border-radius:8px; color:#c4a882; font-size:1.05rem; cursor:pointer; display:flex; align-items:center; justify-content:center;">
+      <i class="fas fa-${i.name}"></i>
+    </button>
+  `).join('');
+}
+
+function pickIcon(name) {
+  const cb = iconPickerCallback;
+  closeIconPicker();
+  if (cb) cb('fa-' + name);
+}
+
+// ── Section create / delete / change icon ──
+let newSectionIcon = 'fa-utensils';
+
+function startNewSection() {
+  newSectionIcon = 'fa-utensils';
+  const form = document.getElementById('new-section-form');
+  form.style.display = 'flex';
+  document.getElementById('new-section-name').value = '';
+  document.getElementById('new-section-icon-btn').innerHTML = `<i class="fas ${newSectionIcon}"></i>`;
+  document.getElementById('new-section-name').focus();
+}
+
+function cancelNewSection() {
+  document.getElementById('new-section-form').style.display = 'none';
+}
+
+function pickNewSectionIcon() {
+  openIconPicker(icon => {
+    newSectionIcon = icon;
+    document.getElementById('new-section-icon-btn').innerHTML = `<i class="fas ${icon}"></i>`;
+  });
+}
+
+async function createSection() {
+  const label = document.getElementById('new-section-name').value.trim();
+  if (!label) { alert('Enter a section name'); return; }
+  try {
+    const res = await fetch(`${API}/api/admin/sections`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+      body: JSON.stringify({ label, icon: newSectionIcon }),
+    });
+    if (!res.ok) throw new Error((await res.json()).detail || 'Create failed');
+    showToast('Section created');
+    await loadSections();          // refresh the add-item dropdown source
+    loadSectionsTab();
+  } catch (e) {
+    alert('Failed: ' + e.message);
+  }
+}
+
+function changeSectionIcon(key) {
+  openIconPicker(async icon => {
+    try {
+      const res = await fetch(`${API}/api/admin/sections/${key}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+        body: JSON.stringify({ icon }),
+      });
+      if (!res.ok) throw new Error('Update failed');
+      showToast('Icon updated');
+      loadSectionsTab();
+    } catch (e) {
+      alert('Failed: ' + e.message);
+    }
+  });
+}
+
+async function deleteSection(key) {
+  const s = sectionsData.find(x => x.key === key);
+  const label = s ? s.label : key;
+  if (!confirm(`Delete the "${label}" section?`)) return;
+  try {
+    const res = await fetch(`${API}/api/admin/sections/${key}`, {
+      method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` },
+    });
+    if (!res.ok) throw new Error((await res.json()).detail || 'Delete failed');
+    showToast('Section deleted');
+    await loadSections();
+    loadSectionsTab();
+  } catch (e) {
+    alert(e.message);
   }
 }
 
