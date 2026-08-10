@@ -165,8 +165,8 @@ DEFAULT_SETTINGS = [
 ]
 
 DEFAULT_SECTIONS = [
-    ("starters",    "Starters",         "fa-leaf",                  True,  1),
-    ("salads",      "Salads & Bowls",   "fa-seedling",              False, 2),
+    ("starters",    "Starters",         "fa-plate-wheat",           True,  1),
+    ("salads",      "Salads & Bowls",   "fa-leaf",                  False, 2),
     ("fish",        "Fish & Seafood",   "fa-fish",                  True,  3),
     ("meat",        "Meat",             "fa-drumstick-bite",        True,  4),
     ("pizza",       "Pizza",            "fa-pizza-slice",           True,  5),
@@ -176,15 +176,15 @@ DEFAULT_SECTIONS = [
     ("sides",       "Sides",            "fa-bowl-food",             False, 9),
     ("sauces",      "Sauces",           "fa-mortar-pestle",         False, 10),
     ("desserts",    "Desserts",         "fa-ice-cream",             True,  11),
-    ("softdrinks",  "Soft Drinks",      "fa-glass-water",           False, 12),
+    ("softdrinks",  "Soft Drinks",      "fa-bottle-water",          False, 12),
     ("freshjuices", "Fresh Juices",     "fa-lemon",                 False, 13),
-    ("localjuices", "Local Juices",     "fa-leaf",                  False, 14),
+    ("localjuices", "Local Juices",     "fa-seedling",              False, 14),
     ("milkshakes",  "Milkshakes",       "fa-blender",               False, 15),
     ("coffee",      "Coffee",           "fa-mug-hot",               False, 16),
     ("hottea",      "Hot Tea",          "fa-mug-saucer",            False, 17),
-    ("matchas",     "Matchas",          "fa-spa",                   False, 18),
+    ("matchas",     "Matchas",          "fa-bowl-rice",             False, 18),
     ("mocktails",   "Mocktails",        "fa-martini-glass-citrus",  True,  19),
-    ("icedtea",     "Iced Tea",         "fa-snowflake",             False, 20),
+    ("icedtea",     "Iced Tea",         "fa-glass-water",           False, 20),
 ]
 
 
@@ -211,6 +211,15 @@ async def init_db(conn: asyncpg.Connection) -> None:
         await conn.execute(
             "INSERT INTO sections (key, label, icon, ornament, sort_order) VALUES ($1, $2, $3, $4, $5) ON CONFLICT (key) DO NOTHING",
             key, label, icon, ornament, sort_order,
+        )
+    # One-time correction of section icons to the accurate set (runs once, then never again)
+    icons_done = await conn.fetchval("SELECT value FROM site_settings WHERE key = 'section_icons_v2'")
+    if not icons_done:
+        for key, _label, icon, _ornament, _order in DEFAULT_SECTIONS:
+            await conn.execute("UPDATE sections SET icon = $1 WHERE key = $2", icon, key)
+        await conn.execute(
+            "INSERT INTO site_settings (key, value) VALUES ('section_icons_v2', '1') "
+            "ON CONFLICT (key) DO UPDATE SET value = '1'"
         )
     await conn.execute(CREATE_GALLERY)
     # Seed the default photos only on a fresh table, so admin deletions stick across restarts

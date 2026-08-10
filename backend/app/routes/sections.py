@@ -5,7 +5,7 @@ from fastapi import APIRouter, Depends, HTTPException
 
 from app.auth import require_admin
 from app.database import get_db
-from app.models import Section, SectionLabelUpdate
+from app.models import Section, SectionLabelUpdate, SectionReorder
 
 router = APIRouter(prefix="/api")
 
@@ -35,6 +35,21 @@ async def update_section_label(
     if row is None:
         raise HTTPException(status_code=404, detail="Section not found")
     return Section(**dict(row))
+
+
+# ── Admin: PUT /api/admin/sections/reorder ────────────────────────────────────
+
+@router.put("/admin/sections/reorder", dependencies=[Depends(require_admin)])
+async def reorder_sections(
+    payload: SectionReorder,
+    db: asyncpg.Connection = Depends(get_db),
+) -> dict[str, bool]:
+    async with db.transaction():
+        for index, key in enumerate(payload.keys):
+            await db.execute(
+                "UPDATE sections SET sort_order = $1 WHERE key = $2", index + 1, key
+            )
+    return {"success": True}
 
 
 

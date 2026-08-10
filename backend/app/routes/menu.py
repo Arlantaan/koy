@@ -17,6 +17,7 @@ from app.models import (
     MenuItemImageResponse,
     MenuItemPublic,
     MenuItemUpdate,
+    MenuReorder,
     SuccessResponse,
 )
 
@@ -165,6 +166,22 @@ async def admin_create_item(
             body.insert_after, body.badge or "",
         )
     return {"success": True, "id": item_id}
+
+
+# ── Admin: PUT /api/admin/menu/reorder ────────────────────────────────────────
+# Save a new order for a set of items (the ordered id list from a drag-and-drop)
+
+@router.put("/admin/menu/reorder", dependencies=[Depends(require_admin)])
+async def reorder_menu(
+    body: MenuReorder,
+    db: asyncpg.Connection = Depends(get_db),
+) -> dict[str, bool]:
+    async with db.transaction():
+        for index, item_id in enumerate(body.ids):
+            await db.execute(
+                "UPDATE menu_items SET sort_order = $1 WHERE id = $2", index + 1, item_id
+            )
+    return {"success": True}
 
 
 # ── Admin: PUT /api/admin/menu/:id ────────────────────────────────────────────

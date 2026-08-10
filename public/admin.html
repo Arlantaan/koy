@@ -625,6 +625,7 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js"></script>
 <script>
 const API = window.location.origin.replace(/^https:\/\/www\./, 'https://');
 let token = sessionStorage.getItem('admin_token') || '';
@@ -655,10 +656,12 @@ async function loadSectionsTab() {
   const list = document.getElementById('sections-list');
   list.innerHTML = `
     <p style="color:#888; font-size:0.8rem; margin-bottom:1.25rem;">
-      Rename any section. The internal ID never changes — only the display name updates.
+      Drag <i class="fas fa-grip-vertical"></i> to reorder sections — this order is the order shown on the site. Rename any section in its box (the internal ID never changes).
     </p>
+    <div id="sections-sortable">
     ${sectionsData.map(s => `
-      <div style="display:flex; align-items:center; gap:0.75rem; padding:0.65rem 0; border-bottom:1px solid rgba(255,255,255,0.06);">
+      <div class="section-sort-row" data-key="${s.key}" style="display:flex; align-items:center; gap:0.6rem; padding:0.65rem 0; border-bottom:1px solid rgba(255,255,255,0.06);">
+        <span class="drag-handle" title="Drag to reorder" style="cursor:grab; color:#777; flex-shrink:0;"><i class="fas fa-grip-vertical"></i></span>
         <i class="fas ${s.icon}" style="width:18px; text-align:center; color:#97836B; flex-shrink:0;"></i>
         <input
           id="sec-input-${s.key}"
@@ -672,9 +675,44 @@ async function loadSectionsTab() {
         >Save</button>
       </div>
     `).join('')}
+    </div>
   `;
+  initSectionSortable();
   document.getElementById('sections-loading').style.display = 'none';
   document.getElementById('sections-list').style.display = 'block';
+}
+
+function initSectionSortable() {
+  if (typeof Sortable === 'undefined') return;
+  const container = document.getElementById('sections-sortable');
+  if (!container) return;
+  new Sortable(container, {
+    handle: '.drag-handle',
+    animation: 150,
+    onEnd: () => {
+      const keys = [...container.querySelectorAll('.section-sort-row')].map(r => r.dataset.key);
+      saveSectionOrder(keys);
+    },
+  });
+}
+
+async function saveSectionOrder(keys) {
+  try {
+    const res = await fetch(`${API}/api/admin/sections/reorder`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+      body: JSON.stringify({ keys }),
+    });
+    if (!res.ok) throw new Error('save failed');
+    // Keep local order in sync so the Menu tab reflects it too
+    sectionsData.sort((a, b) => keys.indexOf(a.key) - keys.indexOf(b.key));
+    SECTION_LABELS = {};
+    sectionsData.forEach(s => { SECTION_LABELS[s.key] = s.label; });
+    showToast('Section order saved');
+  } catch (e) {
+    showToast('Could not save order');
+    loadSectionsTab();
+  }
 }
 
 async function saveSectionLabel(key) {
@@ -800,7 +838,8 @@ function buildAdminItemRow(item) {
   const marketingBadge = mBadgeMeta
     ? `<span class="badge-pill ${mBadgeMeta.cls} ms-1">${mBadgeMeta.label}</span>` : '';
   return `
-    <div class="item-row" id="row-${item.id}">
+    <div class="item-row" id="row-${item.id}" data-id="${item.id}">
+      <span class="drag-handle" title="Drag to reorder" style="cursor:grab; color:#777; padding:0 0.4rem; flex-shrink:0; align-self:center;"><i class="fas fa-grip-vertical"></i></span>
       ${imgEl}
       <div class="item-info">
         <div class="item-name">${item.name} ${statusBadge}${marketingBadge}</div>
@@ -973,6 +1012,9 @@ function renderItems() {
     }
   }
 
+  // Order within each section by sort_order (drag-and-drop saves this)
+  for (const k in sections) sections[k].sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0));
+
   let html = '';
   const renderedSections = new Set();
   const customSectionsToRender = new Map(); // section -> items
@@ -990,7 +1032,9 @@ function renderItems() {
     if (!items) continue;
     
     html += `<div class="section-header" style="display:flex;align-items:center;justify-content:space-between;"><span><i class="fas fa-circle-small me-2"></i>${label} <span class="ms-2 text-muted">${items.length} items</span></span><button onclick="openDeleteSectionModal('${key}','${label}')" style="background:none;border:none;color:#ff6b6b;font-size:0.75rem;cursor:pointer;opacity:0.7;" title="Delete entire section"><i class="fas fa-trash-can me-1"></i>Delete section</button></div>`;
+    html += `<div class="item-list" data-section="${key}">`;
     for (const item of items) html += buildAdminItemRow(item);
+    html += `</div>`;
     renderedSections.add(key);
 
     // Render custom sections that should appear after this predefined section
@@ -1000,7 +1044,9 @@ function renderItems() {
         if (customItems.length > 0) {
           const customLabel = customSection.charAt(0).toUpperCase() + customSection.slice(1).replace(/([A-Z])/g, ' $1');
           html += `<div class="section-header" style="display:flex;align-items:center;justify-content:space-between;"><span><i class="fas fa-circle-small me-2"></i>${customLabel} <span class="ms-2 text-muted">${customItems.length} items</span></span><button onclick="openDeleteSectionModal('${customSection}','${customLabel}')" style="background:none;border:none;color:#ff6b6b;font-size:0.75rem;cursor:pointer;opacity:0.7;" title="Delete entire section"><i class="fas fa-trash-can me-1"></i>Delete section</button></div>`;
+          html += `<div class="item-list" data-section="${customSection}">`;
           for (const item of customItems) html += buildAdminItemRow(item);
+          html += `</div>`;
           renderedSections.add(customSection);
         }
       }
@@ -1012,10 +1058,45 @@ function renderItems() {
     if (!renderedSections.has(customSection)) {
       const customLabel = customSection.charAt(0).toUpperCase() + customSection.slice(1).replace(/([A-Z])/g, ' $1');
       html += `<div class="section-header" style="display:flex;align-items:center;justify-content:space-between;"><span><i class="fas fa-circle-small me-2"></i>${customLabel} <span class="ms-2 text-muted">${items.length} items</span></span><button onclick="openDeleteSectionModal('${customSection}','${customLabel}')" style="background:none;border:none;color:#ff6b6b;font-size:0.75rem;cursor:pointer;opacity:0.7;" title="Delete entire section"><i class="fas fa-trash-can me-1"></i>Delete section</button></div>`;
+      html += `<div class="item-list" data-section="${customSection}">`;
       for (const item of items) html += buildAdminItemRow(item);
+      html += `</div>`;
     }
   }
   document.getElementById('menu-list').innerHTML = html;
+  initItemSortables();
+}
+
+// Make each section's item list drag-sortable
+function initItemSortables() {
+  if (typeof Sortable === 'undefined') return;
+  document.querySelectorAll('#menu-list .item-list').forEach(list => {
+    new Sortable(list, {
+      handle: '.drag-handle',
+      animation: 150,
+      onEnd: () => {
+        const ids = [...list.querySelectorAll('.item-row')].map(r => r.dataset.id);
+        saveItemOrder(ids);
+      },
+    });
+  });
+}
+
+async function saveItemOrder(ids) {
+  try {
+    const res = await fetch(`${API}/api/admin/menu/reorder`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+      body: JSON.stringify({ ids }),
+    });
+    if (!res.ok) throw new Error('save failed');
+    // Keep local state in sync so re-renders preserve the new order
+    ids.forEach((id, i) => { const it = allItems.find(x => x.id === id); if (it) it.sort_order = i + 1; });
+    showToast('Order saved');
+  } catch (e) {
+    showToast('Could not save order');
+    loadItems(); // reset to server truth on failure
+  }
 }
 
 async function openEdit(item) {

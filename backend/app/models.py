@@ -225,3 +225,11 @@ class Section(BaseModel):
 class SectionLabelUpdate(BaseModel):
     label: str = Field(..., min_length=1, max_length=80)
 
+
+class SectionReorder(BaseModel):
+    keys: list[str] = Field(..., min_length=1)
+
+
+class MenuReorder(BaseModel):
+    ids: list[str] = Field(..., min_length=1)
+
