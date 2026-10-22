@@ -4,6 +4,7 @@ from datetime import datetime, timedelta, timezone
 from typing import Any, Literal, Optional
 
 import asyncpg
+import bcrypt
 import jwt
 from fastapi import Depends, HTTPException, Request, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
@@ -36,9 +37,26 @@ def _decode_staff_token(token: str) -> dict[str, Any]:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid or expired token")
 
 
-async def _resolve_admin_password(db: asyncpg.Connection) -> str:
-    row = await db.fetchrow("SELECT value FROM site_settings WHERE key = 'admin_password'")
-    return row["value"] if row else settings.admin_password
+async def _verify_admin_password(token: str, db: asyncpg.Connection) -> bool:
+    """True if `token` is the admin password.
+
+    Preference order:
+      1. bcrypt hash stored in site_settings.admin_password_hash
+      2. legacy plaintext row (accepted only so the admin can log in and rotate;
+         change-password removes it)
+      3. env ADMIN_PASSWORD bootstrap value
+    """
+    row = await db.fetchrow("SELECT value FROM site_settings WHERE key = 'admin_password_hash'")
+    if row and row["value"]:
+        try:
+            if bcrypt.checkpw(token.encode(), row["value"].encode()):
+                return True
+        except ValueError:
+            pass  # malformed hash — fall through to other checks
+    legacy = await db.fetchrow("SELECT value FROM site_settings WHERE key = 'admin_password'")
+    if legacy and legacy["value"] and token == legacy["value"]:
+        return True
+    return bool(settings.admin_password) and token == settings.admin_password
 
 
 async def require_admin(
@@ -54,9 +72,7 @@ async def require_admin(
             headers={"WWW-Authenticate": "Bearer"},
         )
     token = credentials.credentials
-    # Legacy: plaintext admin password
-    expected = await _resolve_admin_password(db)
-    if token == expected:
+    if await _verify_admin_password(token, db):
         return
     # JWT admin token
     try:
@@ -84,9 +100,8 @@ def require_role(*allowed_roles: StaffRole) -> Any:
         if credentials is None:
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authenticated")
         token = credentials.credentials
-        # Legacy plaintext admin password → treat as admin (accepted for all roles)
-        expected = await _resolve_admin_password(db)
-        if token == expected:
+        # Admin password → treat as admin (accepted for all roles)
+        if await _verify_admin_password(token, db):
             return
         payload = _decode_staff_token(token)
         role = payload.get("role", "")
