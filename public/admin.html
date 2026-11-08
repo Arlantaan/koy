@@ -207,32 +207,6 @@
   <!-- Customers tab -->
   <div id="view-customers" class="container-fluid px-3 py-3" style="max-width:900px; margin:0 auto; display:none;">
 
-    <!-- Analytics strip -->
-    <div id="cust-analytics" style="display:none;gap:0.5rem;flex-wrap:wrap;margin-bottom:1rem;">
-      <div style="flex:1;min-width:90px;background:#1a1a1a;border:1px solid rgba(151,131,107,0.15);border-radius:9px;padding:0.7rem 0.9rem;text-align:center;">
-        <div id="cust-stat-total" style="font-size:1.4rem;font-weight:700;color:#f0ede8;line-height:1.2;">—</div>
-        <div style="font-size:0.6rem;color:#666;text-transform:uppercase;letter-spacing:0.07em;margin-top:0.15rem;">Customers</div>
-      </div>
-      <div style="flex:1;min-width:90px;background:#1a1a1a;border:1px solid rgba(46,204,113,0.2);border-radius:9px;padding:0.7rem 0.9rem;text-align:center;">
-        <div id="cust-stat-phone" style="font-size:1.4rem;font-weight:700;color:#2ecc71;line-height:1.2;">—</div>
-        <div style="font-size:0.6rem;color:#666;text-transform:uppercase;letter-spacing:0.07em;margin-top:0.15rem;">With Phone</div>
-      </div>
-      <div style="flex:1;min-width:90px;background:#1a1a1a;border:1px solid rgba(151,131,107,0.25);border-radius:9px;padding:0.7rem 0.9rem;text-align:center;">
-        <div id="cust-stat-vip" style="font-size:1.4rem;font-weight:700;color:#97836B;line-height:1.2;">—</div>
-        <div style="font-size:0.6rem;color:#666;text-transform:uppercase;letter-spacing:0.07em;margin-top:0.15rem;">VIP Regulars</div>
-      </div>
-      <div style="flex:1;min-width:90px;background:#1a1a1a;border:1px solid rgba(151,131,107,0.15);border-radius:9px;padding:0.7rem 0.9rem;text-align:center;">
-        <div id="cust-stat-revenue" style="font-size:1.4rem;font-weight:700;color:#97836B;line-height:1.2;">—</div>
-        <div style="font-size:0.6rem;color:#666;text-transform:uppercase;letter-spacing:0.07em;margin-top:0.15rem;">Est. Revenue</div>
-      </div>
-    </div>
-
-    <!-- Top regulars -->
-    <div id="cust-top" style="display:none;margin-bottom:1rem;">
-      <div style="font-size:0.63rem;color:#666;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.5rem;"><i class="fas fa-crown" style="color:#97836B;margin-right:0.3rem;"></i>Top Regulars — Reach Out</div>
-      <div id="cust-top-cards" style="display:flex;gap:0.5rem;overflow-x:auto;padding-bottom:0.3rem;"></div>
-    </div>
-
     <!-- Sort + export -->
     <div id="cust-controls" style="display:none;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.4rem;margin-bottom:0.75rem;">
       <div id="cust-sort-btns" style="display:flex;gap:0.3rem;flex-wrap:wrap;"></div>
@@ -2301,7 +2275,7 @@ async function deleteStaff(id, name) {
 
 let _allCustomers = [];
 let _custPage = 1;
-let _custSort = 'orders';
+let _custSort = 'newest';
 const CUST_PAGE_SIZE = 20;
 
 async function loadCustomers() {
@@ -2309,8 +2283,6 @@ async function loadCustomers() {
   el.innerHTML = '<p class="text-center py-5" style="color:#555;">Loading…</p>';
   document.getElementById('customers-pagination').innerHTML = '';
   document.getElementById('customer-count').textContent = '';
-  document.getElementById('cust-analytics').style.display = 'none';
-  document.getElementById('cust-top').style.display = 'none';
   document.getElementById('cust-controls').style.display = 'none';
   try {
     const res = await fetch(`${API}/api/admin/customers`, {
@@ -2320,9 +2292,10 @@ async function loadCustomers() {
     const data = await res.json();
     _allCustomers = Array.isArray(data) ? data : (data.customers || []);
     _custPage = 1;
-    _custSort = 'orders';
+    _custSort = 'newest';
     document.getElementById('customer-search').value = '';
-    _buildAnalytics(_allCustomers);
+    _buildControls();
+    renderCustomersPage();
   } catch { el.innerHTML = '<p class="text-center py-5" style="color:#e74c3c;">Connection error.</p>'; }
 }
 
@@ -2341,55 +2314,20 @@ function setCustSort(sort) {
   renderCustomersPage();
 }
 
-function _buildAnalytics(all) {
-  // Stats
-  document.getElementById('cust-stat-total').textContent = all.length;
-  document.getElementById('cust-stat-phone').textContent = all.filter(c => c.phone).length;
-  document.getElementById('cust-stat-vip').textContent = all.filter(c => c.order_count >= 5).length;
-  const rev = all.reduce((s, c) => s + (c.total_spend || 0), 0);
-  document.getElementById('cust-stat-revenue').textContent = rev > 0 ? 'D' + Math.round(rev).toLocaleString() : '—';
-  document.getElementById('cust-analytics').style.display = 'flex';
-
-  // Top regulars cards
-  const top = [...all].sort((a, b) => b.order_count - a.order_count).slice(0, 5).filter(c => c.order_count >= 2);
-  const cardsEl = document.getElementById('cust-top-cards');
-  if (top.length) {
-    const cols = ['#97836B','#e08c3a','#5bc0de','#2ecc71','#9b59b6'];
-    cardsEl.innerHTML = top.map((c, i) => {
-      const ini = c.name.split(' ').map(w => w[0]).join('').slice(0,2).toUpperCase();
-      const callLink = c.phone
-        ? `<a href="tel:${c.phone}" style="display:block;margin-top:0.4rem;color:#2ecc71;font-size:0.72rem;font-weight:700;text-decoration:none;"><i class="fas fa-phone" style="margin-right:0.25rem;"></i>${escHtml(c.phone)}</a>`
-        : (c.email ? `<a href="mailto:${escHtml(c.email)}" style="display:block;margin-top:0.4rem;color:#888;font-size:0.68rem;text-decoration:none;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:140px;">${escHtml(c.email)}</a>` : '<span style="font-size:0.68rem;color:#444;">No contact saved</span>');
-      const spendLine = c.total_spend > 0 ? `<div style="font-size:0.63rem;color:#97836B;margin-top:0.2rem;">D${Math.round(c.total_spend).toLocaleString()} spent</div>` : '';
-      return `<div style="flex:0 0 auto;background:#1a1a1a;border:1px solid rgba(151,131,107,0.2);border-radius:10px;padding:0.75rem;min-width:155px;max-width:185px;">
-        <div style="display:flex;align-items:center;gap:0.45rem;margin-bottom:0.4rem;">
-          <div style="width:34px;height:34px;border-radius:50%;background:${cols[i]||'#555'};display:flex;align-items:center;justify-content:center;font-size:0.72rem;font-weight:700;color:#000;flex-shrink:0;">${ini}</div>
-          <div>
-            <div style="font-size:0.8rem;font-weight:700;color:#f0ede8;line-height:1.2;">${escHtml(c.name.split(' ')[0])}</div>
-            <div style="font-size:0.63rem;color:#97836B;">${c.order_count} order${c.order_count!==1?'s':''}</div>
-          </div>
-        </div>
-        ${callLink}${spendLine}
-      </div>`;
-    }).join('');
-    document.getElementById('cust-top').style.display = 'block';
-  }
-
-  // Sort buttons
+function _buildControls() {
   const sortEl = document.getElementById('cust-sort-btns');
-  const sorts = [['orders','Most Orders'],['spend','Top Spenders'],['reservations','Most Visits'],['recent','Recent Activity'],['newest','Newest']];
-  sortEl.innerHTML = sorts.map(([s,l]) =>
-    `<button data-sort="${s}" onclick="setCustSort('${s}')" style="background:transparent;border:1px solid rgba(255,255,255,0.1);color:#888;border-radius:6px;padding:0.25rem 0.55rem;font-size:0.7rem;cursor:pointer;">${l}</button>`
+  const sorts = [['newest','Newest'],['recent','Recent Activity'],['reservations','Most Visits']];
+  sortEl.innerHTML = sorts.map(([sv,l]) =>
+    `<button data-sort="${sv}" onclick="setCustSort('${sv}')" style="background:transparent;border:1px solid rgba(255,255,255,0.1);color:#888;border-radius:6px;padding:0.25rem 0.55rem;font-size:0.7rem;cursor:pointer;">${l}</button>`
   ).join('');
   document.getElementById('cust-controls').style.display = 'flex';
-  setCustSort('orders');
+  setCustSort('newest');
 }
 
 function exportCustomersCSV() {
-  const rows = [['Name','Phone','Email','Orders','Total Spend (D)','Reservations','Last Active','Joined']];
+  const rows = [['Name','Phone','Email','Reservations','Last Active','Joined']];
   for (const c of _allCustomers) {
-    rows.push([c.name, c.phone||'', c.email||'', c.order_count,
-      c.total_spend ? Math.round(c.total_spend) : '',
+    rows.push([c.name, c.phone||'', c.email||'',
       c.reservation_count,
       c.last_login ? new Date(c.last_login).toLocaleDateString('en-GB') : '',
       c.created_at ? new Date(c.created_at).toLocaleDateString('en-GB') : '']);
@@ -2401,6 +2339,20 @@ function exportCustomersCSV() {
   a.click();
 }
 
+async function deleteCustomer(id, name) {
+  if (!confirm(`Delete ${name || 'this customer'}?\n\nThis permanently removes the account. Past reservations are kept but unlinked.`)) return;
+  try {
+    const res = await fetch(`${API}/api/admin/customers/${id}`, {
+      method: 'DELETE',
+      headers: { 'Authorization': `Bearer ${token}` },
+    });
+    if (!res.ok) { alert('Failed to delete customer.'); return; }
+    _allCustomers = _allCustomers.filter(c => c.id !== id);
+    renderCustomersPage();
+    if (typeof showToast === 'function') showToast('Customer deleted');
+  } catch { alert('Connection error.'); }
+}
+
 function renderCustomersPage() {
   const q = (document.getElementById('customer-search').value || '').toLowerCase().trim();
   let filtered = q ? _allCustomers.filter(c =>
@@ -2410,11 +2362,10 @@ function renderCustomersPage() {
   ) : [..._allCustomers];
 
   switch (_custSort) {
-    case 'orders':       filtered.sort((a,b) => (b.order_count - a.order_count) || ((b.total_spend||0)-(a.total_spend||0))); break;
-    case 'spend':        filtered.sort((a,b) => (b.total_spend||0) - (a.total_spend||0)); break;
     case 'reservations': filtered.sort((a,b) => b.reservation_count - a.reservation_count); break;
     case 'recent':       filtered.sort((a,b) => (b.last_login ? new Date(b.last_login) : 0) - (a.last_login ? new Date(a.last_login) : 0)); break;
-    case 'newest':       filtered.sort((a,b) => new Date(b.created_at) - new Date(a.created_at)); break;
+    case 'newest':
+    default:             filtered.sort((a,b) => new Date(b.created_at) - new Date(a.created_at)); break;
   }
 
   const total = filtered.length;
@@ -2437,24 +2388,21 @@ function renderCustomersPage() {
   }
 
   const rows = slice.map(c => {
-    const isVip = c.order_count >= 5;
     const method = c.has_google ? '<i class="fab fa-google" style="color:#97836B;"></i> Google' : (c.has_password ? '<i class="fas fa-key" style="color:#aaa;"></i> PIN' : '—');
     const contact = c.phone
       ? `<a href="tel:${c.phone}" style="color:#2ecc71;text-decoration:none;font-size:0.78rem;">${escHtml(c.phone)}</a>`
       : (c.email ? `<a href="mailto:${escHtml(c.email)}" style="color:#aaa;text-decoration:none;font-size:0.75rem;">${escHtml(c.email)}</a>` : '<span style="color:#333">—</span>');
     const last = c.last_login ? new Date(c.last_login).toLocaleDateString('en-GB') : '—';
     const av = c.avatar ? `<img src="${escHtml(c.avatar)}" style="width:28px;height:28px;border-radius:50%;object-fit:cover;">` : '<i class="fas fa-user-circle" style="font-size:1.4rem;color:#555;"></i>';
-    const vipBadge = isVip ? ' <i class="fas fa-crown" style="color:#97836B;font-size:0.6rem;vertical-align:middle;" title="VIP — 5+ orders"></i>' : '';
-    const spendStr = c.total_spend > 0 ? `<span style="color:#97836B;font-weight:700;">D${Math.round(c.total_spend).toLocaleString()}</span>` : '<span style="color:#2a2a2a;">—</span>';
+    const safeName = (c.name||'').replace(/'/g, "\\'");
     return `<tr style="border-bottom:1px solid rgba(255,255,255,0.04);">
       <td style="padding:0.55rem 0.5rem;">${av}</td>
-      <td style="padding:0.55rem 0.5rem;font-size:0.82rem;color:#f0ede8;">${escHtml(c.name)}${vipBadge}</td>
+      <td style="padding:0.55rem 0.5rem;font-size:0.82rem;color:#f0ede8;">${escHtml(c.name)}</td>
       <td style="padding:0.55rem 0.5rem;">${contact}</td>
       <td style="padding:0.55rem 0.5rem;font-size:0.75rem;">${method}</td>
-      <td style="padding:0.55rem 0.5rem;font-size:0.78rem;color:#97836B;text-align:center;font-weight:700;">${c.order_count}</td>
-      <td style="padding:0.55rem 0.5rem;font-size:0.78rem;text-align:right;">${spendStr}</td>
       <td style="padding:0.55rem 0.5rem;font-size:0.75rem;color:#aaa;text-align:center;">${c.reservation_count}</td>
       <td style="padding:0.55rem 0.5rem;font-size:0.7rem;color:#555;">${last}</td>
+      <td style="padding:0.55rem 0.5rem;text-align:right;"><button onclick="deleteCustomer('${c.id}','${safeName}')" title="Delete customer" style="background:rgba(255,60,60,0.1);color:#ff6b6b;border:1px solid rgba(255,60,60,0.3);border-radius:6px;padding:0.25rem 0.5rem;font-size:0.72rem;cursor:pointer;"><i class="fas fa-trash"></i></button></td>
     </tr>`;
   }).join('');
 
@@ -2465,10 +2413,9 @@ function renderCustomersPage() {
         <th style="padding:0.45rem 0.5rem;">Name</th>
         <th style="padding:0.45rem 0.5rem;">Contact</th>
         <th style="padding:0.45rem 0.5rem;">Sign-in</th>
-        <th style="padding:0.45rem 0.5rem;text-align:center;">Orders</th>
-        <th style="padding:0.45rem 0.5rem;text-align:right;">Spent</th>
         <th style="padding:0.45rem 0.5rem;text-align:center;">Visits</th>
         <th style="padding:0.45rem 0.5rem;">Last Active</th>
+        <th style="padding:0.45rem 0.5rem;"></th>
       </tr></thead>
       <tbody style="border-top:1px solid rgba(255,255,255,0.06);">${rows}</tbody>
     </table>
@@ -2478,12 +2425,12 @@ function renderCustomersPage() {
   if (pages <= 1) { pgEl.innerHTML = ''; return; }
   const btnStyle = (active) => `cursor:pointer;border-radius:6px;padding:0.3rem 0.65rem;font-size:0.78rem;border:1px solid ${active?'rgba(151,131,107,0.6)':'rgba(255,255,255,0.1)'};background:${active?'rgba(151,131,107,0.15)':'transparent'};color:${active?'#97836B':'#aaa'};font-weight:${active?'700':'400'};`;
   let html = `<button style="${btnStyle(false)}" ${_custPage===1?'disabled':''} onclick="_custPage--;renderCustomersPage()">‹</button>`;
-  const range = [...new Set([1,2,_custPage-1,_custPage,_custPage+1,pages-1,pages])].filter(p=>p>=1&&p<=pages).sort((a,b)=>a-b);
+  const range = [...new Set([1,2,_custPage-1,_custPage,_custPage+1,pages-1,pages])].filter(pn=>pn>=1&&pn<=pages).sort((a,b)=>a-b);
   let prev = 0;
-  for (const p of range) {
-    if (p - prev > 1) html += `<span style="color:#444;padding:0 0.2rem;">…</span>`;
-    html += `<button style="${btnStyle(p===_custPage)}" onclick="_custPage=${p};renderCustomersPage()">${p}</button>`;
-    prev = p;
+  for (const pn of range) {
+    if (pn - prev > 1) html += `<span style="color:#444;padding:0 0.2rem;">…</span>`;
+    html += `<button style="${btnStyle(pn===_custPage)}" onclick="_custPage=${pn};renderCustomersPage()">${pn}</button>`;
+    prev = pn;
   }
   html += `<button style="${btnStyle(false)}" ${_custPage===pages?'disabled':''} onclick="_custPage++;renderCustomersPage()">›</button>`;
   pgEl.innerHTML = html;

@@ -334,6 +334,23 @@ async def admin_list_customers(
     return result
 
 
+# ── Admin: DELETE /api/admin/customers/:id ───────────────────────────────────
+
+@router.delete("/admin/customers/{user_id}", dependencies=[Depends(require_admin)])
+async def admin_delete_customer(
+    user_id: str,
+    db: asyncpg.Connection = Depends(get_db),
+) -> dict[str, Any]:
+    """Permanently delete a customer account. Reservations and orders are kept
+    (their user link is set to NULL); PIN-reset tokens are removed."""
+    row = await db.fetchrow("SELECT id FROM users WHERE id = $1", user_id)
+    if row is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Customer not found")
+    async with db.transaction():
+        await db.execute("DELETE FROM users WHERE id = $1", user_id)
+    return {"success": True}
+
+
 # ── POST /api/auth/forgot-pin ─────────────────────────────────────────────────
 
 @router.post("/auth/forgot-pin", status_code=status.HTTP_200_OK)
