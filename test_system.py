@@ -17,7 +17,7 @@ import urllib.request
 import urllib.error
 
 BASE = "https://koya.living"
-ADMIN_PASS = sys.argv[1] if len(sys.argv) > 1 else "koya2026!"  # ← change if needed
+ADMIN_PASS = sys.argv[1] if len(sys.argv) > 1 else ""  # pass the admin password as the first CLI arg
 
 PASS_STR = "\033[92m✓ PASS\033[0m"
 FAIL_STR = "\033[91m✗ FAIL\033[0m"

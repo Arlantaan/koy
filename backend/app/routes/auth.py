@@ -390,7 +390,7 @@ async def forgot_pin(
     import httpx
     email_html = f"""
     <div style="font-family:Georgia,serif;max-width:480px;margin:0 auto;background:#0b0b0b;color:#f0ede8;padding:2.5rem;border-radius:12px;">
-      <img src="https://koya.living/images/koya_logo_gold.png" alt="KOYA" style="height:48px;margin-bottom:1.5rem;" />
+      <img src="https://koyagambia.com/images/koya_logo_gold.png" alt="KOYA" style="height:48px;margin-bottom:1.5rem;" />
       <h2 style="color:#d4af37;font-size:1.3rem;margin:0 0 0.75rem;">Reset your PIN</h2>
       <p style="color:#aaa;font-size:0.95rem;margin:0 0 1.5rem;">Hi {row['name']}, use the code below to reset your Koya PIN. It expires in <strong style="color:#f0ede8;">10 minutes</strong>.</p>
       <div style="background:#1a1a1a;border:1px solid rgba(212,175,55,0.3);border-radius:10px;padding:1.5rem;text-align:center;margin-bottom:1.5rem;">

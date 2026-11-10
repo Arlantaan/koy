@@ -8,13 +8,13 @@ class Settings(BaseSettings):
 
     admin_password: str = "changeme"
     database_url: str = "postgresql://postgres:postgres@localhost:5432/koya"
-    cors_origins: list[str] = ["http://localhost", "http://localhost:3000", "http://localhost:5173", "https://koya.living"]
+    cors_origins: list[str] = ["http://localhost", "http://localhost:3000", "http://localhost:5173", "https://koya.living", "https://koyagambia.com", "https://www.koyagambia.com"]
     debug: bool = False
     jwt_secret: str = "changeme-jwt-secret-please-change"
     google_client_id: str = ""
     upload_dir: str = "/var/www/koya/uploads"
     resend_api_key: str = ""
-    email_from: str = "Koya Restaurant <comedine@koya.living>"
+    email_from: str = "Koya Restaurant <info@koyagambia.com>"
 
 
 settings = Settings()

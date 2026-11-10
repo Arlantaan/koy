@@ -6,13 +6,13 @@
     <title>Koya</title>
     <link rel="icon" type="image/png" href="koya_pics/Koya_Logos-02-WHITE.png" />
     <!-- Preload first hero image (LCP) so it starts fetching immediately -->
-    <link rel="preload" href="koya_bg/bg1.webp" as="image" fetchpriority="high" />
+    <link rel="preload" href="koya_bg/bg7.webp" as="image" fetchpriority="high" />
     <!-- Preconnect to external CDNs for faster resource loading -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin />
-    <link rel="preconnect" href="https://koya.living" crossorigin />
+    <link rel="preconnect" href="https://koyagambia.com" crossorigin />
     <!-- dns-prefetch as fallback for older browsers -->
     <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
     <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
@@ -802,21 +802,13 @@
 
         /* ── Info block ── */
         .info-block {
-            padding: 2.2rem 1.5rem 0;
+            padding: 2rem 1.5rem;
             text-align: center;
             position: relative;
+            max-width: 440px;
+            margin: 0 auto;
         }
-        .info-block::after {
-            content: '\2726  \00B7  \2726';
-            display: block;
-            text-align: center;
-            color: rgba(151,131,107,0.28);
-            font-size: 0.52rem;
-            letter-spacing: 0.55em;
-            padding: 1.75rem 0 0;
-            margin-top: 1.75rem;
-            border-top: 1px solid rgba(255,255,255,0.05);
-        }
+        .info-block::after { display: none; }
         .info-block-name {
             font-family: 'Poppins', sans-serif;
             font-size: 0.6rem;
@@ -1231,6 +1223,28 @@
             text-shadow: 0 2px 14px rgba(0,0,0,0.5);
             animation: heroFade 1.2s 0.52s ease both;
         }
+        /* Hero contact chips (hours · location/ETA · phone) */
+        .hero-chips {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.45rem;
+            margin-top: 0.25rem;
+            pointer-events: auto;
+            animation: heroFade 1.2s 0.6s ease both;
+        }
+        .hero-chips .info-chip {
+            background: rgba(0,0,0,0.34);
+            border-color: rgba(255,255,255,0.28);
+            color: rgba(255,255,255,0.92);
+            -webkit-backdrop-filter: blur(6px);
+            backdrop-filter: blur(6px);
+        }
+        .hero-chips .info-chip-link:hover {
+            border-color: rgba(151,131,107,0.7);
+            background: rgba(151,131,107,0.25);
+            color: #fff;
+        }
 
         @keyframes heroFade {
             from { opacity: 0; transform: translateY(14px); }
@@ -1340,7 +1354,11 @@
             justify-content: center;
             min-height: calc(100svh - 56px);
             position: relative;
-            background: radial-gradient(ellipse 90% 55% at 50% 36%, rgba(151,131,107,0.06) 0%, transparent 68%);
+            background:
+                linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)),
+                linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0) 58%),
+                linear-gradient(to bottom, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0) 34%),
+                url('koya_bg/bg13.png') center / cover no-repeat;
         }
 
         /* Forward: new page enters from the right */
@@ -1395,19 +1413,21 @@
             border-color: rgba(255,255,255,0.9);
             transform: translateY(-1px);
         }
+        /* Cover (hero) — subtle tertiary pill (matches the stack, just quieter) */
         .cover-about-link {
             display: inline-flex;
             align-items: center;
+            justify-content: center;
             gap: 0.5rem;
             font-size: 0.72rem;
             font-weight: 700;
-            letter-spacing: 0.12em;
+            letter-spacing: 0.1em;
             text-transform: uppercase;
-            color: rgba(255,255,255,0.75);
+            color: rgba(255,255,255,0.72);
             background: rgba(255,255,255,0.08);
             border: 1.5px solid rgba(255,255,255,0.22);
             border-radius: 999px;
-            padding: 0.6rem 1.7rem;
+            padding: 0.72rem 1.5rem;
             cursor: pointer;
             backdrop-filter: blur(6px);
             -webkit-backdrop-filter: blur(6px);
@@ -1447,6 +1467,29 @@
             background: rgba(255,255,255,0.25);
             box-shadow: 0 8px 32px rgba(0,0,0,0.4);
             transform: translateY(-1px);
+        }
+
+        /* Cover (hero) — clear primary action (gold fill) */
+        #page-cover .page-explore-btn {
+            background: var(--gold);
+            color: #fff;
+            border: none;
+            box-shadow: 0 6px 26px rgba(151,131,107,0.45);
+        }
+        #page-cover .page-explore-btn:hover {
+            background: #a68f73;
+            box-shadow: 0 10px 34px rgba(151,131,107,0.55);
+            transform: translateY(-1px);
+        }
+        /* Both action pills share identical width, height & padding so the stack is flush */
+        #page-cover .page-explore-btn,
+        #page-cover .cover-reserve-btn,
+        #page-cover .cover-about-link {
+            width: 100%;
+            justify-content: center;
+            padding: 0.72rem 1.4rem;
+            font-size: 0.72rem;
+            letter-spacing: 0.1em;
         }
 
         /* About page CTA area */
@@ -2159,6 +2202,9 @@
         <!-- Sticky header -->
         <header class="site-header">
             <div class="header-left">
+                <button class="header-btn" id="searchToggle" aria-label="Search">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M9 2C5.146 2 2 5.146 2 9s3.146 7 7 7c1.748 0 3.345-.652 4.574-1.719l.426.426V16l6 6 2-2-6-6h-1.293l-.426-.426A6.965 6.965 0 0 0 16 9c0-3.854-3.146-7-7-7zm0 2c2.773 0 5 2.227 5 5s-2.227 5-5 5-5-2.227-5-5 2.227-5 5-5z" fill="currentColor"/></svg>
+                </button>
             </div>
             <div class="header-page-dots" id="headerPageDots">
                 <button class="header-page-dot active" aria-label="Cover"></button>
@@ -2166,9 +2212,6 @@
                 <button class="header-page-dot" aria-label="Menu"></button>
             </div>
             <div class="header-actions">
-                <button class="header-btn" id="searchToggle" aria-label="Search">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M9 2C5.146 2 2 5.146 2 9s3.146 7 7 7c1.748 0 3.345-.652 4.574-1.719l.426.426V16l6 6 2-2-6-6h-1.293l-.426-.426A6.965 6.965 0 0 0 16 9c0-3.854-3.146-7-7-7zm0 2c2.773 0 5 2.227 5 5s-2.227 5-5 5-5-2.227-5-5 2.227-5 5-5z" fill="currentColor"/></svg>
-                </button>
                 <button class="header-btn header-signin-btn" id="header-signin-btn" aria-label="Sign In" onclick="openAuthModal()">
                     <i class="fas fa-user"></i> Sign In
                 </button>
@@ -2191,7 +2234,7 @@
                 <hr class="nav-dropdown-divider" />
                 <div class="nav-dropdown-section">Links</div>
                 <a id="nav-phone" href="tel:+2202222208" class="nav-dropdown-ext"><i class="fas fa-phone"></i>+220 2222208</a>
-                <a id="nav-email" href="mailto:comedine@koya.living" class="nav-dropdown-ext"><i class="fas fa-envelope"></i>comedine@koya.living</a>
+                <a id="nav-email" href="mailto:info@koyagambia.com" class="nav-dropdown-ext"><i class="fas fa-envelope"></i>info@koyagambia.com</a>
                 <a id="nav-instagram" href="#" target="_blank" rel="noopener noreferrer" class="nav-dropdown-ext"><i class="fab fa-instagram"></i>Instagram</a>
                 <a id="nav-tiktok" href="#" target="_blank" rel="noopener noreferrer" class="nav-dropdown-ext"><i class="fab fa-tiktok"></i>TikTok</a>
                 <a id="nav-whatsapp" href="https://api.whatsapp.com/send/?phone=2202222208" target="_blank" rel="noopener noreferrer" class="nav-dropdown-ext"><i class="fab fa-whatsapp"></i>WhatsApp</a>
@@ -2233,12 +2276,8 @@
             <!-- ── Page 1: Cover ── -->
             <div class="book-page pg-active" id="page-cover">
                 <div class="hero-slider" id="heroSlider">
-                    <div class="slide active" style="background-image:url('koya_bg/bg1.webp')"></div>
-                    <div class="slide" data-bg="koya_bg/bg2.webp"></div>
-                    <div class="slide" data-bg="koya_bg/bg3.webp"></div>
-                    <div class="slide" data-bg="koya_bg/bg4.webp"></div>
-                    <div class="slide" data-bg="koya_bg/bg6.webp"></div>
-                    <div class="slide" data-bg="koya_bg/bg7.webp"></div>
+                    <!-- Hero cycles only this curated set (bg7–bg12); the rest live in the gallery -->
+                    <div class="slide active" style="background-image:url('koya_bg/bg7.webp')"></div>
                     <div class="slide" data-bg="koya_bg/bg8.webp"></div>
                     <div class="slide" data-bg="koya_bg/bg9.webp"></div>
                     <div class="slide" data-bg="koya_bg/bg10.webp"></div>
@@ -2247,8 +2286,12 @@
                     <div class="hero-overlay">
                         <h2 class="hero-brand-title"><img src="koya_pics/Koya_Logos-02-WHITE.png" alt="Koya" class="hero-logo-img" /></h2>
                         <p class="hero-tagline">Modern Dining. Rooted in Soul</p>
-                        <p id="cover-hours" class="hero-sub-line">Open daily &nbsp;·&nbsp; 18:00 – 01:30</p>
-                        <div style="margin-top:2rem;pointer-events:auto;display:flex;flex-direction:column;align-items:center;gap:0.65rem;">
+                        <div class="hero-chips">
+                            <span id="about-hours" class="info-chip"><i class="fas fa-clock"></i>18:00 – 01:30</span>
+                            <a class="info-chip info-chip-link" id="locationChip" href="https://maps.app.goo.gl/fcSsMLpHL6t6gf6G6" target="_blank" rel="noopener noreferrer"><i class="fas fa-location-dot"></i>C7VH+9R<span class="info-chip-eta" id="locationEta"></span></a>
+                            <a id="about-phone" class="info-chip info-chip-link" href="tel:+2202222208"><i class="fas fa-phone"></i>+220 2222208</a>
+                        </div>
+                        <div style="margin-top:1.5rem;pointer-events:auto;display:inline-grid;justify-items:stretch;gap:0.65rem;">
                             <button class="page-explore-btn" onclick="bookGoTo(2)">
                                 <i class="fas fa-utensils"></i>&nbsp; Explore Our Menu
                             </button>
@@ -2273,18 +2316,9 @@
                     <img src="koya_pics/Koya_Logos-02-WHITE.png" alt="Koya">
                 </div>
                 <div class="info-block">
+                    <p class="info-block-name">Welcome</p>
+                    <h2 class="info-block-headline">A Seat at<br><span class="headline-accent">Our Table</span></h2>
                     <p id="about-description" class="info-block-desc">An intimate indoor dining experience in the heart of Kololi. Quality food and warm hospitality, humbly served.</p>
-                    <div class="info-chips">
-                        <span id="about-hours" class="info-chip"><i class="fas fa-clock"></i>18:00 – 01:30</span>
-                        <a class="info-chip info-chip-link" id="locationChip" href="https://maps.app.goo.gl/fcSsMLpHL6t6gf6G6" target="_blank" rel="noopener noreferrer"><i class="fas fa-location-dot"></i>C7VH+9R<span class="info-chip-eta" id="locationEta"></span></a>
-                        <a id="about-phone" class="info-chip info-chip-link" href="tel:+2202222208"><i class="fas fa-phone"></i>+220 2222208</a>
-                    </div>
-                    <a href="reserve.html" class="info-reserve-btn"><i class="fas fa-calendar-check"></i>Reserve a Table</a>
-                </div>
-                <div class="about-cta-row">
-                    <button class="page-explore-btn" onclick="bookGoTo(2)">
-                        <i class="fas fa-utensils"></i>&nbsp; Explore Our Menu
-                    </button>
                 </div>
             </div>
 
@@ -2331,7 +2365,7 @@
                         <div class="footer-block-icon"><i class="fas fa-envelope"></i></div>
                         <div>
                             <div class="footer-block-label">Email</div>
-                            <div class="footer-block-value"><a id="footer-email" href="mailto:comedine@koya.living">comedine@koya.living</a></div>
+                            <div class="footer-block-value"><a id="footer-email" href="mailto:info@koyagambia.com">info@koyagambia.com</a></div>
                         </div>
                     </div>
                     <div class="footer-block">
@@ -2390,7 +2424,7 @@
           document.documentElement.style.overflow = '';
         }
 
-        let API = 'https://koya.living';
+        let API = ''; // same-origin — works on koyagambia.com, koya.living, or localhost (no hard-coded domain)
         // Use local mock data if running on localhost
         const isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1' || location.hostname.startsWith('192.168.') || location.hostname.startsWith('10.');
         if (isLocal) {
@@ -2520,7 +2554,9 @@
       startHeroSlideshow();
     }
 
-    // Fetch the managed photo set → drives BOTH the hero backgrounds and the gallery viewer
+    // Fetch the managed photo set → drives the GALLERY viewer only.
+    // The hero keeps its own fixed, curated slides (bg7–bg12 in the #heroSlider markup),
+    // so the rest of the photos stay viewable in the gallery but never auto-play in the hero.
     async function loadGalleryData() {
       try {
         const res = await fetch(`${API}/api/gallery`);
@@ -2528,10 +2564,9 @@
         const paths = (items || []).map(g => g.image).filter(Boolean);
         if (paths.length) {
           GALLERY_IMAGES = paths;
-          buildHero(paths);
         }
       } catch (e) {
-        // keep the hardcoded fallback slides
+        // keep the default gallery list + the hero's static slides
       }
     }
 
@@ -2592,6 +2627,13 @@
             backToMenuGrid();
             return;
           }
+          // Results live on the menu page — jump there so they're actually visible.
+          // bookGoTo(2) runs resetMenuToGrid() (which clears the box), so restore the query after.
+          if (currentBookPage !== 2) {
+            const typed = menuSearchInput.value;
+            bookGoTo(2);
+            menuSearchInput.value = typed;
+          }
           // search mode: hide the category grid and reveal matching dishes
           const _grid = document.getElementById('menuGrid');
           const _backBar = document.getElementById('menuBackBar');
@@ -2643,6 +2685,8 @@
 
       // Hero slideshow
       startHeroSlideshow();
+      // The location/ETA chip now lives on the hero — compute the ETA shortly after load
+      setTimeout(() => { try { calcEta(); } catch (e) {} }, 1200);
 
       // Tap ripple on section tiles
       document.addEventListener('click', e => {
@@ -2662,8 +2706,10 @@
         dot.addEventListener('click', () => bookGoTo(i));
       });
       document.getElementById('headerBackBtn')?.addEventListener('click', () => {
+        // Drilled into a menu section → step back to the category grid first.
+        // Otherwise return to the Cover (home) — About & Menu are both launched from it.
         if (menuIsDrilledIn()) { backToMenuGrid(); }
-        else { bookGoTo(currentBookPage - 1); }
+        else { bookGoTo(0); }
       });
 
       // ── Book: touch swipe ──
@@ -2875,10 +2921,6 @@
              </button>`
           ).join('') + `</div>`;
 
-        const backHtml = `<div id="menuBackBar" class="menu-back-bar" style="display:none;">
-             <button class="menu-back-btn" onclick="backToMenuGrid()"><i class="fas fa-chevron-left"></i> All Sections</button>
-           </div>`;
-
         let sectionsHtml = '';
         for (const s of orderedSections) {
           const ornament = s.ornament ? `<p class="section-ornament">&#10022; &nbsp; &#10022; &nbsp; &#10022;</p>` : '';
@@ -2892,7 +2934,7 @@
             </section>`;
         }
 
-        container.innerHTML = backHtml + gridHtml + sectionsHtml;
+        container.innerHTML = gridHtml + sectionsHtml;
         setupReveal(!isBackgroundRefresh);
         loadImages(items);
         syncAddButtons();

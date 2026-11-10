@@ -160,7 +160,7 @@ DEFAULT_SETTINGS = [
     ("instagram", "casaafriqa"),
     ("facebook", "casaafriqa"),
     ("tiktok", "@casaafriqa"),
-    ("email", "comedine@koya.living"),
+    ("email", "info@koyagambia.com"),
     ("maps_url", "https://maps.app.goo.gl/fcSsMLpHL6t6gf6G6"),
 ]
 

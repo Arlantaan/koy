@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Koya — Menu Layout Preview</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Kaushan+Script&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+  :root {
+    --bg: #141312;
+    --surface: #1d1b19;
+    --surface-2: #232019;
+    --border: rgba(151,131,107,0.22);
+    --text: #f0ede8;
+    --muted: #95897b;
+    --beige: #97836b;
+    --beige-bright: #c4a882;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Poppins', system-ui, sans-serif;
+    font-weight: 300;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+  }
+  .preview-flag {
+    background: var(--beige);
+    color: #1a1712;
+    text-align: center;
+    font-size: 0.7rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-weight: 600;
+    padding: 0.4rem;
+  }
+  .wrap { max-width: 1000px; margin: 0 auto; padding: 2rem 1.25rem 4rem; }
+
+  /* ── Menu header ── */
+  .menu-eyebrow {
+    text-align: center;
+    color: var(--beige);
+    font-size: 0.72rem;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    margin-bottom: 0.4rem;
+  }
+  .menu-title {
+    text-align: center;
+    font-family: 'Kaushan Script', cursive;
+    font-size: 2.6rem;
+    font-weight: 400;
+    color: var(--text);
+    margin-bottom: 2.2rem;
+  }
+
+  /* ── Category grid (landing) ── */
+  .cat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 0.9rem;
+  }
+  .cat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.5rem 1rem 1.2rem;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.55rem;
+  }
+  .cat-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--beige);
+    background: var(--surface-2);
+  }
+  .cat-icon {
+    font-size: 1.7rem;
+    color: var(--beige-bright);
+    height: 2rem;
+    display: flex;
+    align-items: center;
+  }
+  .cat-name {
+    font-weight: 500;
+    font-size: 0.98rem;
+    letter-spacing: 0.01em;
+  }
+  .cat-count {
+    color: var(--muted);
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  /* ── Section page ── */
+  .section-view { display: none; }
+  .section-view.active { display: block; animation: fadeUp 0.25s ease; }
+  .cat-grid-wrap.hidden { display: none; }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .back-btn {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--beige-bright);
+    font-family: inherit;
+    font-size: 0.8rem;
+    letter-spacing: 0.06em;
+    padding: 0.5rem 1rem;
+    border-radius: 999px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: background 0.15s, border-color 0.15s;
+  }
+  .back-btn:hover { background: var(--surface-2); border-color: var(--beige); }
+  .section-head {
+    text-align: center;
+    margin: 1.6rem 0 1.8rem;
+  }
+  .section-head .fa { color: var(--beige-bright); font-size: 1.4rem; margin-bottom: 0.5rem; }
+  .section-head h2 {
+    font-family: 'Kaushan Script', cursive;
+    font-weight: 400;
+    font-size: 2.1rem;
+  }
+
+  .item {
+    display: flex;
+    gap: 1rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    align-items: center;
+  }
+  .item-img {
+    width: 74px; height: 74px;
+    border-radius: 10px;
+    object-fit: cover;
+    flex-shrink: 0;
+    background: var(--surface-2);
+  }
+  .item-img.placeholder {
+    display: flex; align-items: center; justify-content: center;
+    color: var(--beige); font-size: 1.3rem;
+  }
+  .item-body { flex: 1; min-width: 0; }
+  .item-top { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; }
+  .item-name { font-weight: 500; font-size: 1rem; }
+  .item-price { color: var(--beige-bright); font-weight: 500; white-space: nowrap; }
+  .item-desc { color: var(--muted); font-size: 0.83rem; margin-top: 0.25rem; line-height: 1.5; }
+  .item-badge {
+    display: inline-block;
+    background: rgba(151,131,107,0.2);
+    color: var(--beige-bright);
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.1rem 0.45rem;
+    border-radius: 999px;
+    margin-left: 0.5rem;
+    vertical-align: middle;
+  }
+  .loading { text-align: center; color: var(--muted); padding: 3rem; }
+</style>
+</head>
+<body>
+  <div class="preview-flag">Layout Preview — not live · category grid → section page</div>
+  <div class="wrap">
+    <div class="menu-eyebrow">Our Menu</div>
+    <div class="menu-title">Explore by Section</div>
+
+    <div id="catGridWrap" class="cat-grid-wrap">
+      <div id="catGrid" class="cat-grid"></div>
+    </div>
+
+    <div id="sectionView" class="section-view">
+      <button class="back-btn" onclick="showGrid()"><i class="fas fa-chevron-left"></i> All Sections</button>
+      <div class="section-head">
+        <i id="secIcon" class="fas"></i>
+        <h2 id="secTitle"></h2>
+      </div>
+      <div id="secItems"></div>
+    </div>
+
+    <div id="loading" class="loading"><i class="fas fa-spinner fa-spin"></i> Loading menu…</div>
+  </div>
+
+<script>
+  // The 20 real sections — labels + icons (matches the live site)
+  const SECTION_META = {
+    starters:   { label: 'Starters',       icon: 'fa-leaf' },
+    salads:     { label: 'Salads & Bowls', icon: 'fa-seedling' },
+    fish:       { label: 'Fish & Seafood', icon: 'fa-fish' },
+    meat:       { label: 'Meat',           icon: 'fa-drumstick-bite' },
+    mains:      { label: 'Main Courses',   icon: 'fa-utensils' },
+    pizza:      { label: 'Pizza',          icon: 'fa-pizza-slice' },
+    pasta:      { label: 'Pasta',          icon: 'fa-wheat-awn' },
+    calzone:    { label: 'Calzone',        icon: 'fa-bread-slice' },
+    sharing:    { label: 'Sharing Mix',    icon: 'fa-people-group' },
+    sides:      { label: 'Sides',          icon: 'fa-bowl-food' },
+    sauces:     { label: 'Sauces',         icon: 'fa-mortar-pestle' },
+    desserts:   { label: 'Desserts',       icon: 'fa-ice-cream' },
+    softdrinks: { label: 'Soft Drinks',    icon: 'fa-glass-water' },
+    freshjuices:{ label: 'Fresh Juices',   icon: 'fa-lemon' },
+    localjuices:{ label: 'Local Juices',   icon: 'fa-leaf' },
+    milkshakes: { label: 'Milkshakes',     icon: 'fa-blender' },
+    coffee:     { label: 'Coffee',         icon: 'fa-mug-hot' },
+    hottea:     { label: 'Hot Tea',        icon: 'fa-mug-saucer' },
+    matchas:    { label: 'Matchas',        icon: 'fa-spa' },
+    mocktails:  { label: 'Mocktails',      icon: 'fa-martini-glass-citrus' },
+    icedtea:    { label: 'Iced Tea',       icon: 'fa-snowflake' },
+  };
+
+  let grouped = {};   // section key -> [items]
+  let order = [];     // section keys in display order
+
+  function metaFor(key) {
+    return SECTION_META[key] || { label: key.charAt(0).toUpperCase() + key.slice(1), icon: 'fa-utensils' };
+  }
+
+  function esc(s) { return (s || '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+
+  function renderGrid() {
+    const grid = document.getElementById('catGrid');
+    grid.innerHTML = order.map(key => {
+      const m = metaFor(key);
+      const count = grouped[key].length;
+      return `
+        <div class="cat-card" onclick="openSection('${key}')">
+          <div class="cat-icon"><i class="fas ${m.icon}"></i></div>
+          <div class="cat-name">${esc(m.label)}</div>
+          <div class="cat-count">${count} item${count !== 1 ? 's' : ''}</div>
+        </div>`;
+    }).join('');
+  }
+
+  function openSection(key) {
+    const m = metaFor(key);
+    document.getElementById('secIcon').className = 'fas ' + m.icon;
+    document.getElementById('secTitle').textContent = m.label;
+    document.getElementById('secItems').innerHTML = grouped[key].map(it => {
+      const img = it.image
+        ? `<img class="item-img" src="${esc(it.image)}" alt="" loading="lazy" onerror="this.classList.add('placeholder');this.removeAttribute('src');this.innerHTML='';">`
+        : `<div class="item-img placeholder"><i class="fas ${m.icon}"></i></div>`;
+      const badge = it.badge ? `<span class="item-badge">${esc(it.badge)}</span>` : '';
+      const price = it.price ? `<span class="item-price">${esc(it.price)}</span>` : '';
+      const desc = it.description ? `<div class="item-desc">${esc(it.description)}</div>` : '';
+      return `
+        <div class="item">
+          ${img}
+          <div class="item-body">
+            <div class="item-top">
+              <span class="item-name">${esc(it.name)}${badge}</span>
+              ${price}
+            </div>
+            ${desc}
+          </div>
+        </div>`;
+    }).join('');
+    document.getElementById('catGridWrap').classList.add('hidden');
+    const sv = document.getElementById('sectionView');
+    sv.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function showGrid() {
+    document.getElementById('sectionView').classList.remove('active');
+    document.getElementById('catGridWrap').classList.remove('hidden');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  fetch('mock-menu.json')
+    .then(r => r.json())
+    .then(items => {
+      items = items.filter(i => !i.hidden);
+      grouped = {};
+      items.forEach(i => { (grouped[i.section] = grouped[i.section] || []).push(i); });
+      // Order: follow SECTION_META order, then any leftovers
+      const known = Object.keys(SECTION_META).filter(k => grouped[k]);
+      const extra = Object.keys(grouped).filter(k => !SECTION_META[k]);
+      order = [...known, ...extra];
+      document.getElementById('loading').style.display = 'none';
+      renderGrid();
+    })
+    .catch(err => {
+      document.getElementById('loading').innerHTML = 'Could not load menu data (mock-menu.json). Open this file through http://localhost, not by double-clicking.';
+      console.error(err);
+    });
+</script>
+</body>
+</html>
