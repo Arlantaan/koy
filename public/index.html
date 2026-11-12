@@ -2785,7 +2785,7 @@
       const container = document.getElementById('menu-content');
       try {
         let items;
-        if (API === '') {
+        if (isLocal) {
           // Local mock
           const res = await fetch('mock-menu.json');
           items = await res.json();
@@ -3147,7 +3147,7 @@
       if (fab) fab.style.display = 'none';
     }
     async function loadImages(items) {
-      if (API === '') return; // local mock already has image URLs inline
+      if (isLocal) return; // local mock already has image URLs inline
       try {
         const res = await fetch(`${API}/api/menu/images`);
         const imgs = await res.json();
@@ -3247,7 +3247,7 @@
 
     // ── Apply site settings from API ─────────────────────────────────────────
     async function applySettings() {
-      if (API === '') return;
+      if (isLocal) return;
       try {
         const res = await fetch(`${API}/api/settings`);
         if (!res.ok) return;
