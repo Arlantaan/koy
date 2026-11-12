@@ -39,6 +39,8 @@ echo "=== 4. Copy files ==="
 mkdir -p "$APP_DIR"
 rsync -a --delete \
     --exclude='.git' \
+    --exclude='uploads' \
+    --exclude='uploads/***' \
     --exclude='backend/.venv' \
     --exclude='backend/.env' \
     --exclude='backend/__pycache__' \

@@ -2737,10 +2737,14 @@
       }, { passive: true });
     });
 
+    // If a menu image fails to load (e.g. a wiped /uploads file), collapse it
+    // into the same clean placeholder slot used by items that have no image.
+    function koyaImgFail(el){ const d = document.createElement('div'); d.className = 'menu-img-slot'; el.replaceWith(d); }
+
     function buildCard(item) {
       const isComingSoon = item.badge === 'coming_soon';
             const imgEl = item.image
-                ? `<img src="${item.image}" alt="${item.name}" loading="lazy" decoding="async" class="menu-img-blur" onload="this.classList.remove('menu-img-blur')" onclick="${isComingSoon ? '' : `openImage('${item.image.replace(/'/g, "\\'")}')`}"/>`
+                ? `<img src="${item.image}" alt="${item.name}" loading="lazy" decoding="async" class="menu-img-blur" onload="this.classList.remove('menu-img-blur')" onerror="koyaImgFail(this)" onclick="${isComingSoon ? '' : `openImage('${item.image.replace(/'/g, "\\'")}')`}"/>`
                 : `<div class="menu-img-slot" id="img-${item.id}"></div>`;
       // Normalise price: if it's a plain number (with optional commas) add the D prefix
       const rawPrice = item.price ? String(item.price).trim() : '';
@@ -3165,6 +3169,7 @@
           img.decoding = 'async';
           img.className = 'menu-img-blur';
           img.onload = () => img.classList.remove('menu-img-blur');
+          img.onerror = () => koyaImgFail(img);
           if (!isComingSoon) img.onclick = () => openImage(image);
           slot.replaceWith(img);
         }
